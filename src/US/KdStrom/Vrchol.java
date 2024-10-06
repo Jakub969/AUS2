@@ -7,9 +7,11 @@ public class Vrchol<T> {
     private Vrchol<T> pravySyn;
     private Vrchol<T> rodic;
     private final IKluc<T> kluc;
+    private T data;
 
-    public Vrchol(IKluc<T> kluc) {
+    public Vrchol(IKluc<T> kluc, T data) {
         this.kluc = kluc;
+        this.data = data;
     }
 
     public Vrchol<T> getLavySyn() {
@@ -38,5 +40,9 @@ public class Vrchol<T> {
 
     public IKluc<T> getKluc() {
         return kluc;
+    }
+
+    public T getData() {
+        return data;
     }
 }

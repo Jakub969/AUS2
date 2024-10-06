@@ -54,9 +54,9 @@ public class Parcela implements IKluc<Parcela> {
     @Override
     public int porovnaj(IKluc<Parcela> kluc) {
         if (kluc instanceof Parcela klucParcela) {
-            if (this.cisloParcely == klucParcela.cisloParcely) {
+            if (this.GPSsuradnice.getPoziciaDlzky() == klucParcela.GPSsuradnice.getPoziciaDlzky()) {
                 return 0;
-            } else if (this.cisloParcely < klucParcela.cisloParcely) {
+            } else if (this.GPSsuradnice.getPoziciaDlzky() < klucParcela.GPSsuradnice.getPoziciaDlzky()) {
                 return -1;
             } else {
                 return 1;

@@ -54,9 +54,9 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
     @Override
     public int porovnaj(IKluc<Nehnutelnost> kluc) {
         if (kluc instanceof Nehnutelnost klucNehnutelnost) {
-            if (this.supisneCislo == klucNehnutelnost.supisneCislo) {
+            if (this.GPSsuradnice.getPoziciaDlzky() == klucNehnutelnost.GPSsuradnice.getPoziciaDlzky()) {
                 return 0;
-            } else if (this.supisneCislo < klucNehnutelnost.supisneCislo) {
+            } else if (this.GPSsuradnice.getPoziciaDlzky() < klucNehnutelnost.GPSsuradnice.getPoziciaDlzky()) {
                 return -1;
             } else {
                 return 1;
