@@ -1,8 +1,12 @@
-public class Parcela implements IOperacie<Parcela> {
-    int cisloParcely;
-    String popis;
-    Nehnutelnost[] zoznamNehnutelnosti;
-    GPS GPSsuradnice;
+package triedy;
+
+import rozhrania.IKluc;
+
+public class Parcela implements IKluc<Parcela> {
+    private final int cisloParcely;
+    private String popis;
+    private Nehnutelnost[] zoznamNehnutelnosti;
+    private GPS GPSsuradnice;
 
     public Parcela(int cisloParcely, String popis, Nehnutelnost[] zoznamNehnutelnosti, GPS GPSsuradnice) {
         this.cisloParcely = cisloParcely;
@@ -38,12 +42,27 @@ public class Parcela implements IOperacie<Parcela> {
     }
 
     @Override
-    public void edituj(Parcela objekt) {
+    public void edituj(GPS GPSsuradnice) {
 
     }
 
     @Override
-    public void vyrad(Parcela objekt) {
+    public void vyrad(GPS GPSsuradnice) {
 
+    }
+
+    @Override
+    public int porovnaj(IKluc<Parcela> kluc) {
+        if (kluc instanceof Parcela klucParcela) {
+            if (this.cisloParcely == klucParcela.cisloParcely) {
+                return 0;
+            } else if (this.cisloParcely < klucParcela.cisloParcely) {
+                return -1;
+            } else {
+                return 1;
+            }
+        } else {
+            return -2;
+        }
     }
 }

@@ -1,8 +1,10 @@
+package triedy;
+
 public class GPS {
-    char sirka;
-    double poziciaSirky;
-    char dlzka;
-    double poziciaDlzky;
+    private char sirka;
+    private double poziciaSirky;
+    private char dlzka;
+    private double poziciaDlzky;
 
     public GPS(char sirka, double poziciaSirky, char dlzka, double poziciaDlzky) {
         this.sirka = sirka;
