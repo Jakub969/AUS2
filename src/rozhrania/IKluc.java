@@ -6,5 +6,5 @@ public interface IKluc<T> {
     void pridaj(T objekt);
     void edituj(GPS GPSsuradnice);
     void vyrad(GPS GPSsuradnice);
-    int porovnaj(IKluc<T> kluc);
+    int porovnaj(IKluc<T> kluc, int poradieKluca);
 }

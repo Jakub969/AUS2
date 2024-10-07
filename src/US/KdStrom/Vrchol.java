@@ -6,12 +6,14 @@ public class Vrchol<T> {
     private Vrchol<T> lavySyn;
     private Vrchol<T> pravySyn;
     private Vrchol<T> rodic;
-    private final IKluc<T> kluc;
-    private T data;
+    private final IKluc<T>[] kluce;
+    private final int pocetKlucov;
+    private final T data;
 
-    public Vrchol(IKluc<T> kluc, T data) {
-        this.kluc = kluc;
+    public Vrchol(IKluc<T>[] kluce, T data) {
+        this.kluce = kluce;
         this.data = data;
+        this.pocetKlucov = kluce.length;
     }
 
     public Vrchol<T> getLavySyn() {
@@ -38,11 +40,15 @@ public class Vrchol<T> {
         this.rodic = rodic;
     }
 
-    public IKluc<T> getKluc() {
-        return kluc;
+    public IKluc<T>[] getKluce() {
+        return kluce;
     }
 
     public T getData() {
         return data;
+    }
+
+    public int getPocetKlucov() {
+        return pocetKlucov;
     }
 }

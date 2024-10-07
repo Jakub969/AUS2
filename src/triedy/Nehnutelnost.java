@@ -52,14 +52,12 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
     }
 
     @Override
-    public int porovnaj(IKluc<Nehnutelnost> kluc) {
+    public int porovnaj(IKluc<Nehnutelnost> kluc, int poradieKluca) {
         if (kluc instanceof Nehnutelnost klucNehnutelnost) {
-            if (this.GPSsuradnice.getPoziciaDlzky() == klucNehnutelnost.GPSsuradnice.getPoziciaDlzky()) {
-                return 0;
-            } else if (this.GPSsuradnice.getPoziciaDlzky() < klucNehnutelnost.GPSsuradnice.getPoziciaDlzky()) {
-                return -1;
+            if (poradieKluca == 0) {
+                return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), klucNehnutelnost.GPSsuradnice.getPoziciaDlzky());
             } else {
-                return 1;
+                return Double.compare(this.GPSsuradnice.getPoziciaSirky(), klucNehnutelnost.GPSsuradnice.getPoziciaSirky());
             }
         } else {
             return -2;
