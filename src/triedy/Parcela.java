@@ -52,12 +52,12 @@ public class Parcela implements IKluc<Parcela> {
     }
 
     @Override
-    public int porovnaj(IKluc<Parcela> kluc, int poradieKluca) {
-        if (kluc instanceof Parcela klucParcela) {
+    public int porovnaj(Parcela data, int poradieKluca) {
+        if (data instanceof Parcela dataParcela) {
             if (poradieKluca == 0) {
-                return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), klucParcela.GPSsuradnice.getPoziciaDlzky());
+                return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataParcela.GPSsuradnice.getPoziciaDlzky());
             } else {
-                return Double.compare(this.GPSsuradnice.getPoziciaSirky(), klucParcela.GPSsuradnice.getPoziciaSirky());
+                return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataParcela.GPSsuradnice.getPoziciaSirky());
             }
         } else {
             return -2;

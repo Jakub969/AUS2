@@ -1,19 +1,13 @@
 package US.KdStrom;
 
-import rozhrania.IKluc;
-
 public class Vrchol<T> {
     private Vrchol<T> lavySyn;
     private Vrchol<T> pravySyn;
     private Vrchol<T> rodic;
-    private final IKluc<T>[] kluce;
-    private final int pocetKlucov;
     private final T data;
 
-    public Vrchol(IKluc<T>[] kluce, T data) {
-        this.kluce = kluce;
+    public Vrchol(T data) {
         this.data = data;
-        this.pocetKlucov = kluce.length;
     }
 
     public Vrchol<T> getLavySyn() {
@@ -40,15 +34,7 @@ public class Vrchol<T> {
         this.rodic = rodic;
     }
 
-    public IKluc<T>[] getKluce() {
-        return kluce;
-    }
-
     public T getData() {
         return data;
-    }
-
-    public int getPocetKlucov() {
-        return pocetKlucov;
     }
 }
