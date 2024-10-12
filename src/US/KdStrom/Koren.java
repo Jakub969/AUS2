@@ -13,11 +13,6 @@ public class Koren<T> extends Vrchol<T> {
     }
 
     @Override
-    public Vrchol<T> getRodic() {
-        return null;
-    }
-
-    @Override
     public void setRodic(Vrchol<T> rodic) {
         throw new UnsupportedOperationException("Koren nema rodica");
     }

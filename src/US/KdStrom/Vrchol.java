@@ -8,6 +8,9 @@ public class Vrchol<T> {
 
     public Vrchol(T data) {
         this.data = data;
+        this.lavySyn = null;
+        this.pravySyn = null;
+        this.rodic = null;
     }
 
     public Vrchol<T> getLavySyn() {
