@@ -6,6 +6,7 @@ import triedy.Nehnutelnost;
 import triedy.Parcela;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class TesterVkladania<T extends IKluc<T>> {
     private final int pocetVlozeni;
@@ -22,9 +23,13 @@ public class TesterVkladania<T extends IKluc<T>> {
     }
 
     private void metodaVkladania() {
+        Random random = new Random(System.nanoTime());
         for (int i = 0; i < this.pocetVlozeni; i++) {
-            int x = (int) (Math.random() * this.maxRozsah);
-            int y = (int) (Math.random() * this.maxRozsah);
+            if (i % 100 == 0) {
+                random.setSeed(System.nanoTime());
+            }
+            double x = (random.nextDouble() * this.maxRozsah);
+            double y = random.nextDouble() * this.maxRozsah;
             GPS gps = new GPS('N', x, 'E', y);
             T data;
             Vrchol<T> vrchol;
@@ -34,12 +39,12 @@ public class TesterVkladania<T extends IKluc<T>> {
                 } else if (instanciaTriedy == Parcela.class) {
                     data = instanciaTriedy.cast(new Parcela(i, "popis", null, gps));
                 } else {
-                    throw new IllegalArgumentException("Unsupported type");
+                    throw new IllegalArgumentException("Nepodporovaný typ triedy");
                 }
                 vrchol = new Vrchol<>(data);
                 this.strom.vloz(vrchol);
             } catch (ClassCastException e) {
-                throw new IllegalArgumentException("Type casting error", e);
+                throw new IllegalArgumentException("Error pri pretypovani", e);
             }
         }
     }
@@ -76,5 +81,13 @@ public class TesterVkladania<T extends IKluc<T>> {
                 throw new IllegalArgumentException("Nepodporovaný typ");
             }
         }
+    }
+
+    public int getHlbka() {
+        return this.strom.getHlbka();
+    }
+
+    public int getPocetVrcholov() {
+        return this.strom.getPocetVrcholov();
     }
 }

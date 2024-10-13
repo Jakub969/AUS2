@@ -1,28 +1,16 @@
-import US.KdStrom.KdStrom;
-import US.KdStrom.Koren;
 import US.KdStrom.TesterVkladania;
-import US.KdStrom.Vrchol;
-import triedy.GPS;
 import triedy.Nehnutelnost;
-
-import java.util.ArrayList;
+import triedy.Parcela;
 
 public class Main {
     public static void main(String[] args) {
-        /*KdStrom<Nehnutelnost> kdStromNehnutelnosti = new KdStrom<>(2);
-        Koren<Nehnutelnost> koren = new Koren<>(new Vrchol<>(new Nehnutelnost(3, "popis", null, new GPS('E', 3.0, 'S', 3.0))));
-        kdStromNehnutelnosti.vloz(koren);
-        for (int i = 0; i <= 5; i++) {
-            Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, new GPS('E', i, 'S', i)));
-            kdStromNehnutelnosti.vloz(vrchol1);
-            System.out.println("Supisne číslo rodiča: " + vrchol1.getRodic().getData().getSupisneCislo() + " Supisne číslo vrcholu: " + vrchol1.getData().getSupisneCislo());
-            System.out.println();
-        }
-        System.out.println(kdStromNehnutelnosti.getHlbka());
-        System.out.println(kdStromNehnutelnosti.getPocetVrcholov());
-        ArrayList<Vrchol<Nehnutelnost>> vrcholy = kdStromNehnutelnosti.inOrderPrehliadka();
-        vrcholy.forEach(vrchol -> System.out.println("Vrchol: " + vrchol.getData().getSupisneCislo()));*/
-        TesterVkladania<Nehnutelnost> testerVkladania = new TesterVkladania<>(7, 10, Nehnutelnost.class);
-        testerVkladania.vypisVrcholy();
+        TesterVkladania<Nehnutelnost> testerVkladania = new TesterVkladania<>(100000, 1000, Nehnutelnost.class);
+        //testerVkladania.vypisVrcholy();
+        System.out.println("Hĺbka: " + testerVkladania.getHlbka());
+        System.out.println("Počet vrcholov: " + testerVkladania.getPocetVrcholov());
+        TesterVkladania<Parcela> testerVkladania1 = new TesterVkladania<>(100000, 1000, Parcela.class);
+        //testerVkladania1.vypisVrcholy();
+        System.out.println("Hĺbka: " + testerVkladania1.getHlbka());
+        System.out.println("Počet vrcholov: " + testerVkladania1.getPocetVrcholov());
     }
 }
