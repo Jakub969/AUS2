@@ -30,11 +30,11 @@ public class KdStrom<T extends IKluc<T>> {
         while (aktualny != null) {
             rodic = aktualny;
             int poradieKluca = this.hlbka % this.pocetKlucov;
-            int porovnanie = aktualny.getData().porovnaj(vrchol.getData(), poradieKluca);
-            if (porovnanie == 1 || porovnanie == 0) { //TODO: porovnanie == 1 alebo 0?
+            int porovnanie = vrchol.getData().porovnaj(aktualny.getData(), poradieKluca);
+            if (porovnanie == -1 || porovnanie == 0) {
                 aktualny = aktualny.getLavySyn();
                 lavy = true;
-            } else if (porovnanie == -1) { //TODO: porovnanie == -1 ?
+            } else if (porovnanie == 1) {
                 aktualny = aktualny.getPravySyn();
                 lavy = false;
             } else {

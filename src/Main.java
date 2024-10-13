@@ -15,6 +15,7 @@ public class Main {
             Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, new GPS('E', i, 'S', i)));
             kdStromNehnutelnosti.vloz(vrchol1);
             System.out.println("Supisne číslo rodiča: " + vrchol1.getRodic().getData().getSupisneCislo() + " Supisne číslo vrcholu: " + vrchol1.getData().getSupisneCislo());
+            System.out.println();
         }
         System.out.println(kdStromNehnutelnosti.getHlbka());
         System.out.println(kdStromNehnutelnosti.getPocetVrcholov());

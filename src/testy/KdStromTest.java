@@ -17,13 +17,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class KdStromTest {
 
     private KdStrom<Nehnutelnost> kdStromNehnutelnosti;
+    private Koren<Nehnutelnost> koren;
 
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
-        kdStromNehnutelnosti = new KdStrom<>(2);
-        Koren<Nehnutelnost> koren = new Koren<>(new Vrchol<>(new Nehnutelnost(3, "popis", null, new GPS('E', 3.0, 'S', 3.0))));
-        kdStromNehnutelnosti.vloz(koren);
+        this.kdStromNehnutelnosti = new KdStrom<>(2);
+        this.koren = new Koren<>(new Vrchol<>(new Nehnutelnost(3, "popis", null, new GPS('E', 3.0, 'S', 3.0))));
+        this.kdStromNehnutelnosti.vloz(this.koren);
     }
 
     @org.junit.jupiter.api.AfterEach
@@ -33,11 +34,11 @@ class KdStromTest {
     @Order(1)
     @org.junit.jupiter.api.Test
     void vloz() {
+        int[] supisneCisloRodica = {3, 0, 1, 2, 3 ,4};
         for (int i = 0; i <= 5; i++) {
             Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, new GPS('E', i, 'S', i)));
-            kdStromNehnutelnosti.vloz(vrchol1);
-            //assertEquals(koren, vrchol1.getRodic());
-            assertEquals(i, vrchol1.getData().getSupisneCislo());
+            this.kdStromNehnutelnosti.vloz(vrchol1);
+            assertEquals(supisneCisloRodica[i], vrchol1.getRodic().getData().getSupisneCislo());
         }
     }
 
@@ -47,9 +48,9 @@ class KdStromTest {
         int[] supisneCisla = {0, 1, 2, 3, 3, 4, 5};
         for (int i = 0; i <= 5; i++) {
             Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, new GPS('E', i, 'S', i)));
-            kdStromNehnutelnosti.vloz(vrchol1);
+            this.kdStromNehnutelnosti.vloz(vrchol1);
         }
-        ArrayList<Vrchol<Nehnutelnost>> vrcholy = kdStromNehnutelnosti.inOrderPrehliadka();
+        ArrayList<Vrchol<Nehnutelnost>> vrcholy = this.kdStromNehnutelnosti.inOrderPrehliadka();
         for (int i = 0; i <= 6; i++) {
 
             assertEquals(supisneCisla[i], vrcholy.get(i).getData().getSupisneCislo());
@@ -58,13 +59,24 @@ class KdStromTest {
 
     @org.junit.jupiter.api.Test
     void getKoren() {
+        assertEquals(this.koren.getData().getSupisneCislo(), this.kdStromNehnutelnosti.getKoren().getKoren().getData().getSupisneCislo());
     }
 
     @org.junit.jupiter.api.Test
     void getHlbka() {
+        for (int i = 0; i <= 5; i++) {
+            Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, new GPS('E', i, 'S', i)));
+            kdStromNehnutelnosti.vloz(vrchol1);
+        }
+        assertEquals(4, kdStromNehnutelnosti.getHlbka());
     }
 
     @org.junit.jupiter.api.Test
     void getPocetVrcholov() {
+        for (int i = 0; i <= 5; i++) {
+            Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, new GPS('E', i, 'S', i)));
+            kdStromNehnutelnosti.vloz(vrchol1);
+        }
+        assertEquals(7, kdStromNehnutelnosti.getPocetVrcholov());
     }
 }
