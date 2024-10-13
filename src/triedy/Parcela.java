@@ -2,13 +2,15 @@ package triedy;
 
 import rozhrania.IKluc;
 
+import java.util.ArrayList;
+
 public class Parcela implements IKluc<Parcela> {
     private final int cisloParcely;
     private String popis;
-    private Nehnutelnost[] zoznamNehnutelnosti;
+    private ArrayList<Nehnutelnost> zoznamNehnutelnosti;
     private GPS GPSsuradnice;
 
-    public Parcela(int cisloParcely, String popis, Nehnutelnost[] zoznamNehnutelnosti, GPS GPSsuradnice) {
+    public Parcela(int cisloParcely, String popis, ArrayList<Nehnutelnost> zoznamNehnutelnosti, GPS GPSsuradnice) {
         this.cisloParcely = cisloParcely;
         this.popis = popis;
         this.zoznamNehnutelnosti = zoznamNehnutelnosti;
@@ -23,7 +25,7 @@ public class Parcela implements IKluc<Parcela> {
         return popis;
     }
 
-    public Nehnutelnost[] getZoznamNehnutelnosti() {
+    public ArrayList<Nehnutelnost> getZoznamNehnutelnosti() {
         return zoznamNehnutelnosti;
     }
 

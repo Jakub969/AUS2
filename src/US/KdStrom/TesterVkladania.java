@@ -28,7 +28,7 @@ public class TesterVkladania<T extends IKluc<T>> {
             if (i % 100 == 0) {
                 random.setSeed(System.nanoTime());
             }
-            double x = (random.nextDouble() * this.maxRozsah);
+            double x = random.nextDouble() * this.maxRozsah;
             double y = random.nextDouble() * this.maxRozsah;
             GPS gps = new GPS('N', x, 'E', y);
             T data;
