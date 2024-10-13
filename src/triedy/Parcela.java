@@ -63,4 +63,13 @@ public class Parcela implements IKluc<Parcela> {
             return -2;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Parcela{" +
+                "cisloParcely=" + cisloParcely +
+                ", popis='" + popis + '\'' +
+                ", GPSsuradnice="  + GPSsuradnice.getDlzka() + ": " + GPSsuradnice.getPoziciaDlzky() + " | " + GPSsuradnice.getSirka() + ": " + GPSsuradnice.getPoziciaSirky() +
+                '}';
+    }
 }

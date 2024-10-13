@@ -63,4 +63,13 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
             return -2;
         }
     }
+
+    @Override
+    public String toString() {
+        return "Nehnutelnost{" +
+                "supisneCislo=" + supisneCislo +
+                ", popis='" + popis + '\'' +
+                ", GPSsuradnice=" + GPSsuradnice.getDlzka() + ": " + GPSsuradnice.getPoziciaDlzky() +  " | " + GPSsuradnice.getSirka() + ": " + GPSsuradnice.getPoziciaSirky() +
+                '}';
+    }
 }

@@ -25,7 +25,7 @@ public class TesterVkladania<T extends IKluc<T>> {
         for (int i = 0; i < this.pocetVlozeni; i++) {
             int x = (int) (Math.random() * this.maxRozsah);
             int y = (int) (Math.random() * this.maxRozsah);
-            GPS gps = new GPS('E', x, 'S', y);
+            GPS gps = new GPS('N', x, 'E', y);
             T data;
             Vrchol<T> vrchol;
             try {
@@ -48,14 +48,32 @@ public class TesterVkladania<T extends IKluc<T>> {
         ArrayList<Vrchol<T>> vrcholy = this.strom.inOrderPrehliadka();
         for (Vrchol<T> vrchol : vrcholy) {
             T data = vrchol.getData();
-            if (data instanceof Nehnutelnost) {
-                Nehnutelnost nehnutelnost = (Nehnutelnost) data;
-                System.out.println("Supisne číslo: " + nehnutelnost.getSupisneCislo());
-            } else if (data instanceof Parcela) {
-                Parcela parcela = (Parcela) data;
-                System.out.println("Číslo parcely: " + parcela.getCisloParcely());
+            if (data instanceof Nehnutelnost nehnutelnost) {
+                if (vrchol.getRodic() == null) {
+                    System.out.println("Vrchol zo súpisným číslom " + nehnutelnost.getSupisneCislo() + " je koreňom: " + vrchol.getData().toString());
+                } else {
+                    System.out.println("Vrchol zo supisným číslom: " + nehnutelnost.getSupisneCislo() + " má rodiča: " + vrchol.getRodic().getData().toString());
+                }
+                if (vrchol.getPravySyn() != null) {
+                    System.out.println("Pravý syn: " + vrchol.getPravySyn().getData().toString());
+                }
+                if (vrchol.getLavySyn() != null) {
+                    System.out.println("Ľavý syn: " + vrchol.getLavySyn().getData().toString());
+                }
+            } else if (data instanceof Parcela parcela) {
+                if (vrchol.getRodic() == null) {
+                    System.out.println("Vrchol z číslom parcely " + parcela.getCisloParcely() + " je koreňom " + vrchol.getData().toString());
+                } else {
+                    System.out.println("Vrchol z číslom parcely: " + parcela.getCisloParcely() + " má rodiča: " + vrchol.getRodic().getData().toString());
+                }
+                if (vrchol.getPravySyn() != null) {
+                    System.out.println("Pravý syn: " + vrchol.getPravySyn().getData().toString());
+                }
+                if (vrchol.getLavySyn() != null) {
+                    System.out.println("Ľavý syn: " + vrchol.getLavySyn().getData().toString());
+                }
             } else {
-                throw new IllegalArgumentException("Unsupported type");
+                throw new IllegalArgumentException("Nepodporovaný typ");
             }
         }
     }

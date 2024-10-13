@@ -22,7 +22,7 @@ public class Main {
         System.out.println(kdStromNehnutelnosti.getPocetVrcholov());
         ArrayList<Vrchol<Nehnutelnost>> vrcholy = kdStromNehnutelnosti.inOrderPrehliadka();
         vrcholy.forEach(vrchol -> System.out.println("Vrchol: " + vrchol.getData().getSupisneCislo()));*/
-        TesterVkladania<Nehnutelnost> testerVkladania = new TesterVkladania<>(5, 10, Nehnutelnost.class);
+        TesterVkladania<Nehnutelnost> testerVkladania = new TesterVkladania<>(7, 10, Nehnutelnost.class);
         testerVkladania.vypisVrcholy();
     }
 }

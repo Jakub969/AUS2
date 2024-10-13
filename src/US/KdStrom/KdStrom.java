@@ -29,7 +29,7 @@ public class KdStrom<T extends IKluc<T>> {
         int lokalnaHlbka = 0;
         while (aktualny != null) {
             rodic = aktualny;
-            int poradieKluca = this.hlbka % this.pocetKlucov;
+            int poradieKluca = lokalnaHlbka % this.pocetKlucov;
             int porovnanie = vrchol.getData().porovnaj(aktualny.getData(), poradieKluca);
             if (porovnanie == -1 || porovnanie == 0) {
                 aktualny = aktualny.getLavySyn();
