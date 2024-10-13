@@ -1,5 +1,6 @@
 import US.KdStrom.KdStrom;
 import US.KdStrom.Koren;
+import US.KdStrom.TesterVkladania;
 import US.KdStrom.Vrchol;
 import triedy.GPS;
 import triedy.Nehnutelnost;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        KdStrom<Nehnutelnost> kdStromNehnutelnosti = new KdStrom<>(2);
+        /*KdStrom<Nehnutelnost> kdStromNehnutelnosti = new KdStrom<>(2);
         Koren<Nehnutelnost> koren = new Koren<>(new Vrchol<>(new Nehnutelnost(3, "popis", null, new GPS('E', 3.0, 'S', 3.0))));
         kdStromNehnutelnosti.vloz(koren);
         for (int i = 0; i <= 5; i++) {
@@ -20,6 +21,8 @@ public class Main {
         System.out.println(kdStromNehnutelnosti.getHlbka());
         System.out.println(kdStromNehnutelnosti.getPocetVrcholov());
         ArrayList<Vrchol<Nehnutelnost>> vrcholy = kdStromNehnutelnosti.inOrderPrehliadka();
-        vrcholy.forEach(vrchol -> System.out.println("Vrchol: " + vrchol.getData().getSupisneCislo()));
+        vrcholy.forEach(vrchol -> System.out.println("Vrchol: " + vrchol.getData().getSupisneCislo()));*/
+        TesterVkladania<Nehnutelnost> testerVkladania = new TesterVkladania<>(5, 10, Nehnutelnost.class);
+        testerVkladania.vypisVrcholy();
     }
 }
