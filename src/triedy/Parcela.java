@@ -34,7 +34,9 @@ public class Parcela implements IKluc<Parcela> {
     }
 
     @Override
-    public void vyhladaj(GPS GPSsuradnice) {
+    public boolean vyhladaj(GPS GPSsuradnice1, GPS GPSsuradnice2) {
+        return GPSsuradnice1.getPoziciaSirky() <= this.GPSsuradnice.getPoziciaSirky() && this.GPSsuradnice.getPoziciaSirky() <= GPSsuradnice2.getPoziciaSirky() &&
+                GPSsuradnice1.getPoziciaDlzky() <= this.GPSsuradnice.getPoziciaDlzky() && this.GPSsuradnice.getPoziciaDlzky() <= GPSsuradnice2.getPoziciaDlzky();
 
     }
 

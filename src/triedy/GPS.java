@@ -18,7 +18,11 @@ public class GPS {
     }
 
     public double getPoziciaSirky() {
-        return poziciaSirky;
+        if (sirka == 'N') {
+            return poziciaSirky;
+        } else {
+            return -poziciaSirky;
+        }
     }
 
     public char getDlzka() {
@@ -26,6 +30,10 @@ public class GPS {
     }
 
     public double getPoziciaDlzky() {
-        return poziciaDlzky;
+        if (dlzka == 'E') {
+            return poziciaDlzky;
+        } else {
+            return -poziciaDlzky;
+        }
     }
 }

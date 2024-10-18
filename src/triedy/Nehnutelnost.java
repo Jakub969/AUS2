@@ -5,10 +5,10 @@ import rozhrania.IKluc;
 import java.util.ArrayList;
 
 public class Nehnutelnost implements IKluc<Nehnutelnost> {
-    private int supisneCislo;
-    private String popis;
-    private ArrayList<Parcela> zoznamParcel;
-    private GPS GPSsuradnice;
+    private final int supisneCislo;
+    private final String popis;
+    private final ArrayList<Parcela> zoznamParcel;
+    private final GPS GPSsuradnice;
 
     public Nehnutelnost(int supisneCislo, String popis, ArrayList<Parcela> zoznamParcel, GPS GPSsuradnice) {
         this.supisneCislo = supisneCislo;
@@ -34,8 +34,9 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
     }
 
     @Override
-    public void vyhladaj(GPS GPSsuradnice) {
-
+    public boolean vyhladaj(GPS GPSsuradnice1, GPS GPSsuradnice2) {
+        return GPSsuradnice1.getPoziciaSirky() <= this.GPSsuradnice.getPoziciaSirky() && this.GPSsuradnice.getPoziciaSirky() <= GPSsuradnice2.getPoziciaSirky() &&
+                GPSsuradnice1.getPoziciaDlzky() <= this.GPSsuradnice.getPoziciaDlzky() && this.GPSsuradnice.getPoziciaDlzky() <= GPSsuradnice2.getPoziciaDlzky();
     }
 
     @Override

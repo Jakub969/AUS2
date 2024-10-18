@@ -2,7 +2,7 @@ package rozhrania;
 import triedy.GPS;
 
 public interface IKluc<T> {
-    void vyhladaj(GPS GPSsuradnice);
+    boolean vyhladaj(GPS GPSsuradnice1, GPS GPSsuradnice2);
     void pridaj(T objekt);
     void edituj(GPS GPSsuradnice);
     void vyrad(GPS GPSsuradnice);
