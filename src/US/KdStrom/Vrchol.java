@@ -4,7 +4,7 @@ public class Vrchol<T> {
     private Vrchol<T> lavySyn;
     private Vrchol<T> pravySyn;
     private Vrchol<T> rodic;
-    private final T data;
+    private T data;
 
     public Vrchol(T data) {
         this.data = data;
@@ -39,5 +39,8 @@ public class Vrchol<T> {
 
     public T getData() {
         return data;
+    }
+    public void setData(T data) {
+        this.data = data;
     }
 }

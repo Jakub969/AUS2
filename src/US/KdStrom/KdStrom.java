@@ -107,7 +107,75 @@ public class KdStrom<T extends IKluc<T>> {
         return vrcholy;
     }
 
+    public boolean vyrad(Vrchol<T> vrchol) {
+        ArrayList<Vrchol<T>> vrcholy = this.vyhladaj(vrchol.getData(), vrchol.getData());
+        if (vrcholy.isEmpty()) {
+            return false;
+        } else {
+            for (Vrchol<T> vrchol1 : vrcholy) {
+                if (vrchol1.getLavySyn() == null && vrchol1.getPravySyn() == null) {
+                    odstranList(vrchol1);
+                } else {
+                    nahradVrchol(vrchol1);
+                }
+                pocetVrcholov--;
+            }
+            return true;
+        }
+    }
 
+    private void nahradVrchol(Vrchol<T> vrchol) {
+        int poradieKluca = getHlbkaVrchola(vrchol) % this.pocetKlucov;
+        Vrchol<T> nahrada = null;
+        if (poradieKluca == 0) {
+            nahrada = najdiNajvacsiVrchol(vrchol.getLavySyn(), poradieKluca);
+        } else {
+            nahrada = najdiNajmensiVrchol(vrchol.getPravySyn(), poradieKluca);
+        }
+        if (nahrada != null) {
+            vrchol.setData(nahrada.getData());
+            if (nahrada.getLavySyn() == null && nahrada.getPravySyn() == null) {
+                odstranList(nahrada);
+            } else {
+                nahradVrchol(nahrada);
+            }
+        }
+    }
+
+    private Vrchol<T> najdiNajmensiVrchol(Vrchol<T> vrchol, int poradieKluca) {
+        while (vrchol.getLavySyn() != null) {
+            vrchol = vrchol.getLavySyn();
+        }
+        return vrchol;
+    }
+
+    private Vrchol<T> najdiNajvacsiVrchol(Vrchol<T> vrchol, int poradieKluca) {
+        while (vrchol.getPravySyn() != null) {
+            vrchol = vrchol.getPravySyn();
+        }
+        return vrchol;
+    }
+
+
+    private int getHlbkaVrchola(Vrchol<T> vrchol) {
+        int lokalnaHlbka = 0;
+        while (vrchol.getRodic() != null) {
+            vrchol = vrchol.getRodic();
+            lokalnaHlbka++;
+        }
+        return lokalnaHlbka;
+    }
+
+    private void odstranList(Vrchol<T> vrchol) {
+        Vrchol<T> rodic = vrchol.getRodic();
+        if (rodic == null) {
+            this.koren = null;
+        } else if (rodic.getLavySyn() == vrchol) {
+            rodic.setLavySyn(null);
+        } else {
+            rodic.setPravySyn(null);
+        }
+    }
 
     public ArrayList<Vrchol<T>> inOrderPrehliadka() {
         Vrchol<T> aktualny = this.koren.getKoren();
