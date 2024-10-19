@@ -17,11 +17,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class KdStromTest {
 
     private KdStrom<Nehnutelnost> kdStromNehnutelnosti;
+    private Vrchol<Nehnutelnost> koren;
 
 
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
         this.kdStromNehnutelnosti = new KdStrom<>(2);
+        koren = new Vrchol<>(new Nehnutelnost(3, "popis", null, null, new GPS('N', 3, 'E', 3)));
+        this.kdStromNehnutelnosti.vloz(koren);
     }
 
     @org.junit.jupiter.api.AfterEach
@@ -32,7 +35,6 @@ class KdStromTest {
     @org.junit.jupiter.api.Test
     void vloz() {
         int[] supisneCisloRodica = {3, 0, 1, 2, 3 ,4};
-        this.kdStromNehnutelnosti.vloz(new Vrchol<>(new Nehnutelnost(3, "popis", null,null, new GPS('N', 3, 'E', 3))));
         for (int i = 0; i <= 5; i++) {
             Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, null, new GPS('N', i, 'E', i)));
             this.kdStromNehnutelnosti.vloz(vrchol1);
@@ -57,15 +59,13 @@ class KdStromTest {
 
     @org.junit.jupiter.api.Test
     void getKoren() {
-        Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(3, "popis", null, null, new GPS('N', 3, 'E', 3)));
-        this.kdStromNehnutelnosti.vloz(vrchol1);
-        assertEquals(vrchol1.getData().getSupisneCislo(), this.kdStromNehnutelnosti.getKoren().getKoren().getData().getSupisneCislo());
+        assertEquals(this.koren, this.kdStromNehnutelnosti.getKoren().getKoren());
     }
 
     @org.junit.jupiter.api.Test
     void getHlbka() {
         for (int i = 0; i <= 5; i++) {
-            Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, null, new GPS('E', i, 'S', i)));
+            Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, null, new GPS('N', i, 'E', i)));
             kdStromNehnutelnosti.vloz(vrchol1);
         }
         assertEquals(4, kdStromNehnutelnosti.getHlbka());
@@ -74,7 +74,7 @@ class KdStromTest {
     @org.junit.jupiter.api.Test
     void getPocetVrcholov() {
         for (int i = 0; i <= 5; i++) {
-            Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, null, new GPS('E', i, 'S', i)));
+            Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, null, new GPS('N', i, 'E', i)));
             kdStromNehnutelnosti.vloz(vrchol1);
         }
         assertEquals(7, kdStromNehnutelnosti.getPocetVrcholov());

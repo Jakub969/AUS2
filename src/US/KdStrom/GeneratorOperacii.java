@@ -8,18 +8,26 @@ import triedy.Parcela;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class TesterVkladania<T extends IKluc<T>> {
+public class GeneratorOperacii<T extends IKluc<T>> {
     private final int pocetVlozeni;
+    private final int pocetMazani;
+    private final int pocetHladani;
     private final int maxRozsah;
+    private ArrayList<Vrchol<T>> zoznamVlozenychVrcholov;
     private final KdStrom<T> strom;
     private final Class<T> instanciaTriedy;
 
-    public TesterVkladania(int pocetVlozeni, int maxRozsah, Class<T> trieda) {
+    public GeneratorOperacii(int pocetVlozeni, int pocetMazani, int pocetHladani, int maxRozsah, Class<T> trieda) {
         this.pocetVlozeni = pocetVlozeni;
+        this.pocetMazani = pocetMazani;
+        this.pocetHladani = pocetHladani;
         this.maxRozsah = maxRozsah;
         this.strom = new KdStrom<>(2);
         this.instanciaTriedy = trieda;
+        this.zoznamVlozenychVrcholov = new ArrayList<>(this.pocetVlozeni * 2);
         metodaVkladania();
+        metodaMazania();
+        metodaVyhladavania();
     }
 
     private void metodaVkladania() {
@@ -56,8 +64,49 @@ public class TesterVkladania<T extends IKluc<T>> {
                 Vrchol<T> vrchol2 = new Vrchol<>(data2);
                 this.strom.vloz(vrchol1);
                 this.strom.vloz(vrchol2);
+                this.zoznamVlozenychVrcholov.add(vrchol1);
+                this.zoznamVlozenychVrcholov.add(vrchol2);
             } catch (ClassCastException e) {
                 throw new IllegalArgumentException("Error pri pretypovani", e);
+            }
+        }
+    }
+
+    public void metodaMazania() {
+        Random random = new Random(System.nanoTime());
+        for (int i = 0; i < this.pocetMazani; i++) {
+            if (i % 100 == 0) {
+                random.setSeed(System.nanoTime());
+            }
+            int index = random.nextInt(this.zoznamVlozenychVrcholov.size());
+            Vrchol<T> vrchol = this.zoznamVlozenychVrcholov.get(index);
+            this.strom.vyrad(vrchol);
+            System.out.println("Vrchol s kľúčom: " + vrchol.getData().toString() + " bol vymazaný");
+            this.zoznamVlozenychVrcholov.remove(index);
+        }
+    }
+
+    private void metodaVyhladavania() {
+        Random random = new Random(System.nanoTime());
+        for (int i = 0; i < this.pocetHladani; i++) {
+            if (i % 100 == 0) {
+                random.setSeed(System.nanoTime());
+            }
+            int index = random.nextInt(this.zoznamVlozenychVrcholov.size());
+            Vrchol<T> vrchol1 = this.zoznamVlozenychVrcholov.get(index);
+            Vrchol<T> vrchol2 = null;
+            if (vrchol1.getData() instanceof Nehnutelnost nehnutelnost) {
+                int indexVrcholu = this.zoznamVlozenychVrcholov.indexOf(nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS());
+                vrchol2 = this.zoznamVlozenychVrcholov.get(indexVrcholu);
+            } else if (vrchol1.getData() instanceof Parcela parcela) {
+                int indexParcely = this.zoznamVlozenychVrcholov.indexOf(parcela.getReferenciaNaRovnakuParceluSInymiGPS());
+                vrchol2 = this.zoznamVlozenychVrcholov.get(indexParcely);
+            } else {
+                throw new IllegalArgumentException("Nepodporovaný typ triedy");
+            }
+            ArrayList<Vrchol<T>> vysledok = this.strom.vyhladaj(vrchol1.getData(), vrchol2.getData());
+            for (Vrchol<T> tVrchol : vysledok) {
+                System.out.println("Vrchol s kľúčom: " + tVrchol.getData().toString() + " bol nájdený");
             }
         }
     }

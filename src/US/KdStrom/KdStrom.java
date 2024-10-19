@@ -125,6 +125,9 @@ public class KdStrom<T extends IKluc<T>> {
     }
 
     private void nahradVrchol(Vrchol<T> vrchol) {
+        if (vrchol == null) {
+            throw new IllegalArgumentException("Vrchol cannot be null");
+        }
         int poradieKluca = getHlbkaVrchola(vrchol) % this.pocetKlucov;
         Vrchol<T> nahrada = null;
         if (poradieKluca == 0) {
@@ -133,16 +136,15 @@ public class KdStrom<T extends IKluc<T>> {
             nahrada = najdiNajmensiVrchol(vrchol.getPravySyn(), poradieKluca);
         }
         if (nahrada != null) {
-            vrchol.setData(nahrada.getData());
-            if (nahrada.getLavySyn() == null && nahrada.getPravySyn() == null) {
-                odstranList(nahrada);
-            } else {
-                nahradVrchol(nahrada);
-            }
+            odstranList(vrchol);
+            vloz(nahrada);
         }
     }
 
     private Vrchol<T> najdiNajmensiVrchol(Vrchol<T> vrchol, int poradieKluca) {
+        if (vrchol == null) {
+            throw new IllegalArgumentException("Vrchol nemože byť null");
+        }
         while (vrchol.getLavySyn() != null) {
             vrchol = vrchol.getLavySyn();
         }
@@ -150,6 +152,9 @@ public class KdStrom<T extends IKluc<T>> {
     }
 
     private Vrchol<T> najdiNajvacsiVrchol(Vrchol<T> vrchol, int poradieKluca) {
+        if (vrchol == null) {
+            throw new IllegalArgumentException("Vrchol nemože byť null");
+        }
         while (vrchol.getPravySyn() != null) {
             vrchol = vrchol.getPravySyn();
         }

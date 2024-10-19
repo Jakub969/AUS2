@@ -7,8 +7,14 @@ public class GPS {
     private double poziciaDlzky;
 
     public GPS(char sirka, double poziciaSirky, char dlzka, double poziciaDlzky) {
+        if (sirka != 'N' && sirka != 'S') {
+            throw new IllegalArgumentException("Sirka musí byť 'N' alebo 'S'");
+        }
         this.sirka = sirka;
         this.poziciaSirky = poziciaSirky;
+        if (dlzka != 'E' && dlzka != 'W') {
+            throw new IllegalArgumentException("Dlzka musí byť 'E' alebo 'W'");
+        }
         this.dlzka = dlzka;
         this.poziciaDlzky = poziciaDlzky;
     }
