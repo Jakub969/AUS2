@@ -28,21 +28,34 @@ public class TesterVkladania<T extends IKluc<T>> {
             if (i % 100 == 0) {
                 random.setSeed(System.nanoTime());
             }
-            double x = random.nextDouble() * this.maxRozsah;
-            double y = random.nextDouble() * this.maxRozsah;
-            GPS gps = new GPS('N', x, 'E', y);
-            T data;
-            Vrchol<T> vrchol;
+            double x1 = random.nextDouble() * this.maxRozsah;
+            double y1 = random.nextDouble() * this.maxRozsah;
+            double x2 = random.nextDouble() * this.maxRozsah;
+            double y2 = random.nextDouble() * this.maxRozsah;
+            GPS gps1 = new GPS('N', x1, 'E', y1);
+            GPS gps2 = new GPS('N', x2, 'E', y2);
+            T data1;
+            T data2;
             try {
                 if (instanciaTriedy == Nehnutelnost.class) {
-                    data = instanciaTriedy.cast(new Nehnutelnost(i, "popis", null, gps));
+                    Nehnutelnost nehnutelnost1 = new Nehnutelnost(i, "popis", null, null, gps1);
+                    Nehnutelnost nehnutelnost2 = new Nehnutelnost(i, "popis", null, nehnutelnost1, gps2);
+                    nehnutelnost1.setReferenciaNaRovnakuNehnutelnostSInymiGPS(nehnutelnost2);
+                    data1 = instanciaTriedy.cast(nehnutelnost1);
+                    data2 = instanciaTriedy.cast(nehnutelnost2);
                 } else if (instanciaTriedy == Parcela.class) {
-                    data = instanciaTriedy.cast(new Parcela(i, "popis", null, gps));
+                    Parcela parcela1 = new Parcela(i, "popis", null, null, gps1);
+                    Parcela parcela2 = new Parcela(i, "popis", null, parcela1, gps2);
+                    parcela1.setReferenciaNaRovnakuParceluSInymiGPS(parcela2);
+                    data1 = instanciaTriedy.cast(parcela1);
+                    data2 = instanciaTriedy.cast(parcela2);
                 } else {
                     throw new IllegalArgumentException("Nepodporovaný typ triedy");
                 }
-                vrchol = new Vrchol<>(data);
-                this.strom.vloz(vrchol);
+                Vrchol<T> vrchol1 = new Vrchol<>(data1);
+                Vrchol<T> vrchol2 = new Vrchol<>(data2);
+                this.strom.vloz(vrchol1);
+                this.strom.vloz(vrchol2);
             } catch (ClassCastException e) {
                 throw new IllegalArgumentException("Error pri pretypovani", e);
             }

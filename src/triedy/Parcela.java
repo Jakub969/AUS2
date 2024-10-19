@@ -8,12 +8,14 @@ public class Parcela implements IKluc<Parcela> {
     private final int cisloParcely;
     private String popis;
     private ArrayList<Nehnutelnost> zoznamNehnutelnosti;
+    private Parcela referenciaNaRovnakuParceluSInymiGPS;
     private GPS GPSsuradnice;
 
-    public Parcela(int cisloParcely, String popis, ArrayList<Nehnutelnost> zoznamNehnutelnosti, GPS GPSsuradnice) {
+    public Parcela(int cisloParcely, String popis, ArrayList<Nehnutelnost> zoznamNehnutelnosti, Parcela referenciaNaRovnakuParceluSInymiGPS, GPS GPSsuradnice) {
         this.cisloParcely = cisloParcely;
         this.popis = popis;
         this.zoznamNehnutelnosti = zoznamNehnutelnosti;
+        this.referenciaNaRovnakuParceluSInymiGPS = referenciaNaRovnakuParceluSInymiGPS;
         this.GPSsuradnice = GPSsuradnice;
     }
 
@@ -31,6 +33,14 @@ public class Parcela implements IKluc<Parcela> {
 
     public GPS getGPSsuradnice() {
         return GPSsuradnice;
+    }
+
+    public Parcela getReferenciaNaRovnakuParceluSInymiGPS() {
+        return referenciaNaRovnakuParceluSInymiGPS;
+    }
+
+    public void setReferenciaNaRovnakuParceluSInymiGPS(Parcela referenciaNaRovnakuParceluSInymiGPS) {
+        this.referenciaNaRovnakuParceluSInymiGPS = referenciaNaRovnakuParceluSInymiGPS;
     }
 
     @Override
