@@ -72,7 +72,7 @@ public class KdStrom<T extends IKluc<T>> {
         }
     }
 
-    public ArrayList<Vrchol<T>> vyhladaj(GPS kluc1, GPS kluc2) {
+    public ArrayList<Vrchol<T>> vyhladaj(T kluc1, T kluc2) {
         ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
         Stack<Vrchol<T>> stack = new Stack<>();
         Stack<Integer> hlbkaStack = new Stack<>();
@@ -88,57 +88,25 @@ public class KdStrom<T extends IKluc<T>> {
                 continue;
             }
 
-            boolean patriDoObdlznika = aktualny.getData().vyhladaj(kluc1, kluc2);
-            if (patriDoObdlznika) {
+            int poradieKluca = hlbka % 2;
+            int patriDoObdlznika = aktualny.getData().vyhladaj(kluc1, kluc2, poradieKluca);
+            if (patriDoObdlznika == 0) {
                 vrcholy.add(aktualny);
             }
 
-            int dimenzia = hlbka % 2; // 0 pre šírku, 1 pre dĺžku
-            if (dimenzia == 0) {
-                if (aktualny.getData() instanceof Nehnutelnost instanciaNehnutelnosti) {
-                    if (kluc1.getPoziciaSirky() <= instanciaNehnutelnosti.getGPSsuradnice().getPoziciaSirky()) {
-                        stack.push(aktualny.getLavySyn());
-                        hlbkaStack.push(hlbka + 1);
-                    }
-                    if (kluc2.getPoziciaSirky() >= instanciaNehnutelnosti.getGPSsuradnice().getPoziciaSirky()) {
-                        stack.push(aktualny.getPravySyn());
-                        hlbkaStack.push(hlbka + 1);
-                    }
-                } else if (aktualny.getData() instanceof Parcela instanciaParcely) {
-                    if (kluc1.getPoziciaSirky() <= instanciaParcely.getGPSsuradnice().getPoziciaSirky()) {
-                        stack.push(aktualny.getLavySyn());
-                        hlbkaStack.push(hlbka + 1);
-                    }
-                    if (kluc2.getPoziciaSirky() >= instanciaParcely.getGPSsuradnice().getPoziciaSirky()) {
-                        stack.push(aktualny.getPravySyn());
-                        hlbkaStack.push(hlbka + 1);
-                    }
-                }
-            } else {
-                if (aktualny.getData() instanceof Nehnutelnost instanciaNehnutelnosti) {
-                    if (kluc1.getPoziciaDlzky() <= instanciaNehnutelnosti.getGPSsuradnice().getPoziciaSirky()) {
-                        stack.push(aktualny.getLavySyn());
-                        hlbkaStack.push(hlbka + 1);
-                    }
-                    if (kluc2.getPoziciaDlzky() >= instanciaNehnutelnosti.getGPSsuradnice().getPoziciaSirky()) {
-                        stack.push(aktualny.getPravySyn());
-                        hlbkaStack.push(hlbka + 1);
-                    }
-                } else if (aktualny.getData() instanceof Parcela instanciaParcely) {
-                    if (kluc1.getPoziciaDlzky() <= instanciaParcely.getGPSsuradnice().getPoziciaSirky()) {
-                        stack.push(aktualny.getLavySyn());
-                        hlbkaStack.push(hlbka + 1);
-                    }
-                    if (kluc2.getPoziciaDlzky() >= instanciaParcely.getGPSsuradnice().getPoziciaSirky()) {
-                        stack.push(aktualny.getPravySyn());
-                        hlbkaStack.push(hlbka + 1);
-                    }
-                }
+            if (aktualny.getData().porovnaj(kluc1, poradieKluca) >= 0) {
+                stack.push(aktualny.getLavySyn());
+                hlbkaStack.push(hlbka + 1);
+            }
+            if (aktualny.getData().porovnaj(kluc2, poradieKluca) <= 0) {
+                stack.push(aktualny.getPravySyn());
+                hlbkaStack.push(hlbka + 1);
             }
         }
 
         return vrcholy;
     }
+
 
 
     public ArrayList<Vrchol<T>> inOrderPrehliadka() {

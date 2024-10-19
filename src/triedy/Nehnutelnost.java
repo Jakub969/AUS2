@@ -34,9 +34,24 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
     }
 
     @Override
-    public boolean vyhladaj(GPS GPSsuradnice1, GPS GPSsuradnice2) {
-        return GPSsuradnice1.getPoziciaSirky() <= this.GPSsuradnice.getPoziciaSirky() && this.GPSsuradnice.getPoziciaSirky() <= GPSsuradnice2.getPoziciaSirky() &&
-                GPSsuradnice1.getPoziciaDlzky() <= this.GPSsuradnice.getPoziciaDlzky() && this.GPSsuradnice.getPoziciaDlzky() <= GPSsuradnice2.getPoziciaDlzky();
+    public int vyhladaj(Nehnutelnost objekt1, Nehnutelnost objekt2, int poradieKluca) {
+        if (objekt1 instanceof Nehnutelnost GPSsuradnice1 && objekt2 instanceof Nehnutelnost GPSsuradnice2) {
+            if (poradieKluca == 0) {
+                if (GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky() <= this.getGPSsuradnice().getPoziciaDlzky() && this.getGPSsuradnice().getPoziciaDlzky() <= GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky()) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            } else {
+                if (GPSsuradnice1.getGPSsuradnice().getPoziciaSirky() <= this.getGPSsuradnice().getPoziciaSirky() && this.getGPSsuradnice().getPoziciaSirky() <= GPSsuradnice2.getGPSsuradnice().getPoziciaSirky()) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+        } else {
+            return -2;
+        }
     }
 
     @Override
@@ -45,18 +60,18 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
     }
 
     @Override
-    public void edituj(GPS GPSsuradnice) {
+    public void edituj(Nehnutelnost objekt) {
 
     }
 
     @Override
-    public void vyrad(GPS GPSsuradnice) {
+    public void vyrad(Nehnutelnost objekt) {
 
     }
 
     @Override
-    public int porovnaj(Nehnutelnost data, int poradieKluca) {
-        if (data instanceof Nehnutelnost dataNehnutelnost) {
+    public int porovnaj(Nehnutelnost objekt, int poradieKluca) {
+        if (objekt instanceof Nehnutelnost dataNehnutelnost) {
             if (poradieKluca == 0) {
                 return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataNehnutelnost.GPSsuradnice.getPoziciaDlzky());
             } else {
