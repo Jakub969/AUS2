@@ -107,6 +107,7 @@ public class KdStrom<T extends IKluc<T>> {
         return vrcholy;
     }
 
+
     public boolean vyrad(Vrchol<T> vrchol) {
         ArrayList<Vrchol<T>> vrcholy = this.vyhladaj(vrchol.getData(), vrchol.getData());
         if (vrcholy.isEmpty()) {

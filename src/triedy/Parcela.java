@@ -47,13 +47,17 @@ public class Parcela implements IKluc<Parcela> {
     public int vyhladaj(Parcela objekt1, Parcela objekt2, int poradieKluca) {
         if (objekt1 instanceof Parcela GPSsuradnice1 && objekt2 instanceof Parcela GPSsuradnice2) {
             if (poradieKluca == 0) {
-                if (GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky() <= this.getGPSsuradnice().getPoziciaDlzky() && this.getGPSsuradnice().getPoziciaDlzky() <= GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky()) {
+                double min = Math.min(GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky(), GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky());
+                double max = Math.max(GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky(), GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky());
+                if (min <= this.getGPSsuradnice().getPoziciaDlzky() && this.getGPSsuradnice().getPoziciaDlzky() <= max) {
                     return 0;
                 } else {
                     return -1;
                 }
             } else {
-                if (GPSsuradnice1.getGPSsuradnice().getPoziciaSirky() <= this.getGPSsuradnice().getPoziciaSirky() && this.getGPSsuradnice().getPoziciaSirky() <= GPSsuradnice2.getGPSsuradnice().getPoziciaSirky()) {
+                double min = Math.min(GPSsuradnice1.getGPSsuradnice().getPoziciaSirky(), GPSsuradnice2.getGPSsuradnice().getPoziciaSirky());
+                double max = Math.max(GPSsuradnice1.getGPSsuradnice().getPoziciaSirky(), GPSsuradnice2.getGPSsuradnice().getPoziciaSirky());
+                if (min <= this.getGPSsuradnice().getPoziciaSirky() && this.getGPSsuradnice().getPoziciaSirky() <= max) {
                     return 0;
                 } else {
                     return -1;

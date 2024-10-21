@@ -62,6 +62,9 @@ public class GeneratorOperacii<T extends IKluc<T>> {
                 }
                 Vrchol<T> vrchol1 = new Vrchol<>(data1);
                 Vrchol<T> vrchol2 = new Vrchol<>(data2);
+                if (true) {
+                    System.out.println("GPS suradnice: " + gps1.getPoziciaDlzky() + " " + gps1.getPoziciaSirky() + " a " + gps2.getPoziciaDlzky() + " " + gps2.getPoziciaSirky());
+                }
                 this.strom.vloz(vrchol1);
                 this.strom.vloz(vrchol2);
                 this.zoznamVlozenychVrcholov.add(vrchol1);
@@ -100,7 +103,7 @@ public class GeneratorOperacii<T extends IKluc<T>> {
                 Vrchol<Nehnutelnost> vrchol2;
                 vrchol2 = new Vrchol<>(nehnutelnost1);
                 vysledok = this.strom.vyhladaj(vrchol1.getData(), (T) vrchol2.getData());
-                System.out.println("vyhladávam v rozsahu: " + nehnutelnost.getGPSsuradnice().getPoziciaDlzky() + " <= x <=" + nehnutelnost1.getGPSsuradnice().getPoziciaDlzky() + " a " + nehnutelnost.getGPSsuradnice().getPoziciaSirky() + " <= y <=" + nehnutelnost1.getGPSsuradnice().getPoziciaSirky());
+                System.out.println("vyhladávam v rozsahu: x(" + nehnutelnost.getGPSsuradnice().getPoziciaDlzky() + " ; " + nehnutelnost1.getGPSsuradnice().getPoziciaDlzky() + ") a y(" + nehnutelnost.getGPSsuradnice().getPoziciaSirky() + " ; " + nehnutelnost1.getGPSsuradnice().getPoziciaSirky() + ")");
             } else if (vrchol1.getData() instanceof Parcela parcela) {
                 Parcela parcela1 = parcela.getReferenciaNaRovnakuParceluSInymiGPS();
                 Vrchol<Parcela> vrchol2;
