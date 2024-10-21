@@ -26,7 +26,7 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         this.instanciaTriedy = trieda;
         this.zoznamVlozenychVrcholov = new ArrayList<>(this.pocetVlozeni * 2);
         metodaVkladania();
-        metodaMazania();
+        //metodaMazania();
         metodaVyhladavania();
     }
 
@@ -94,19 +94,28 @@ public class GeneratorOperacii<T extends IKluc<T>> {
             }
             int index = random.nextInt(this.zoznamVlozenychVrcholov.size());
             Vrchol<T> vrchol1 = this.zoznamVlozenychVrcholov.get(index);
-            Vrchol<T> vrchol2 = null;
+            ArrayList<Vrchol<T>> vysledok;
             if (vrchol1.getData() instanceof Nehnutelnost nehnutelnost) {
-                int indexVrcholu = this.zoznamVlozenychVrcholov.indexOf(nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS());
-                vrchol2 = this.zoznamVlozenychVrcholov.get(indexVrcholu);
+                Nehnutelnost nehnutelnost1 = nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS();
+                Vrchol<Nehnutelnost> vrchol2;
+                vrchol2 = new Vrchol<>(nehnutelnost1);
+                vysledok = this.strom.vyhladaj(vrchol1.getData(), (T) vrchol2.getData());
+                System.out.println("vyhladávam v rozsahu: " + nehnutelnost.getGPSsuradnice().getPoziciaDlzky() + " <= x <=" + nehnutelnost1.getGPSsuradnice().getPoziciaDlzky() + " a " + nehnutelnost.getGPSsuradnice().getPoziciaSirky() + " <= y <=" + nehnutelnost1.getGPSsuradnice().getPoziciaSirky());
             } else if (vrchol1.getData() instanceof Parcela parcela) {
-                int indexParcely = this.zoznamVlozenychVrcholov.indexOf(parcela.getReferenciaNaRovnakuParceluSInymiGPS());
-                vrchol2 = this.zoznamVlozenychVrcholov.get(indexParcely);
+                Parcela parcela1 = parcela.getReferenciaNaRovnakuParceluSInymiGPS();
+                Vrchol<Parcela> vrchol2;
+                vrchol2 = new Vrchol<>(parcela1);
+                vysledok = this.strom.vyhladaj(vrchol1.getData(), (T) vrchol2.getData());
             } else {
                 throw new IllegalArgumentException("Nepodporovaný typ triedy");
             }
-            ArrayList<Vrchol<T>> vysledok = this.strom.vyhladaj(vrchol1.getData(), vrchol2.getData());
-            for (Vrchol<T> tVrchol : vysledok) {
-                System.out.println("Vrchol s kľúčom: " + tVrchol.getData().toString() + " bol nájdený");
+            if (0 == 0) {
+                int pocetNajdenychVrcholov = vysledok.size();
+                for (Vrchol<T> tVrchol : vysledok) {
+                    System.out.println("Vrchol s kľúčom: " + tVrchol.getData().toString() + " bol nájdený");
+                }
+                System.out.println("Počet nájdených vrcholov: " + pocetNajdenychVrcholov);
+                System.out.println("----------------------------------------------------------------------");
             }
         }
     }

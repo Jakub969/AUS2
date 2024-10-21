@@ -5,7 +5,7 @@ import triedy.Parcela;
 public class Main {
     public static void main(String[] args) {
         long startTime1 = System.nanoTime();
-        GeneratorOperacii<Nehnutelnost> generatorOperacii = new GeneratorOperacii<>(1000000, 10000, 1000, 1000, Nehnutelnost.class);
+        GeneratorOperacii<Nehnutelnost> generatorOperacii = new GeneratorOperacii<>(10, 10000, 5, 1, Nehnutelnost.class);
         long endTime1 = System.nanoTime();
         double seconds1 = (double) (endTime1 - startTime1) / 1_000_000_000.0;
         //testerVkladania.vypisVrcholy();
@@ -13,7 +13,7 @@ public class Main {
         System.out.println("Hĺbka: " + generatorOperacii.getHlbka());
         System.out.println("Počet vrcholov: " + generatorOperacii.getPocetVrcholov());
         long startTime2 = System.nanoTime();
-        GeneratorOperacii<Parcela> generatorOperacii1 = new GeneratorOperacii<>(1000000, 10000, 1000,1000, Parcela.class);
+        GeneratorOperacii<Parcela> generatorOperacii1 = new GeneratorOperacii<>(10, 10000, 5,1, Parcela.class);
         long endTime2 = System.nanoTime();
         double seconds2 = (double) (endTime2 - startTime2) / 1_000_000_000.0;
         //testerVkladania1.vypisVrcholy();
