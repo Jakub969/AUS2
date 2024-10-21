@@ -94,18 +94,30 @@ public class KdStrom<T extends IKluc<T>> {
                 vrcholy.add(aktualny);
             }
 
-            if (aktualny.getData().porovnaj(kluc1, poradieKluca) >= 0) {
-                stack.push(aktualny.getLavySyn());
-                hlbkaStack.push(hlbka + 1);
-            }
-            if (aktualny.getData().porovnaj(kluc2, poradieKluca) <= 0) {
-                stack.push(aktualny.getPravySyn());
-                hlbkaStack.push(hlbka + 1);
+            if (poradieKluca == 0) {
+                if (aktualny.getData().porovnaj(kluc1, poradieKluca) >= 0) {
+                    stack.push(aktualny.getLavySyn());
+                    hlbkaStack.push(hlbka + 1);
+                }
+                if (aktualny.getData().porovnaj(kluc2, poradieKluca) <= 0) {
+                    stack.push(aktualny.getPravySyn());
+                    hlbkaStack.push(hlbka + 1);
+                }
+            } else {
+                if (aktualny.getData().porovnaj(kluc1, poradieKluca) >= 0) {
+                    stack.push(aktualny.getLavySyn());
+                    hlbkaStack.push(hlbka + 1);
+                }
+                if (aktualny.getData().porovnaj(kluc2, poradieKluca) <= 0) {
+                    stack.push(aktualny.getPravySyn());
+                    hlbkaStack.push(hlbka + 1);
+                }
             }
         }
 
         return vrcholy;
     }
+
 
 
     public boolean vyrad(Vrchol<T> vrchol) {

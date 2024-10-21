@@ -49,7 +49,7 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
             if (poradieKluca == 0) {
                 double min = Math.min(GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky(), GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky());
                 double max = Math.max(GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky(), GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky());
-                if (min <= this.getGPSsuradnice().getPoziciaDlzky() && this.getGPSsuradnice().getPoziciaDlzky() <= max) {
+                if (min <= this.getGPSsuradnice().getPoziciaDlzky() && this.getGPSsuradnice().getPoziciaDlzky() <= max) { //TODO upravit na toleranciu
                     return 0;
                 } else {
                     return -1;
