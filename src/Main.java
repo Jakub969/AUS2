@@ -8,7 +8,7 @@ public class Main {
         GeneratorOperacii<Nehnutelnost> generatorOperacii = new GeneratorOperacii<>(10, 10000, 5, 10, Nehnutelnost.class);
         long endTime1 = System.nanoTime();
         double seconds1 = (double) (endTime1 - startTime1) / 1_000_000_000.0;
-        //testerVkladania.vypisVrcholy();
+        generatorOperacii.vypisVrcholy();
         System.out.println("Čas vkladania: " + seconds1);
         System.out.println("Hĺbka: " + generatorOperacii.getHlbka());
         System.out.println("Počet vrcholov: " + generatorOperacii.getPocetVrcholov());
@@ -16,7 +16,7 @@ public class Main {
         GeneratorOperacii<Parcela> generatorOperacii1 = new GeneratorOperacii<>(10, 10000, 5,10, Parcela.class);
         long endTime2 = System.nanoTime();
         double seconds2 = (double) (endTime2 - startTime2) / 1_000_000_000.0;
-        //testerVkladania1.vypisVrcholy();
+        //generatorOperacii1.vypisVrcholy();
         System.out.println("Čas vkladania: " + seconds2);
         System.out.println("Hĺbka: " + generatorOperacii1.getHlbka());
         System.out.println("Počet vrcholov: " + generatorOperacii1.getPocetVrcholov());*/

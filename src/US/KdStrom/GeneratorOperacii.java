@@ -40,8 +40,8 @@ public class GeneratorOperacii<T extends IKluc<T>> {
             double y1 = random.nextDouble() * this.maxRozsah;
             double x2 = random.nextDouble() * this.maxRozsah;
             double y2 = random.nextDouble() * this.maxRozsah;
-            GPS gps1 = new GPS('N', x1, 'E', y1);
-            GPS gps2 = new GPS('N', x2, 'E', y2);
+            GPS gps1 = new GPS('N', Math.floor(x1), 'E', Math.floor(y1));
+            GPS gps2 = new GPS('N', Math.floor(x2), 'E', Math.floor(y2));
             T data1;
             T data2;
             try {
@@ -97,6 +97,7 @@ public class GeneratorOperacii<T extends IKluc<T>> {
             }
             int index = random.nextInt(this.zoznamVlozenychVrcholov.size());
             Vrchol<T> vrchol1 = this.zoznamVlozenychVrcholov.get(index);
+            this.zoznamVlozenychVrcholov.remove(index);
             ArrayList<Vrchol<T>> vysledok;
             if (vrchol1.getData() instanceof Nehnutelnost nehnutelnost) {
                 Nehnutelnost nehnutelnost1 = nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS();

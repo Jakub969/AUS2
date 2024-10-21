@@ -45,11 +45,12 @@ public class Parcela implements IKluc<Parcela> {
 
     @Override
     public int vyhladaj(Parcela objekt1, Parcela objekt2, int poradieKluca) {
+        double tolerancia = 0.000001;
         if (objekt1 instanceof Parcela GPSsuradnice1 && objekt2 instanceof Parcela GPSsuradnice2) {
             if (poradieKluca == 0) {
                 double min = Math.min(GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky(), GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky());
                 double max = Math.max(GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky(), GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky());
-                if (min <= this.getGPSsuradnice().getPoziciaDlzky() && this.getGPSsuradnice().getPoziciaDlzky() <= max) {
+                if (min <= this.getGPSsuradnice().getPoziciaDlzky() && this.getGPSsuradnice().getPoziciaDlzky() <= max || (Math.abs(this.GPSsuradnice.getPoziciaDlzky() - min) <= tolerancia) || (Math.abs(max - this.GPSsuradnice.getPoziciaDlzky()) <= tolerancia)) {
                     return 0;
                 } else {
                     return -1;
@@ -57,7 +58,7 @@ public class Parcela implements IKluc<Parcela> {
             } else {
                 double min = Math.min(GPSsuradnice1.getGPSsuradnice().getPoziciaSirky(), GPSsuradnice2.getGPSsuradnice().getPoziciaSirky());
                 double max = Math.max(GPSsuradnice1.getGPSsuradnice().getPoziciaSirky(), GPSsuradnice2.getGPSsuradnice().getPoziciaSirky());
-                if (min <= this.getGPSsuradnice().getPoziciaSirky() && this.getGPSsuradnice().getPoziciaSirky() <= max) {
+                if (min <= this.getGPSsuradnice().getPoziciaSirky() && this.getGPSsuradnice().getPoziciaSirky() <= max || (Math.abs(this.GPSsuradnice.getPoziciaSirky() - min) <= tolerancia) || (Math.abs(max - this.GPSsuradnice.getPoziciaSirky()) <= tolerancia)) {
                     return 0;
                 } else {
                     return -1;
