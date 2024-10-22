@@ -89,6 +89,12 @@ public class KdStrom<T extends IKluc<T>> {
             }
 
             int poradieKluca = hlbka % 2;
+            // Zabezpečenie, že kluc1 má menšie hodnoty ako kluc2
+            if (kluc1.porovnaj(kluc2, poradieKluca) == 1) {
+                T temp = kluc1;
+                kluc1 = kluc2;
+                kluc2 = temp;
+            }
             int patriDoObdlznika = aktualny.getData().vyhladaj(kluc1, kluc2, poradieKluca);
             if (patriDoObdlznika == 0) {
                 vrcholy.add(aktualny);

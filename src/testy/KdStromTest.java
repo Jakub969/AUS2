@@ -23,8 +23,6 @@ class KdStromTest {
     @org.junit.jupiter.api.BeforeEach
     void setUp() {
         this.kdStromNehnutelnosti = new KdStrom<>(2);
-        koren = new Vrchol<>(new Nehnutelnost(3, "popis", null, null, new GPS('N', 3, 'E', 3)));
-        this.kdStromNehnutelnosti.vloz(koren);
     }
 
     @org.junit.jupiter.api.AfterEach
@@ -34,6 +32,7 @@ class KdStromTest {
     @Order(1)
     @org.junit.jupiter.api.Test
     void vloz() {
+        this.kdStromNehnutelnosti.vloz(new Vrchol<>(new Nehnutelnost(3, "popis", null, null, new GPS('N', 3, 'E', 3))));
         int[] supisneCisloRodica = {3, 0, 1, 2, 3 ,4};
         for (int i = 0; i <= 5; i++) {
             Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, null, new GPS('N', i, 'E', i)));
@@ -45,6 +44,7 @@ class KdStromTest {
     @Order(2)
     @org.junit.jupiter.api.Test
     void inOrderPrehliadka() {
+        this.kdStromNehnutelnosti.vloz(new Vrchol<>(new Nehnutelnost(3, "popis", null, null, new GPS('N', 3, 'E', 3))));
         int[] supisneCisla = {0, 1, 2, 3, 3, 4, 5};
         for (int i = 0; i <= 5; i++) {
             Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, null ,new GPS('N', i, 'E', i)));
@@ -59,11 +59,14 @@ class KdStromTest {
 
     @org.junit.jupiter.api.Test
     void getKoren() {
+        this.koren = new Vrchol<>(new Nehnutelnost(3, "popis", null, null, new GPS('N', 3, 'E', 3)));
+        this.kdStromNehnutelnosti.vloz(this.koren);
         assertEquals(this.koren, this.kdStromNehnutelnosti.getKoren().getKoren());
     }
 
     @org.junit.jupiter.api.Test
     void getHlbka() {
+        this.kdStromNehnutelnosti.vloz(new Vrchol<>(new Nehnutelnost(3, "popis", null, null, new GPS('N', 3, 'E', 3))));
         for (int i = 0; i <= 5; i++) {
             Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, null, new GPS('N', i, 'E', i)));
             kdStromNehnutelnosti.vloz(vrchol1);
@@ -73,6 +76,7 @@ class KdStromTest {
 
     @org.junit.jupiter.api.Test
     void getPocetVrcholov() {
+        this.kdStromNehnutelnosti.vloz(new Vrchol<>(new Nehnutelnost(3, "popis", null, null, new GPS('N', 3, 'E', 3))));
         for (int i = 0; i <= 5; i++) {
             Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, null, new GPS('N', i, 'E', i)));
             kdStromNehnutelnosti.vloz(vrchol1);
@@ -149,7 +153,7 @@ class KdStromTest {
         kluce.add(vrchol51);
         kluce.add(vrchol90);
         kluce.add(vrchol91);
-        int[] pocetVrcholov = {1,6,2,3,1};
+        int[] pocetVrcholov = {1,1,2,1,3};
         for (int i = 0; i < 5; i++) {
             int index = i * 2; // Každý pár je na indexoch 0-1, 2-3, 4-5, atď.
             ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.vyhladaj(kluce.get(index).getData(), kluce.get(index + 1).getData());
@@ -157,7 +161,7 @@ class KdStromTest {
             System.out.println("Vyhľadávam v rozsahu: x(" + kluce.get(index).getData().getGPSsuradnice().getPoziciaDlzky() + " ; " + kluce.get(index + 1).getData().getGPSsuradnice().getPoziciaDlzky() + ") a y(" + kluce.get(index).getData().getGPSsuradnice().getPoziciaSirky() + " ; " + kluce.get(index + 1).getData().getGPSsuradnice().getPoziciaSirky() + ")");
 
             for (Vrchol<Nehnutelnost> vrchol : vysledok) {
-                System.out.println("Vrchol s kľúčom: " + vrchol.getData().getSupisneCislo() + " bol nájdený");
+                System.out.println("Vrchol: " + vrchol.getData().getSupisneCislo() + " ; " + vrchol.getData().toString() + " bol nájdený");
             }
 
             System.out.println("Počet nájdených vrcholov: " + vysledok.size());
