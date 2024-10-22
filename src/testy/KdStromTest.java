@@ -153,7 +153,7 @@ class KdStromTest {
         kluce.add(vrchol51);
         kluce.add(vrchol90);
         kluce.add(vrchol91);
-        int[] pocetVrcholov = {1,1,2,1,3};
+        int[] pocetVrcholov = {3,5,2,2,13};
         for (int i = 0; i < 5; i++) {
             int index = i * 2; // Každý pár je na indexoch 0-1, 2-3, 4-5, atď.
             ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.vyhladaj(kluce.get(index).getData(), kluce.get(index + 1).getData());

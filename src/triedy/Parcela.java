@@ -44,30 +44,35 @@ public class Parcela implements IKluc<Parcela> {
     }
 
     @Override
-    public int vyhladaj(Parcela objekt1, Parcela objekt2, int poradieKluca) {
-        double tolerancia = 0.000001;
+    public int vyhladaj(Parcela objekt1, Parcela objekt2) {
         if (objekt1 instanceof Parcela GPSsuradnice1 && objekt2 instanceof Parcela GPSsuradnice2) {
-            if (poradieKluca == 0) {
-                double min = Math.min(GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky(), GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky());
-                double max = Math.max(GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky(), GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky());
-                if (min <= this.getGPSsuradnice().getPoziciaDlzky() && this.getGPSsuradnice().getPoziciaDlzky() <= max || (Math.abs(this.GPSsuradnice.getPoziciaDlzky() - min) <= tolerancia) || (Math.abs(max - this.GPSsuradnice.getPoziciaDlzky()) <= tolerancia)) {
-                    return 0;
-                } else {
-                    return -1;
-                }
+            double tolerancia = 0.000001;
+
+            // Kontrola súradníc dĺžky
+            double minDlzka = Math.min(GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky(), GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky());
+            double maxDlzka = Math.max(GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky(), GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky());
+            boolean vRozsahuDlzka = (minDlzka < this.getGPSsuradnice().getPoziciaDlzky() && this.getGPSsuradnice().getPoziciaDlzky() < maxDlzka) ||
+                    (Math.abs(this.getGPSsuradnice().getPoziciaDlzky() - minDlzka) <= tolerancia) ||
+                    (Math.abs(maxDlzka - this.getGPSsuradnice().getPoziciaDlzky()) <= tolerancia);
+
+            // Kontrola súradníc šírky
+            double minSirka = Math.min(GPSsuradnice1.getGPSsuradnice().getPoziciaSirky(), GPSsuradnice2.getGPSsuradnice().getPoziciaSirky());
+            double maxSirka = Math.max(GPSsuradnice1.getGPSsuradnice().getPoziciaSirky(), GPSsuradnice2.getGPSsuradnice().getPoziciaSirky());
+            boolean vRozsahuSirka = (minSirka < this.getGPSsuradnice().getPoziciaSirky() && this.getGPSsuradnice().getPoziciaSirky() < maxSirka) ||
+                    (Math.abs(this.getGPSsuradnice().getPoziciaSirky() - minSirka) <= tolerancia) ||
+                    (Math.abs(maxSirka - this.getGPSsuradnice().getPoziciaSirky()) <= tolerancia);
+
+            // Ak sú obe súradnice v rozsahu, vrchol patrí do obdĺžnika
+            if (vRozsahuDlzka && vRozsahuSirka) {
+                return 0;
             } else {
-                double min = Math.min(GPSsuradnice1.getGPSsuradnice().getPoziciaSirky(), GPSsuradnice2.getGPSsuradnice().getPoziciaSirky());
-                double max = Math.max(GPSsuradnice1.getGPSsuradnice().getPoziciaSirky(), GPSsuradnice2.getGPSsuradnice().getPoziciaSirky());
-                if (min <= this.getGPSsuradnice().getPoziciaSirky() && this.getGPSsuradnice().getPoziciaSirky() <= max || (Math.abs(this.GPSsuradnice.getPoziciaSirky() - min) <= tolerancia) || (Math.abs(max - this.GPSsuradnice.getPoziciaSirky()) <= tolerancia)) {
-                    return 0;
-                } else {
-                    return -1;
-                }
+                return -1;
             }
         } else {
             return -2;
         }
     }
+
 
     @Override
     public void pridaj(Parcela objekt) {

@@ -95,7 +95,7 @@ public class KdStrom<T extends IKluc<T>> {
                 kluc1 = kluc2;
                 kluc2 = temp;
             }
-            int patriDoObdlznika = aktualny.getData().vyhladaj(kluc1, kluc2, poradieKluca);
+            int patriDoObdlznika = aktualny.getData().vyhladaj(kluc1, kluc2);
             if (patriDoObdlznika == 0) {
                 vrcholy.add(aktualny);
             }
