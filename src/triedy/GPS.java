@@ -1,10 +1,11 @@
 package triedy;
 
 public class GPS {
-    private char sirka;
-    private double poziciaSirky;
+
     private char dlzka;
     private double poziciaDlzky;
+    private char sirka;
+    private double poziciaSirky;
 
     public GPS(char sirka, double poziciaSirky, char dlzka, double poziciaDlzky) {
         if (sirka != 'N' && sirka != 'S') {
