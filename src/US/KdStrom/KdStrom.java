@@ -41,6 +41,9 @@ public class KdStrom<T extends IKluc<T>> {
 
             // porovnanie klucov, ak je vrchol mensi alebo rovnaky, ideme dolava, inak doprava
             if (porovnanie == -1 || porovnanie == 0) {
+                if (porovnanie == 0) {
+                    aktualny.addDuplicitu(vrchol);
+                }
                 aktualny = aktualny.getLavySyn();
                 lavy = true;
             } else if (porovnanie == 1) {
@@ -117,6 +120,12 @@ public class KdStrom<T extends IKluc<T>> {
 
     public boolean vyrad(Vrchol<T> vrchol) {
         ArrayList<Vrchol<T>> vrcholy = this.vyhladaj(vrchol.getData(), vrchol.getData());
+        for (Vrchol<T> tVrchol : vrcholy) {
+            if (!tVrchol.getDuplicity().isEmpty()) {
+                ArrayList<Vrchol<T>> duplicity = tVrchol.getDuplicity();
+                vrcholy.addAll(duplicity);
+            }
+        }
         if (vrcholy.isEmpty()) {
             return false;
         } else {
@@ -133,9 +142,6 @@ public class KdStrom<T extends IKluc<T>> {
     }
 
     private void nahradVrchol(Vrchol<T> vrchol) {
-        if (vrchol == null) {
-            throw new IllegalArgumentException("Vrchol cannot be null");
-        }
         int poradieKluca = getHlbkaVrchola(vrchol) % this.pocetKlucov;
         Vrchol<T> nahrada = null;
         if (poradieKluca == 0) {
@@ -150,9 +156,6 @@ public class KdStrom<T extends IKluc<T>> {
     }
 
     private Vrchol<T> najdiNajmensiVrchol(Vrchol<T> vrchol, int poradieKluca) {
-        if (vrchol == null) {
-            throw new IllegalArgumentException("Vrchol nemože byť null");
-        }
         while (vrchol.getLavySyn() != null) {
             vrchol = vrchol.getLavySyn();
         }
@@ -160,9 +163,6 @@ public class KdStrom<T extends IKluc<T>> {
     }
 
     private Vrchol<T> najdiNajvacsiVrchol(Vrchol<T> vrchol, int poradieKluca) {
-        if (vrchol == null) {
-            throw new IllegalArgumentException("Vrchol nemože byť null");
-        }
         while (vrchol.getPravySyn() != null) {
             vrchol = vrchol.getPravySyn();
         }

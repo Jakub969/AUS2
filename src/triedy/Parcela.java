@@ -10,6 +10,7 @@ public class Parcela implements IKluc<Parcela> {
     private ArrayList<Nehnutelnost> zoznamNehnutelnosti;
     private Parcela referenciaNaRovnakuParceluSInymiGPS;
     private GPS GPSsuradnice;
+    private final String uuid;
 
     public Parcela(int cisloParcely, String popis, ArrayList<Nehnutelnost> zoznamNehnutelnosti, Parcela referenciaNaRovnakuParceluSInymiGPS, GPS GPSsuradnice) {
         this.cisloParcely = cisloParcely;
@@ -17,6 +18,7 @@ public class Parcela implements IKluc<Parcela> {
         this.zoznamNehnutelnosti = zoznamNehnutelnosti;
         this.referenciaNaRovnakuParceluSInymiGPS = referenciaNaRovnakuParceluSInymiGPS;
         this.GPSsuradnice = GPSsuradnice;
+        this.uuid = java.util.UUID.randomUUID().toString();
     }
 
     public int getCisloParcely() {
@@ -41,6 +43,10 @@ public class Parcela implements IKluc<Parcela> {
 
     public void setReferenciaNaRovnakuParceluSInymiGPS(Parcela referenciaNaRovnakuParceluSInymiGPS) {
         this.referenciaNaRovnakuParceluSInymiGPS = referenciaNaRovnakuParceluSInymiGPS;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     @Override

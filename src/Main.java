@@ -5,10 +5,10 @@ import triedy.Parcela;
 public class Main {
     public static void main(String[] args) {
         long startTime1 = System.nanoTime();
-        GeneratorOperacii<Nehnutelnost> generatorOperacii = new GeneratorOperacii<>(10, 10000, 5, 10, Nehnutelnost.class);
+        GeneratorOperacii<Nehnutelnost> generatorOperacii = new GeneratorOperacii<>(10, 4, 5, 10, Nehnutelnost.class);
         long endTime1 = System.nanoTime();
         double seconds1 = (double) (endTime1 - startTime1) / 1_000_000_000.0;
-        generatorOperacii.vypisVrcholy();
+        //generatorOperacii.vypisVrcholy();
         System.out.println("Čas vkladania: " + seconds1);
         System.out.println("Hĺbka: " + generatorOperacii.getHlbka());
         System.out.println("Počet vrcholov: " + generatorOperacii.getPocetVrcholov());
