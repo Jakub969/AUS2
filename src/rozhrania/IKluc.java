@@ -5,6 +5,6 @@ public interface IKluc<T> {
     int vyhladaj(T objekt1, T objekt2);
     void pridaj(T objekt);
     void edituj(T objekt);
-    void vyrad(T objekt);
+    boolean vyrad(T objekt);
     int porovnaj(T objekt, int poradieKluca);
 }

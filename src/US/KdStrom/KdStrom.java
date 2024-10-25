@@ -120,22 +120,18 @@ public class KdStrom<T extends IKluc<T>> {
 
     public boolean vyrad(Vrchol<T> vrchol) {
         ArrayList<Vrchol<T>> vrcholy = this.vyhladaj(vrchol.getData(), vrchol.getData());
-        for (Vrchol<T> tVrchol : vrcholy) {
-            if (!tVrchol.getDuplicity().isEmpty()) {
-                ArrayList<Vrchol<T>> duplicity = tVrchol.getDuplicity();
-                vrcholy.addAll(duplicity);
-            }
-        }
         if (vrcholy.isEmpty()) {
             return false;
         } else {
             for (Vrchol<T> vrchol1 : vrcholy) {
-                if (vrchol1.getLavySyn() == null && vrchol1.getPravySyn() == null) {
-                    odstranList(vrchol1);
-                } else {
-                    nahradVrchol(vrchol1);
+                if (vrchol1.getData().vyrad(vrchol.getData())) {
+                    if (vrchol1.getLavySyn() == null && vrchol1.getPravySyn() == null) {
+                        odstranList(vrchol1);
+                    } else {
+                        nahradVrchol(vrchol1);
+                    }
+                    pocetVrcholov--;
                 }
-                pocetVrcholov--;
             }
             return true;
         }
@@ -144,31 +140,34 @@ public class KdStrom<T extends IKluc<T>> {
     private void nahradVrchol(Vrchol<T> vrchol) {
         int poradieKluca = getHlbkaVrchola(vrchol) % this.pocetKlucov;
         Vrchol<T> nahrada = null;
-        if (poradieKluca == 0) {
-            nahrada = najdiNajvacsiVrchol(vrchol.getLavySyn(), poradieKluca);
-        } else {
+        if (vrchol.getPravySyn() != null) {
             nahrada = najdiNajmensiVrchol(vrchol.getPravySyn(), poradieKluca);
+        } else if (vrchol.getLavySyn() != null) {
+            nahrada = najdiNajmensiVrchol(vrchol.getLavySyn(), poradieKluca);
         }
         if (nahrada != null) {
-            odstranList(vrchol);
-            vloz(nahrada);
+            if (vrchol.getRodic() == null) {
+                this.koren.setKoren(nahrada);
+            } else if (vrchol.getRodic().getLavySyn() == vrchol) {
+                vrchol.getRodic().setLavySyn(nahrada);
+            } else {
+                vrchol.getRodic().setPravySyn(nahrada);
+            }
+            odstranList(nahrada);
         }
     }
 
     private Vrchol<T> najdiNajmensiVrchol(Vrchol<T> vrchol, int poradieKluca) {
+        Vrchol<T> najmensi = vrchol;
         while (vrchol.getLavySyn() != null) {
+            int klucAktualneho = getHlbkaVrchola(vrchol) % this.pocetKlucov;
+            if (poradieKluca == klucAktualneho) {
+                najmensi = vrchol;
+            }
             vrchol = vrchol.getLavySyn();
         }
-        return vrchol;
+        return najmensi;
     }
-
-    private Vrchol<T> najdiNajvacsiVrchol(Vrchol<T> vrchol, int poradieKluca) {
-        while (vrchol.getPravySyn() != null) {
-            vrchol = vrchol.getPravySyn();
-        }
-        return vrchol;
-    }
-
 
     private int getHlbkaVrchola(Vrchol<T> vrchol) {
         int lokalnaHlbka = 0;

@@ -91,8 +91,12 @@ public class Parcela implements IKluc<Parcela> {
     }
 
     @Override
-    public void vyrad(Parcela objekt) {
-
+    public boolean vyrad(Parcela objekt) {
+        if (objekt instanceof Parcela dataParcela) {
+            return this.uuid.equals(dataParcela.uuid);
+        } else {
+            return false;
+        }
     }
 
     @Override

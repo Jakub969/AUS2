@@ -91,8 +91,11 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
     }
 
     @Override
-    public void vyrad(Nehnutelnost objekt) {
-
+    public boolean vyrad(Nehnutelnost objekt) {
+        if (objekt instanceof Nehnutelnost dataNehnutelnost) {
+            return this.uuid.equals(dataNehnutelnost.uuid);
+        }
+        return false;
     }
 
     @Override

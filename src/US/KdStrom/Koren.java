@@ -1,7 +1,7 @@
 package US.KdStrom;
 
 public class Koren<T> extends Vrchol<T> {
-    private final Vrchol<T> koren;
+    private Vrchol<T> koren;
 
     public Koren(Vrchol<T> koren) {
         super(koren.getData());
@@ -10,6 +10,10 @@ public class Koren<T> extends Vrchol<T> {
 
     public Vrchol<T> getKoren() {
         return koren;
+    }
+
+    public void setKoren(Vrchol<T> koren) {
+        this.koren = koren;
     }
 
     @Override

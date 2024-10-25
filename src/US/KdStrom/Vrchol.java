@@ -52,4 +52,8 @@ public class Vrchol<T> {
     public T getData() {
         return data;
     }
+
+    public void setDuplicity(ArrayList<Vrchol<T>> duplicity) {
+        this.duplicity = duplicity;
+    }
 }
