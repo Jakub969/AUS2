@@ -150,8 +150,10 @@ public class KdStrom<T extends IKluc<T>> {
                 this.koren.setKoren(nahrada);
             } else if (vrchol.getRodic().getLavySyn() == vrchol) {
                 vrchol.getRodic().setLavySyn(nahrada);
+                vrchol.setLavySyn(vrchol.getLavySyn());
             } else {
                 vrchol.getRodic().setPravySyn(nahrada);
+                vrchol.setPravySyn(vrchol.getPravySyn());
             }
             odstranList(nahrada);
         }

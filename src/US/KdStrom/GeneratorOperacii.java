@@ -26,7 +26,7 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         this.instanciaTriedy = trieda;
         this.zoznamVlozenychVrcholov = new ArrayList<>(this.pocetVlozeni * 2);
         metodaVkladania();
-        //metodaMazania();
+        metodaMazania();
         metodaVyhladavania();
     }
 
@@ -86,7 +86,6 @@ public class GeneratorOperacii<T extends IKluc<T>> {
             this.strom.vyrad(vrchol);
             this.zoznamVlozenychVrcholov.remove(index);
             System.out.println("Vrchol s kľúčom: " + vrchol.getData().toString() + " bol vymazaný");
-            this.zoznamVlozenychVrcholov.remove(index);
         }
     }
 
@@ -155,6 +154,17 @@ public class GeneratorOperacii<T extends IKluc<T>> {
                 }
             } else {
                 throw new IllegalArgumentException("Nepodporovaný typ");
+            }
+        }
+    }
+
+    public void vypisVrcholy2() {
+        ArrayList<Vrchol<T>> vrcholy = this.strom.inOrderPrehliadka();
+        System.out.println("Počet vrcholov: " + vrcholy.size());
+        for (Vrchol<T> vrchol : vrcholy) {
+            T data = vrchol.getData();
+            if (data instanceof Nehnutelnost nehnutelnost) {
+                System.out.printf("Vrchol: %s, ", nehnutelnost.getSupisneCislo());
             }
         }
     }

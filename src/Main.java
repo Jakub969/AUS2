@@ -9,6 +9,7 @@ public class Main {
         long endTime1 = System.nanoTime();
         double seconds1 = (double) (endTime1 - startTime1) / 1_000_000_000.0;
         //generatorOperacii.vypisVrcholy();
+        generatorOperacii.vypisVrcholy2();
         System.out.println("Čas vkladania: " + seconds1);
         System.out.println("Hĺbka: " + generatorOperacii.getHlbka());
         System.out.println("Počet vrcholov: " + generatorOperacii.getPocetVrcholov());

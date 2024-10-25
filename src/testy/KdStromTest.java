@@ -168,4 +168,80 @@ class KdStromTest {
             assertEquals(pocetVrcholov[i], vysledok.size());
         }
     }
+
+    @org.junit.jupiter.api.Test
+    void vyrad() {
+        Vrchol<Nehnutelnost> vrchol00 = new Vrchol<>(new Nehnutelnost(0, "popis", null, null, new GPS('N', 3.0, 'E', 2.0)));
+        Vrchol<Nehnutelnost> vrchol01 = new Vrchol<>(new Nehnutelnost(0, "popis", null, null, new GPS('N', 3.0, 'E', 5.0)));
+        Vrchol<Nehnutelnost> vrchol10 = new Vrchol<>(new Nehnutelnost(1, "popis", null, null, new GPS('N', 4.0, 'E', 0.0)));
+        Vrchol<Nehnutelnost> vrchol11 = new Vrchol<>(new Nehnutelnost(1, "popis", null, null, new GPS('N', 8.0, 'E', 7.0)));
+        Vrchol<Nehnutelnost> vrchol20 = new Vrchol<>(new Nehnutelnost(2, "popis", null, null, new GPS('N', 6.0, 'E', 6.0)));
+        Vrchol<Nehnutelnost> vrchol21 = new Vrchol<>(new Nehnutelnost(2, "popis", null, null, new GPS('N', 8.0, 'E', 6.0)));
+        Vrchol<Nehnutelnost> vrchol30 = new Vrchol<>(new Nehnutelnost(3, "popis", null, null, new GPS('N', 2.0, 'E', 7.0)));
+        Vrchol<Nehnutelnost> vrchol31 = new Vrchol<>(new Nehnutelnost(3, "popis", null, null, new GPS('N', 7.0, 'E', 5.0)));
+        Vrchol<Nehnutelnost> vrchol40 = new Vrchol<>(new Nehnutelnost(4, "popis", null, null, new GPS('N', 3.0, 'E', 4.0)));
+        Vrchol<Nehnutelnost> vrchol41 = new Vrchol<>(new Nehnutelnost(4, "popis", null, null, new GPS('N', 3.0, 'E', 1.0)));
+        Vrchol<Nehnutelnost> vrchol50 = new Vrchol<>(new Nehnutelnost(5, "popis", null, null, new GPS('N', 9.0, 'E', 1.0)));
+        Vrchol<Nehnutelnost> vrchol51 = new Vrchol<>(new Nehnutelnost(5, "popis", null, null, new GPS('N', 9.0, 'E', 3.0)));
+        Vrchol<Nehnutelnost> vrchol60 = new Vrchol<>(new Nehnutelnost(6, "popis", null, null, new GPS('N', 4.0, 'E', 4.0)));
+        Vrchol<Nehnutelnost> vrchol61 = new Vrchol<>(new Nehnutelnost(6, "popis", null, null, new GPS('N', 5.0, 'E', 4.0)));
+        Vrchol<Nehnutelnost> vrchol70 = new Vrchol<>(new Nehnutelnost(7, "popis", null, null, new GPS('N', 3.0, 'E', 8.0)));
+        Vrchol<Nehnutelnost> vrchol71 = new Vrchol<>(new Nehnutelnost(7, "popis", null, null, new GPS('N', 8.0, 'E', 2.0)));
+        Vrchol<Nehnutelnost> vrchol80 = new Vrchol<>(new Nehnutelnost(8, "popis", null, null, new GPS('N', 7.0, 'E', 6.0)));
+        Vrchol<Nehnutelnost> vrchol81 = new Vrchol<>(new Nehnutelnost(8, "popis", null, null, new GPS('N', 8.0, 'E', 2.0)));
+        Vrchol<Nehnutelnost> vrchol90 = new Vrchol<>(new Nehnutelnost(9, "popis", null, null, new GPS('N', 9.0, 'E', 4.0)));
+        Vrchol<Nehnutelnost> vrchol91 = new Vrchol<>(new Nehnutelnost(9, "popis", null, null, new GPS('N', 1.0, 'E', 8.0)));
+        ArrayList<Vrchol<Nehnutelnost>> vrcholy = new ArrayList<>();
+        vrcholy.add(vrchol00);
+        vrcholy.add(vrchol01);
+        vrcholy.add(vrchol10);
+        vrcholy.add(vrchol11);
+        vrcholy.add(vrchol20);
+        vrcholy.add(vrchol21);
+        vrcholy.add(vrchol30);
+        vrcholy.add(vrchol31);
+        vrcholy.add(vrchol40);
+        vrcholy.add(vrchol41);
+        vrcholy.add(vrchol50);
+        vrcholy.add(vrchol51);
+        vrcholy.add(vrchol60);
+        vrcholy.add(vrchol61);
+        vrcholy.add(vrchol70);
+        vrcholy.add(vrchol71);
+        vrcholy.add(vrchol80);
+        vrcholy.add(vrchol81);
+        vrcholy.add(vrchol90);
+        vrcholy.add(vrchol91);
+        for (int i = 0; i < 20; i++) {
+            this.kdStromNehnutelnosti.vloz(vrcholy.get(i));
+        }
+        ArrayList<Vrchol<Nehnutelnost>> kluce = new ArrayList<>();
+        kluce.add(vrchol40);
+        kluce.add(vrchol41);
+        kluce.add(vrchol30);
+        kluce.add(vrchol31);
+        kluce.add(vrchol60);
+        kluce.add(vrchol61);
+        kluce.add(vrchol50);
+        kluce.add(vrchol51);
+        kluce.add(vrchol90);
+        kluce.add(vrchol91);
+        int[] pocetVrcholov = {15,17,14,12,13};
+        int[] pocetMazanychVrcholov = {5, 3, 6, 8, 7};
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < pocetMazanychVrcholov[i]; j++) {
+                System.out.println("Mazaný vrchol: " + kluce.get(j).getData().getSupisneCislo() + " ; " + kluce.get(j).getData().toString());
+                this.kdStromNehnutelnosti.vyrad(kluce.get(j));
+                System.out.println("Počet vrcholov po mazaní: " + this.kdStromNehnutelnosti.getPocetVrcholov());
+
+                System.out.println("InOrder prehliadka po mazaní: " + this.kdStromNehnutelnosti.inOrderPrehliadka().size());
+            }
+            ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.inOrderPrehliadka();
+            System.out.println("Počet vrcholov po mazaní: " + vysledok.size());
+            for (Vrchol<Nehnutelnost> nehnutelnostVrchol : vysledok) {
+                System.out.print("Vrchol: " + nehnutelnostVrchol.getData().getSupisneCislo() + ", ");
+            }
+            assertEquals(pocetVrcholov[i], vysledok.size());
+        }
+    }
 }
