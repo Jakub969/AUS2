@@ -149,28 +149,44 @@ public class KdStrom<T extends IKluc<T>> {
             if (vrchol.getRodic() == null) {
                 this.koren.setKoren(nahrada);
             } else if (vrchol.getRodic().getLavySyn() == vrchol) {
-                if (nahrada.getLavySyn() == null) {
-                    nahrada.setLavySyn(vrchol.getLavySyn());
-                } else {
-                    nahrada.getRodic().setPravySyn(nahrada.getLavySyn());
-                    nahrada.setLavySyn(vrchol.getLavySyn());
-                }
                 vrchol.getRodic().setLavySyn(nahrada);
-                vrchol.setPravySyn(null);
-                vrchol.setLavySyn(null);
-                vrchol.setRodic(null);
+                nahrada.setRodic(vrchol.getRodic());
+                if (vrchol.getLavySyn() != null && nahrada != vrchol.getLavySyn()) {
+                    nahrada.setLavySyn(vrchol.getLavySyn());
+                }
+                if (nahrada.getLavySyn() != null) {
+                    vrchol.setLavySyn(nahrada.getLavySyn());
+                }
             } else {
-                if (nahrada.getPravySyn() == null) {
-                    nahrada.setPravySyn(vrchol.getPravySyn());
-                } else {
-                    nahrada.getRodic().setLavySyn(nahrada.getPravySyn());
+                vrchol.getRodic().setPravySyn(nahrada);
+                nahrada.setRodic(vrchol.getRodic());
+                if (vrchol.getPravySyn() != null && nahrada != vrchol.getPravySyn()) {
                     nahrada.setPravySyn(vrchol.getPravySyn());
                 }
-                vrchol.getRodic().setPravySyn(nahrada);
-                vrchol.setLavySyn(null);
-                vrchol.setPravySyn(null);
-                vrchol.setRodic(null);
+                if (nahrada.getPravySyn() != null) {
+                    vrchol.setPravySyn(nahrada.getPravySyn());
+                }
             }
+            vrchol.setLavySyn(null);
+            vrchol.setPravySyn(null);
+            vrchol.setRodic(null);
+            /*while (nahrada.getLavySyn() != null || nahrada.getPravySyn() != null) {
+                Vrchol<T> temp = nahrada;
+                if (nahrada.getLavySyn() != null) {
+                    nahrada = najdiNajmensiVrchol(nahrada.getLavySyn(), poradieKluca);
+                } else {
+                    nahrada = najdiNajvacsiVrchol(nahrada.getPravySyn(), poradieKluca);
+                }
+                if (nahrada != null) {
+                    if (nahrada.getRodic().getLavySyn() == nahrada) {
+                        temp.getRodic().setLavySyn(nahrada);
+                        temp.setLavySyn(nahrada.getLavySyn());
+                    } else {
+                        temp.getRodic().setPravySyn(nahrada);
+                        temp.setPravySyn(nahrada.getPravySyn());
+                    }
+                }
+            }*/
         }
     }
 

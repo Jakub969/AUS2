@@ -226,22 +226,36 @@ class KdStromTest {
         kluce.add(vrchol51);
         kluce.add(vrchol90);
         kluce.add(vrchol91);
-        int[] pocetVrcholov = {15,17,14,12,13};
-        int[] pocetMazanychVrcholov = {5, 3, 6, 8, 7};
+        kluce.add(vrchol00);
+        kluce.add(vrchol01);
+        kluce.add(vrchol10);
+        kluce.add(vrchol11);
+        kluce.add(vrchol20);
+        kluce.add(vrchol21);
+        kluce.add(vrchol70);
+        kluce.add(vrchol71);
+        kluce.add(vrchol80);
+        int[] pocetVrcholov = {15,12,6,3,1};
+        int[] pocetMazanychVrcholov = {5, 3, 6, 3, 2};
+        int zaciatok = 0;
         for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < pocetMazanychVrcholov[i]; j++) {
+            int koniec = zaciatok + pocetMazanychVrcholov[i];
+            for (int j = zaciatok; j < koniec; j++) {
                 System.out.println("Mazaný vrchol: " + kluce.get(j).getData().getSupisneCislo() + " ; " + kluce.get(j).getData().toString());
                 this.kdStromNehnutelnosti.vyrad(kluce.get(j));
                 System.out.println("Počet vrcholov po mazaní: " + this.kdStromNehnutelnosti.getPocetVrcholov());
 
                 System.out.println("InOrder prehliadka po mazaní: " + this.kdStromNehnutelnosti.inOrderPrehliadka().size());
             }
+            zaciatok += pocetMazanychVrcholov[i];
             ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.inOrderPrehliadka();
             System.out.println("Počet vrcholov po mazaní: " + vysledok.size());
             for (Vrchol<Nehnutelnost> nehnutelnostVrchol : vysledok) {
                 System.out.print("Vrchol: " + nehnutelnostVrchol.getData().getSupisneCislo() + ", ");
             }
             assertEquals(pocetVrcholov[i], vysledok.size());
+            System.out.println();
+            System.out.println("-------------------------------------------------------------------------------------------------");
         }
     }
 }
