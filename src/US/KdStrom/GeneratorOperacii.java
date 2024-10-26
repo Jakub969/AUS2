@@ -125,7 +125,7 @@ public class GeneratorOperacii<T extends IKluc<T>> {
     }
 
     public void vypisVrcholy() {
-        ArrayList<Vrchol<T>> vrcholy = this.strom.inOrderPrehliadka();
+        ArrayList<Vrchol<T>> vrcholy = this.strom.inOrderPrehliadka(this.strom.getKoren());
         for (Vrchol<T> vrchol : vrcholy) {
             T data = vrchol.getData();
             if (data instanceof Nehnutelnost nehnutelnost) {
@@ -159,7 +159,7 @@ public class GeneratorOperacii<T extends IKluc<T>> {
     }
 
     public void vypisVrcholy2() {
-        ArrayList<Vrchol<T>> vrcholy = this.strom.inOrderPrehliadka();
+        ArrayList<Vrchol<T>> vrcholy = this.strom.inOrderPrehliadka(this.strom.getKoren());
         System.out.println("Počet vrcholov: " + vrcholy.size());
         for (Vrchol<T> vrchol : vrcholy) {
             T data = vrchol.getData();

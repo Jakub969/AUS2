@@ -138,37 +138,40 @@ public class KdStrom<T extends IKluc<T>> {
     }
 
     private void nahradVrchol(Vrchol<T> vrchol) {
-        int poradieKluca = getHlbkaVrchola(vrchol) % this.pocetKlucov;
         Vrchol<T> nahrada = null;
         if (vrchol.getPravySyn() != null) {
-            nahrada = najdiNajmensiVrchol(vrchol.getPravySyn(), poradieKluca);
+            nahrada = najdiNajmensiVrchol(vrchol.getPravySyn());
         } else if (vrchol.getLavySyn() != null) {
-            nahrada = najdiNajmensiVrchol(vrchol.getLavySyn(), poradieKluca);
+            nahrada = najdiNajvacsiVrchol(vrchol.getLavySyn());
         }
         if (nahrada != null) {
             if (vrchol.getRodic() == null) {
                 this.koren.setKoren(nahrada);
             } else if (vrchol.getRodic().getLavySyn() == vrchol) {
                 vrchol.getRodic().setLavySyn(nahrada);
-                vrchol.setLavySyn(vrchol.getLavySyn());
             } else {
                 vrchol.getRodic().setPravySyn(nahrada);
-                vrchol.setPravySyn(vrchol.getPravySyn());
             }
-            odstranList(nahrada);
+            if (nahrada.getLavySyn() == null && nahrada.getPravySyn() == null) {
+                odstranList(vrchol);
+            } else {
+                nahradVrchol(nahrada);
+            }
         }
     }
 
-    private Vrchol<T> najdiNajmensiVrchol(Vrchol<T> vrchol, int poradieKluca) {
-        Vrchol<T> najmensi = vrchol;
+    private Vrchol<T> najdiNajmensiVrchol(Vrchol<T> vrchol) {
         while (vrchol.getLavySyn() != null) {
-            int klucAktualneho = getHlbkaVrchola(vrchol) % this.pocetKlucov;
-            if (poradieKluca == klucAktualneho) {
-                najmensi = vrchol;
-            }
             vrchol = vrchol.getLavySyn();
         }
-        return najmensi;
+        return vrchol;
+    }
+
+    private Vrchol<T> najdiNajvacsiVrchol(Vrchol<T> vrchol) {
+        while (vrchol.getPravySyn() != null) {
+            vrchol = vrchol.getPravySyn();
+        }
+        return vrchol;
     }
 
     private int getHlbkaVrchola(Vrchol<T> vrchol) {
@@ -191,8 +194,8 @@ public class KdStrom<T extends IKluc<T>> {
         }
     }
 
-    public ArrayList<Vrchol<T>> inOrderPrehliadka() {
-        Vrchol<T> aktualny = this.koren.getKoren();
+    public ArrayList<Vrchol<T>> inOrderPrehliadka(Vrchol<T> zaciatocnyVrchol) {
+        Vrchol<T> aktualny = zaciatocnyVrchol;
         ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
 
         // Morrisov algoritmus pre in-order prehliadku stromu zdroj: https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/
