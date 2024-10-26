@@ -139,39 +139,61 @@ public class KdStrom<T extends IKluc<T>> {
 
     private void nahradVrchol(Vrchol<T> vrchol) {
         Vrchol<T> nahrada = null;
+        int poradieKluca = getHlbkaVrchola(vrchol) % this.pocetKlucov;
         if (vrchol.getPravySyn() != null) {
-            nahrada = najdiNajmensiVrchol(vrchol.getPravySyn());
+            nahrada = najdiNajmensiVrchol(vrchol.getPravySyn(), poradieKluca);
         } else if (vrchol.getLavySyn() != null) {
-            nahrada = najdiNajvacsiVrchol(vrchol.getLavySyn());
+            nahrada = najdiNajvacsiVrchol(vrchol.getLavySyn(), poradieKluca);
         }
         if (nahrada != null) {
             if (vrchol.getRodic() == null) {
                 this.koren.setKoren(nahrada);
             } else if (vrchol.getRodic().getLavySyn() == vrchol) {
+                if (nahrada.getLavySyn() == null) {
+                    nahrada.setLavySyn(vrchol.getLavySyn());
+                } else {
+                    nahrada.getRodic().setPravySyn(nahrada.getLavySyn());
+                    nahrada.setLavySyn(vrchol.getLavySyn());
+                }
                 vrchol.getRodic().setLavySyn(nahrada);
+                vrchol.setPravySyn(null);
+                vrchol.setLavySyn(null);
+                vrchol.setRodic(null);
             } else {
+                if (nahrada.getPravySyn() == null) {
+                    nahrada.setPravySyn(vrchol.getPravySyn());
+                } else {
+                    nahrada.getRodic().setLavySyn(nahrada.getPravySyn());
+                    nahrada.setPravySyn(vrchol.getPravySyn());
+                }
                 vrchol.getRodic().setPravySyn(nahrada);
-            }
-            if (nahrada.getLavySyn() == null && nahrada.getPravySyn() == null) {
-                odstranList(vrchol);
-            } else {
-                nahradVrchol(nahrada);
+                vrchol.setLavySyn(null);
+                vrchol.setPravySyn(null);
+                vrchol.setRodic(null);
             }
         }
     }
 
-    private Vrchol<T> najdiNajmensiVrchol(Vrchol<T> vrchol) {
+    private Vrchol<T> najdiNajmensiVrchol(Vrchol<T> vrchol, int poradieKluca) {
+        Vrchol<T> najmensi = vrchol;
         while (vrchol.getLavySyn() != null) {
+            if (vrchol.getData().porovnaj(najmensi.getData(), poradieKluca) <= 0) {
+                najmensi = vrchol;
+            }
             vrchol = vrchol.getLavySyn();
         }
-        return vrchol;
+        return najmensi;
     }
 
-    private Vrchol<T> najdiNajvacsiVrchol(Vrchol<T> vrchol) {
+    private Vrchol<T> najdiNajvacsiVrchol(Vrchol<T> vrchol, int poradieKluca) {
+        Vrchol<T> najvacsi = vrchol;
         while (vrchol.getPravySyn() != null) {
+            if (vrchol.getData().porovnaj(najvacsi.getData(), poradieKluca) >= 0) {
+                najvacsi = vrchol;
+            }
             vrchol = vrchol.getPravySyn();
         }
-        return vrchol;
+        return najvacsi;
     }
 
     private int getHlbkaVrchola(Vrchol<T> vrchol) {
@@ -194,8 +216,8 @@ public class KdStrom<T extends IKluc<T>> {
         }
     }
 
-    public ArrayList<Vrchol<T>> inOrderPrehliadka(Vrchol<T> zaciatocnyVrchol) {
-        Vrchol<T> aktualny = zaciatocnyVrchol;
+    public ArrayList<Vrchol<T>> inOrderPrehliadka() {
+        Vrchol<T> aktualny = this.koren.getKoren();
         ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
 
         // Morrisov algoritmus pre in-order prehliadku stromu zdroj: https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/

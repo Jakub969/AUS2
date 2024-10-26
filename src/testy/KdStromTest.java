@@ -50,7 +50,7 @@ class KdStromTest {
             Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, null ,new GPS('N', i, 'E', i)));
             this.kdStromNehnutelnosti.vloz(vrchol1);
         }
-        ArrayList<Vrchol<Nehnutelnost>> vrcholy = this.kdStromNehnutelnosti.inOrderPrehliadka(this.kdStromNehnutelnosti.getKoren().getKoren());
+        ArrayList<Vrchol<Nehnutelnost>> vrcholy = this.kdStromNehnutelnosti.inOrderPrehliadka();
         for (int i = 0; i <= 6; i++) {
 
             assertEquals(supisneCisla[i], vrcholy.get(i).getData().getSupisneCislo());
@@ -234,9 +234,9 @@ class KdStromTest {
                 this.kdStromNehnutelnosti.vyrad(kluce.get(j));
                 System.out.println("Počet vrcholov po mazaní: " + this.kdStromNehnutelnosti.getPocetVrcholov());
 
-                System.out.println("InOrder prehliadka po mazaní: " + this.kdStromNehnutelnosti.inOrderPrehliadka(this.kdStromNehnutelnosti.getKoren().getKoren()).size());
+                System.out.println("InOrder prehliadka po mazaní: " + this.kdStromNehnutelnosti.inOrderPrehliadka().size());
             }
-            ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.inOrderPrehliadka(this.kdStromNehnutelnosti.getKoren().getKoren());
+            ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.inOrderPrehliadka();
             System.out.println("Počet vrcholov po mazaní: " + vysledok.size());
             for (Vrchol<Nehnutelnost> nehnutelnostVrchol : vysledok) {
                 System.out.print("Vrchol: " + nehnutelnostVrchol.getData().getSupisneCislo() + ", ");
