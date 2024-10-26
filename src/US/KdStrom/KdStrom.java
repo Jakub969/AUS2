@@ -148,6 +148,18 @@ public class KdStrom<T extends IKluc<T>> {
         if (nahrada != null) {
             if (vrchol.getRodic() == null) {
                 this.koren.setKoren(nahrada);
+                if (nahrada.getLavySyn() == null && vrchol.getPravySyn() == nahrada) {
+                    nahrada.setLavySyn(vrchol.getLavySyn());
+                } else if (nahrada.getPravySyn() == null && vrchol.getLavySyn() == nahrada) {
+                    nahrada.setPravySyn(vrchol.getPravySyn());
+                }
+                if (nahrada.getPravySyn() != null) {
+                    Vrchol<T> temp = nahrada; //TODO ako urobiť aby sa vrcholy nastavili správne
+                    nahrada = najdiNajmensiVrchol(nahrada.getPravySyn(), getHlbkaVrchola(nahrada) % this.pocetKlucov);
+
+                } else if (nahrada.getLavySyn() != null) {
+                    nahrada = najdiNajvacsiVrchol(nahrada.getLavySyn(), getHlbkaVrchola(nahrada) % this.pocetKlucov);
+                }
             } else if (vrchol.getRodic().getLavySyn() == vrchol) {
                 vrchol.getRodic().setLavySyn(nahrada);
                 nahrada.setRodic(vrchol.getRodic());
