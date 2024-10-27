@@ -138,51 +138,72 @@ public class KdStrom<T extends IKluc<T>> {
 
     private void nahradVrchol(Vrchol<T> vrchol) {
         int poradieKluca = getHlbkaVrchola(vrchol) % this.pocetKlucov;
+        ArrayList<Vrchol<T>> nahrady = new ArrayList<>();
         Vrchol<T> nahrada = vyhladajNahradu(vrchol, poradieKluca);
+        while (nahrada != null) {
+            nahrady.add(nahrada);
+            if (nahrada.getLavySyn() != null && nahrada.getPravySyn() != null) {
+                poradieKluca = getHlbkaVrchola(nahrada) % this.pocetKlucov;
+                nahrada = vyhladajNahradu(nahrada, poradieKluca);
+            } else {
+                break;
+            }
+        }
+        Vrchol<T> rodicVrchola = vrchol.getRodic();
+        Vrchol<T> lavySyn = vrchol.getLavySyn();
+        Vrchol<T> pravySyn = vrchol.getPravySyn();
+        Vrchol<T> lavySynNahrady = null;
+        Vrchol<T> pravySynNahrady = null;
 
-        if (nahrada != null) {
-            // Získanie rodiča vrchola a jeho synov
-            Vrchol<T> rodicVrchola = vrchol.getRodic();
-            Vrchol<T> lavySyn = vrchol.getLavySyn();
-            Vrchol<T> pravySyn = vrchol.getPravySyn();
+        for (Vrchol<T> nahradnyVrchol : nahrady) {
+
 
             // Odstranenie referencie syna pre rodiča náhrady
-            if (nahrada.getRodic().getLavySyn() == nahrada) {
-                nahrada.getRodic().setLavySyn(null);
+
+            if (nahradnyVrchol.getRodic().getLavySyn() == nahradnyVrchol) {
+                nahradnyVrchol.getRodic().setLavySyn(null);
             } else {
-                nahrada.getRodic().setPravySyn(null);
+                nahradnyVrchol.getRodic().setPravySyn(null);
             }
+
 
             // Nastavenie prepojení pre náhradu
             if (rodicVrchola != null) {
                 if (rodicVrchola.getLavySyn() == vrchol) {
-                    rodicVrchola.setLavySyn(nahrada);
-                    nahrada.setRodic(rodicVrchola);
+                    rodicVrchola.setLavySyn(nahradnyVrchol);
+                    nahradnyVrchol.setRodic(rodicVrchola);
                 } else {
-                    rodicVrchola.setPravySyn(nahrada);
-                    nahrada.setRodic(rodicVrchola);
+                    rodicVrchola.setPravySyn(nahradnyVrchol);
+                    nahradnyVrchol.setRodic(rodicVrchola);
                 }
             } else {
-                this.koren.setKoren(nahrada); // Ak nemá rodiča, nahrada sa stáva novým koreňom
+                this.koren.setKoren(nahradnyVrchol); // Ak nemá rodiča, nahrada sa stáva novým koreňom
             }
 
             // Nastavenie detí náhrady podľa pôvodného vrchola
-            if (lavySyn != nahrada) {
-                nahrada.setLavySyn(lavySyn);
+            if (lavySyn != nahradnyVrchol) {
+                lavySynNahrady = nahradnyVrchol.getLavySyn();
+                nahradnyVrchol.setLavySyn(lavySyn);
                 if (lavySyn != null) {
-                    lavySyn.setRodic(nahrada);
+                    lavySyn.setRodic(nahradnyVrchol);
                 }
             }
-            if (pravySyn != nahrada) {
-                nahrada.setPravySyn(pravySyn);
+            if (pravySyn != nahradnyVrchol) {
+                pravySynNahrady = nahradnyVrchol.getPravySyn();
+                nahradnyVrchol.setPravySyn(pravySyn);
                 if (pravySyn != null) {
-                    pravySyn.setRodic(nahrada);
+                    pravySyn.setRodic(nahradnyVrchol);
                 }
             }
-            vrchol.setRodic(null);
+            rodicVrchola = nahradnyVrchol.getRodic();
+            lavySyn = nahradnyVrchol.getLavySyn();
+            pravySyn = nahradnyVrchol.getPravySyn();
+            if (nahrady.getFirst() == nahradnyVrchol) {
+                vrchol.setRodic(null);
+            }
+            vrchol = nahradnyVrchol;
         }
     }
-
 
     private Vrchol<T> vyhladajNahradu(Vrchol<T> vrchol, int poradieKluca) {
         Vrchol<T> nahrada;
