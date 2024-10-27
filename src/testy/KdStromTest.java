@@ -244,8 +244,12 @@ class KdStromTest {
                 System.out.println("Mazaný vrchol: " + kluce.get(j).getData().getSupisneCislo() + " ; " + kluce.get(j).getData().toString());
                 this.kdStromNehnutelnosti.vyrad(kluce.get(j));
                 System.out.println("Počet vrcholov po mazaní: " + this.kdStromNehnutelnosti.getPocetVrcholov());
-
-                System.out.println("InOrder prehliadka po mazaní: " + this.kdStromNehnutelnosti.inOrderPrehliadka().size());
+                ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.inOrderPrehliadka();
+                System.out.println("InOrder prehliadka po mazaní: " + vysledok.size());
+                for (Vrchol<Nehnutelnost> nehnutelnostVrchol : vysledok) {
+                    System.out.print("Vrchol: " + nehnutelnostVrchol.getData().getSupisneCislo() + ", ");
+                }
+                System.out.println();
             }
             zaciatok += pocetMazanychVrcholov[i];
             ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.inOrderPrehliadka();

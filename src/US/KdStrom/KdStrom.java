@@ -24,7 +24,7 @@ public class KdStrom<T extends IKluc<T>> {
 
     public void vloz(Vrchol<T> vrchol) {
         // ak je strom prazdny, vlozime vrchol ako koren
-        if(this.koren == null) {
+        if (this.koren == null) {
             this.koren = new Koren<>(vrchol);
             pocetVrcholov++;
             return;
@@ -117,7 +117,6 @@ public class KdStrom<T extends IKluc<T>> {
     }
 
 
-
     public boolean vyrad(Vrchol<T> vrchol) {
         ArrayList<Vrchol<T>> vrcholy = this.vyhladaj(vrchol.getData(), vrchol.getData());
         if (vrcholy.isEmpty()) {
@@ -138,64 +137,68 @@ public class KdStrom<T extends IKluc<T>> {
     }
 
     private void nahradVrchol(Vrchol<T> vrchol) {
-        Vrchol<T> nahrada = null;
         int poradieKluca = getHlbkaVrchola(vrchol) % this.pocetKlucov;
+        Vrchol<T> nahrada = vyhladajNahradu(vrchol, poradieKluca);
+
+        if (nahrada != null) {
+            // Získanie rodiča vrchola a jeho synov
+            Vrchol<T> rodicVrchola = vrchol.getRodic();
+            Vrchol<T> lavySyn = vrchol.getLavySyn();
+            Vrchol<T> pravySyn = vrchol.getPravySyn();
+
+            // Odstranenie referencie syna pre rodiča náhrady
+            if (nahrada.getRodic().getLavySyn() == nahrada) {
+                nahrada.getRodic().setLavySyn(null);
+            } else {
+                nahrada.getRodic().setPravySyn(null);
+            }
+
+            // Nastavenie prepojení pre náhradu
+            if (rodicVrchola != null) {
+                if (rodicVrchola.getLavySyn() == vrchol) {
+                    rodicVrchola.setLavySyn(nahrada);
+                    nahrada.setRodic(rodicVrchola);
+                } else {
+                    rodicVrchola.setPravySyn(nahrada);
+                    nahrada.setRodic(rodicVrchola);
+                }
+            } else {
+                this.koren.setKoren(nahrada); // Ak nemá rodiča, nahrada sa stáva novým koreňom
+            }
+
+            // Nastavenie detí náhrady podľa pôvodného vrchola
+            if (lavySyn != nahrada) {
+                nahrada.setLavySyn(lavySyn);
+                if (lavySyn != null) {
+                    lavySyn.setRodic(nahrada);
+                }
+            }
+            if (pravySyn != nahrada) {
+                nahrada.setPravySyn(pravySyn);
+                if (pravySyn != null) {
+                    pravySyn.setRodic(nahrada);
+                }
+            }
+            vrchol.setRodic(null);
+        }
+    }
+
+
+    private Vrchol<T> vyhladajNahradu(Vrchol<T> vrchol, int poradieKluca) {
+        Vrchol<T> nahrada;
+
+
+        // Pokúsi sa nájsť náhradu vrchola podľa aktuálneho poradia kľúča
         if (vrchol.getPravySyn() != null) {
             nahrada = najdiNajmensiVrchol(vrchol.getPravySyn(), poradieKluca);
         } else if (vrchol.getLavySyn() != null) {
             nahrada = najdiNajvacsiVrchol(vrchol.getLavySyn(), poradieKluca);
+        } else {
+            return null; // Ak nemá ani jeden podstrom, žiadna náhrada nie je potrebná
         }
-        if (nahrada != null) {
-            if (vrchol.getRodic() == null) {
-                this.koren.setKoren(nahrada);
-                if (nahrada.getLavySyn() == null && vrchol.getPravySyn() == nahrada) {
-                    nahrada.setLavySyn(vrchol.getLavySyn());
-                } else if (nahrada.getPravySyn() == null && vrchol.getLavySyn() == nahrada) {
-                    nahrada.setPravySyn(vrchol.getPravySyn());
-                }
-                while (nahrada.getPravySyn() != null && nahrada.getLavySyn() != null) {
-                    Vrchol<T> dalsiaNahrada = null;
-                    if (nahrada.getPravySyn() != null) {
-                        dalsiaNahrada = najdiNajmensiVrchol(nahrada.getPravySyn(), getHlbkaVrchola(nahrada) % this.pocetKlucov);
-                    } else if (nahrada.getLavySyn() != null) {
-                        dalsiaNahrada = najdiNajvacsiVrchol(nahrada.getLavySyn(), getHlbkaVrchola(nahrada) % this.pocetKlucov);
-                    }
-                    if (dalsiaNahrada != null) {
-                        nahrada.setPravySyn(dalsiaNahrada.getPravySyn());
-                        if (dalsiaNahrada.getPravySyn() != null) {
-                            dalsiaNahrada.getPravySyn().setRodic(nahrada);
-                        }
-                        nahrada.setLavySyn(dalsiaNahrada.getLavySyn());
-                        if (dalsiaNahrada.getLavySyn() != null) {
-                            dalsiaNahrada.getLavySyn().setRodic(nahrada);
-                        }
-                        nahrada = dalsiaNahrada;
-                    }
-                }
-            } else if (vrchol.getRodic().getLavySyn() == vrchol) {
-                vrchol.getRodic().setLavySyn(nahrada);
-                nahrada.setRodic(vrchol.getRodic());
-                if (vrchol.getLavySyn() != null && nahrada != vrchol.getLavySyn()) {
-                    nahrada.setLavySyn(vrchol.getLavySyn());
-                }
-                if (nahrada.getLavySyn() != null) {
-                    vrchol.setLavySyn(nahrada.getLavySyn());
-                }
-            } else {
-                vrchol.getRodic().setPravySyn(nahrada);
-                nahrada.setRodic(vrchol.getRodic());
-                if (vrchol.getPravySyn() != null && nahrada != vrchol.getPravySyn()) {
-                    nahrada.setPravySyn(vrchol.getPravySyn());
-                }
-                if (nahrada.getPravySyn() != null) {
-                    vrchol.setPravySyn(nahrada.getPravySyn());
-                }
-            }
-            vrchol.setLavySyn(null);
-            vrchol.setPravySyn(null);
-            vrchol.setRodic(null);
-        }
+        return nahrada;
     }
+
 
     private Vrchol<T> najdiNajmensiVrchol(Vrchol<T> vrchol, int poradieKluca) {
         Vrchol<T> najmensi = vrchol;
