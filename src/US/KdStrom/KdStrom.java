@@ -153,12 +153,24 @@ public class KdStrom<T extends IKluc<T>> {
                 } else if (nahrada.getPravySyn() == null && vrchol.getLavySyn() == nahrada) {
                     nahrada.setPravySyn(vrchol.getPravySyn());
                 }
-                if (nahrada.getPravySyn() != null) {
-                    Vrchol<T> temp = nahrada; //TODO ako urobiť aby sa vrcholy nastavili správne
-                    nahrada = najdiNajmensiVrchol(nahrada.getPravySyn(), getHlbkaVrchola(nahrada) % this.pocetKlucov);
-
-                } else if (nahrada.getLavySyn() != null) {
-                    nahrada = najdiNajvacsiVrchol(nahrada.getLavySyn(), getHlbkaVrchola(nahrada) % this.pocetKlucov);
+                while (nahrada.getPravySyn() != null && nahrada.getLavySyn() != null) {
+                    Vrchol<T> dalsiaNahrada = null;
+                    if (nahrada.getPravySyn() != null) {
+                        dalsiaNahrada = najdiNajmensiVrchol(nahrada.getPravySyn(), getHlbkaVrchola(nahrada) % this.pocetKlucov);
+                    } else if (nahrada.getLavySyn() != null) {
+                        dalsiaNahrada = najdiNajvacsiVrchol(nahrada.getLavySyn(), getHlbkaVrchola(nahrada) % this.pocetKlucov);
+                    }
+                    if (dalsiaNahrada != null) {
+                        nahrada.setPravySyn(dalsiaNahrada.getPravySyn());
+                        if (dalsiaNahrada.getPravySyn() != null) {
+                            dalsiaNahrada.getPravySyn().setRodic(nahrada);
+                        }
+                        nahrada.setLavySyn(dalsiaNahrada.getLavySyn());
+                        if (dalsiaNahrada.getLavySyn() != null) {
+                            dalsiaNahrada.getLavySyn().setRodic(nahrada);
+                        }
+                        nahrada = dalsiaNahrada;
+                    }
                 }
             } else if (vrchol.getRodic().getLavySyn() == vrchol) {
                 vrchol.getRodic().setLavySyn(nahrada);
@@ -182,31 +194,14 @@ public class KdStrom<T extends IKluc<T>> {
             vrchol.setLavySyn(null);
             vrchol.setPravySyn(null);
             vrchol.setRodic(null);
-            /*while (nahrada.getLavySyn() != null || nahrada.getPravySyn() != null) {
-                Vrchol<T> temp = nahrada;
-                if (nahrada.getLavySyn() != null) {
-                    nahrada = najdiNajmensiVrchol(nahrada.getLavySyn(), poradieKluca);
-                } else {
-                    nahrada = najdiNajvacsiVrchol(nahrada.getPravySyn(), poradieKluca);
-                }
-                if (nahrada != null) {
-                    if (nahrada.getRodic().getLavySyn() == nahrada) {
-                        temp.getRodic().setLavySyn(nahrada);
-                        temp.setLavySyn(nahrada.getLavySyn());
-                    } else {
-                        temp.getRodic().setPravySyn(nahrada);
-                        temp.setPravySyn(nahrada.getPravySyn());
-                    }
-                }
-            }*/
         }
     }
 
     private Vrchol<T> najdiNajmensiVrchol(Vrchol<T> vrchol, int poradieKluca) {
         Vrchol<T> najmensi = vrchol;
         while (vrchol.getLavySyn() != null) {
-            if (vrchol.getData().porovnaj(najmensi.getData(), poradieKluca) <= 0) {
-                najmensi = vrchol;
+            if (vrchol.getLavySyn().getData().porovnaj(najmensi.getData(), poradieKluca) <= 0) {
+                najmensi = vrchol.getLavySyn();
             }
             vrchol = vrchol.getLavySyn();
         }
@@ -216,8 +211,8 @@ public class KdStrom<T extends IKluc<T>> {
     private Vrchol<T> najdiNajvacsiVrchol(Vrchol<T> vrchol, int poradieKluca) {
         Vrchol<T> najvacsi = vrchol;
         while (vrchol.getPravySyn() != null) {
-            if (vrchol.getData().porovnaj(najvacsi.getData(), poradieKluca) >= 0) {
-                najvacsi = vrchol;
+            if (vrchol.getPravySyn().getData().porovnaj(najvacsi.getData(), poradieKluca) >= 0) {
+                najvacsi = vrchol.getPravySyn();
             }
             vrchol = vrchol.getPravySyn();
         }
