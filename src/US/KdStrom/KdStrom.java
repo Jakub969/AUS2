@@ -165,50 +165,17 @@ public class KdStrom<T extends IKluc<T>> {
         }
         // Ak existuje najnižšia možná náhrada, pristúpime k výmene
         if (nahrada != null) {
-            Vrchol<T> rodicVrchola = vrchol.getRodic();
-            Vrchol<T> lavySyn = vrchol.getLavySyn();
-            Vrchol<T> pravySyn = vrchol.getPravySyn();
-
-            // Odstránenie referencie syna pre rodiča náhrady
-            if (nahrada.getRodic() != null) {
-                if (nahrada.getRodic().getLavySyn() == nahrada) {
-                    nahrada.getRodic().setLavySyn(null);
-                } else {
-                    nahrada.getRodic().setPravySyn(null);
-                }
-            }
-
-            // Nastavenie nového rodiča pre náhradu
-            if (rodicVrchola != null) {
-                if (rodicVrchola.getLavySyn() == vrchol) {
-                    rodicVrchola.setLavySyn(nahrada);
-                } else {
-                    rodicVrchola.setPravySyn(nahrada);
-                }
-                nahrada.setRodic(rodicVrchola);
-            } else {
-                this.koren = nahrada; // Ak nemá rodiča, nahrada sa stáva novým koreňom
-                this.koren.setRodic(null);
-            }
-
-            // Nastavenie detí pre novú náhradu
-            if (lavySyn != nahrada) {
-                nahrada.setLavySyn(lavySyn);
-                if (lavySyn != null) {
-                    lavySyn.setRodic(nahrada);
-                }
-            }
-            if (pravySyn != nahrada) {
-                nahrada.setPravySyn(pravySyn);
-                if (pravySyn != null) {
-                    pravySyn.setRodic(nahrada);
-                }
-            }
+            opravPrepojenia(vrchol, nahrada);
         }
     }
 
     private Vrchol<T> nahradNahradu(Stack<Vrchol<T>> zasobnik, Vrchol<T> nahrada) {
         Vrchol<T> vrchol = zasobnik.pop();
+        opravPrepojenia(vrchol, nahrada);
+        return vrchol;
+    }
+
+    private void opravPrepojenia(Vrchol<T> vrchol, Vrchol<T> nahrada) {
         Vrchol<T> rodicVrchola = vrchol.getRodic();
         Vrchol<T> lavySyn = vrchol.getLavySyn();
         Vrchol<T> pravySyn = vrchol.getPravySyn();
@@ -230,6 +197,9 @@ public class KdStrom<T extends IKluc<T>> {
                 rodicVrchola.setPravySyn(nahrada);
             }
             nahrada.setRodic(rodicVrchola);
+        } else {
+            this.koren = nahrada; // Ak nemá rodiča, nahrada sa stáva novým koreňom
+            this.koren.setRodic(null);
         }
         // Nastavenie detí pre novú náhradu
         if (lavySyn != nahrada) {
@@ -244,9 +214,7 @@ public class KdStrom<T extends IKluc<T>> {
                 pravySyn.setRodic(nahrada);
             }
         }
-        return vrchol;
     }
-
 
     private Vrchol<T> vyhladajNahradu(Vrchol<T> vrchol, int poradieKluca) {
         Vrchol<T> nahrada;
