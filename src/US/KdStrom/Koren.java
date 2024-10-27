@@ -12,10 +12,6 @@ public class Koren<T> extends Vrchol<T> {
         return koren;
     }
 
-    public void setKoren(Vrchol<T> koren) {
-        this.koren = koren;
-    }
-
     @Override
     public void setRodic(Vrchol<T> rodic) {
         throw new UnsupportedOperationException("Koren nema rodica");
