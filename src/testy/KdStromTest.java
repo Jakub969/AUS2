@@ -253,10 +253,6 @@ class KdStromTest {
             }
             zaciatok += pocetMazanychVrcholov[i];
             ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.inOrderPrehliadka();
-            System.out.println("Počet vrcholov po mazaní: " + vysledok.size());
-            for (Vrchol<Nehnutelnost> nehnutelnostVrchol : vysledok) {
-                System.out.print("Vrchol: " + nehnutelnostVrchol.getData().getSupisneCislo() + ", ");
-            }
             assertEquals(pocetVrcholov[i], vysledok.size());
             System.out.println();
             System.out.println("-------------------------------------------------------------------------------------------------");
