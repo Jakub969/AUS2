@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class KdStrom<T extends IKluc<T>> {
-    private Koren<T> koren;
+    private Vrchol<T> koren;
     private int hlbka;
     private final int pocetKlucov;
     private int pocetVrcholov;
@@ -25,11 +25,11 @@ public class KdStrom<T extends IKluc<T>> {
     public void vloz(Vrchol<T> vrchol) {
         // ak je strom prazdny, vlozime vrchol ako koren
         if (this.koren == null) {
-            this.koren = new Koren<>(vrchol);
+            this.koren = vrchol;
             pocetVrcholov++;
             return;
         }
-        Vrchol<T> aktualny = this.koren.getKoren();
+        Vrchol<T> aktualny = this.koren;
         Vrchol<T> rodic = null;
         boolean lavy = true;
         int lokalnaHlbka = 0;
@@ -59,7 +59,7 @@ public class KdStrom<T extends IKluc<T>> {
 
         // vkladanie vrchola do stromu ako lavy alebo pravy syn
         if (rodic == null) {
-            this.koren = new Koren<>(vrchol);
+            this.koren = vrchol;
             pocetVrcholov++;
         } else if (lavy) {
             rodic.setLavySyn(vrchol);
@@ -80,7 +80,7 @@ public class KdStrom<T extends IKluc<T>> {
         Stack<Vrchol<T>> stack = new Stack<>();
         Stack<Integer> hlbkaStack = new Stack<>();
 
-        stack.push(this.koren.getKoren());
+        stack.push(this.koren);
         hlbkaStack.push(0);
 
         while (!stack.isEmpty()) {
@@ -187,7 +187,8 @@ public class KdStrom<T extends IKluc<T>> {
                 }
                 nahrada.setRodic(rodicVrchola);
             } else {
-                //this.koren = nahrada; // Ak nemá rodiča, nahrada sa stáva novým koreňom
+                this.koren = nahrada; // Ak nemá rodiča, nahrada sa stáva novým koreňom
+                this.koren.setRodic(null);
             }
 
             // Nastavenie detí pre novú náhradu
@@ -306,7 +307,7 @@ public class KdStrom<T extends IKluc<T>> {
     }
 
     public ArrayList<Vrchol<T>> inOrderPrehliadka() {
-        Vrchol<T> aktualny = this.koren.getKoren();
+        Vrchol<T> aktualny = this.koren;
         ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
 
         // Morrisov algoritmus pre in-order prehliadku stromu zdroj: https://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion-and-without-stack/
@@ -337,7 +338,7 @@ public class KdStrom<T extends IKluc<T>> {
         return vrcholy;
     }
 
-    public Koren<T> getKoren() {
+    public Vrchol<T> getKoren() {
         return koren;
     }
 

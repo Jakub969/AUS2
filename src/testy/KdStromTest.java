@@ -1,7 +1,6 @@
 package testy;
 
 import US.KdStrom.KdStrom;
-import US.KdStrom.Koren;
 import US.KdStrom.Vrchol;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -61,7 +60,7 @@ class KdStromTest {
     void getKoren() {
         this.koren = new Vrchol<>(new Nehnutelnost(3, "popis", null, null, new GPS('N', 3, 'E', 3)));
         this.kdStromNehnutelnosti.vloz(this.koren);
-        assertEquals(this.koren, this.kdStromNehnutelnosti.getKoren().getKoren());
+        assertEquals(this.koren, this.kdStromNehnutelnosti.getKoren());
     }
 
     @org.junit.jupiter.api.Test
