@@ -91,7 +91,7 @@ public class KdStrom<T extends IKluc<T>> {
                 continue;
             }
 
-            int poradieKluca = hlbka % 2;
+            int poradieKluca = hlbka % this.pocetKlucov;
             // Zabezpečenie, že kluc1 má menšie hodnoty ako kluc2
             if (kluc1.porovnaj(kluc2, poradieKluca) == 1) {
                 T temp = kluc1;
