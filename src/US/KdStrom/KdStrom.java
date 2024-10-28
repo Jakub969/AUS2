@@ -130,7 +130,6 @@ public class KdStrom<T extends IKluc<T>> {
                         nahradVrchol(vrchol1);
                         odstranVrchol(vrchol1);
                     }
-                    pocetVrcholov--;
                 }
             }
             return true;
@@ -143,6 +142,7 @@ public class KdStrom<T extends IKluc<T>> {
         vrchol.setRodic(null);
         vrchol.setLavySyn(null);
         vrchol.setPravySyn(null);
+        pocetVrcholov--;
     }
 
     private void nahradVrchol(Vrchol<T> vrchol) {
@@ -201,7 +201,7 @@ public class KdStrom<T extends IKluc<T>> {
             this.koren = nahrada; // Ak nemá rodiča, nahrada sa stáva novým koreňom
             this.koren.setRodic(null);
         }
-        // Nastavenie detí pre novú náhradu
+        // Nastavenie synov pre novú náhradu
         if (lavySyn != nahrada) {
             nahrada.setLavySyn(lavySyn);
             if (lavySyn != null) {
@@ -226,7 +226,7 @@ public class KdStrom<T extends IKluc<T>> {
         } else if (vrchol.getLavySyn() != null) {
             nahrada = najdiNajvacsiVrchol(vrchol.getLavySyn(), poradieKluca);
         } else {
-            return null; // Ak nemá ani jeden podstrom, žiadna náhrada nie je potrebná
+            return null;
         }
         return nahrada;
     }
@@ -272,6 +272,7 @@ public class KdStrom<T extends IKluc<T>> {
         } else {
             rodic.setPravySyn(null);
         }
+        pocetVrcholov--;
     }
 
     public ArrayList<Vrchol<T>> inOrderPrehliadka() {
