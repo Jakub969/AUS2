@@ -58,7 +58,7 @@ public class GeneratorOperacii2<T extends IKluc<T>> {
         if (this.zoznamVlozenychVrcholov.isEmpty()) {
             return;
         }
-        int index = (int) (Math.random() * this.zoznamVlozenychVrcholov.size());
+        int index = (random.nextInt(this.zoznamVlozenychVrcholov.size()));
         Vrchol<T> vrchol = this.zoznamVlozenychVrcholov.get(index);
         System.out.println("Vymazavam vrchol: " + vrchol.getData().toString());
         this.strom.vyrad(vrchol);
@@ -69,7 +69,7 @@ public class GeneratorOperacii2<T extends IKluc<T>> {
         if (this.zoznamVlozenychVrcholov.isEmpty()) {
             return;
         }
-        int index = (int) (random.nextInt(this.zoznamVlozenychVrcholov.size()));
+        int index = (random.nextInt(this.zoznamVlozenychVrcholov.size()));
         Vrchol<T> vrchol = this.zoznamVlozenychVrcholov.get(index);
         System.out.println("Vyhladavam vrchol: " + vrchol.getData().toString());
         ArrayList<Vrchol<T>> vysledok = this.strom.vyhladaj(vrchol.getData(), vrchol.getData());
