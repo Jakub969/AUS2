@@ -17,17 +17,17 @@ public class GeneratorOperacii<T extends IKluc<T>> {
     private final KdStrom<T> strom;
     private final Class<T> instanciaTriedy;
 
-    public GeneratorOperacii(int pocetVlozeni, int pocetMazani, int pocetHladani, int maxRozsah, Class<T> trieda) {
+    public GeneratorOperacii(KdStrom<T> kdStrom, int pocetVlozeni, int pocetMazani, int pocetHladani, int maxRozsah, Class<T> trieda) {
         this.pocetVlozeni = pocetVlozeni;
         this.pocetMazani = pocetMazani;
         this.pocetHladani = pocetHladani;
         this.maxRozsah = maxRozsah;
-        this.strom = new KdStrom<>(2);
+        this.strom = kdStrom;
         this.instanciaTriedy = trieda;
         this.zoznamVlozenychVrcholov = new ArrayList<>(this.pocetVlozeni * 2);
         metodaVkladania();
-        metodaMazania();
-        metodaVyhladavania();
+        //metodaMazania();
+        //metodaVyhladavania();
     }
 
     private void metodaVkladania() {
@@ -62,9 +62,8 @@ public class GeneratorOperacii<T extends IKluc<T>> {
                 }
                 Vrchol<T> vrchol1 = new Vrchol<>(data1);
                 Vrchol<T> vrchol2 = new Vrchol<>(data2);
-                if (false) {
-                    System.out.println("GPS suradnice: " + gps1.getPoziciaDlzky() + " " + gps1.getPoziciaSirky() + " a " + gps2.getPoziciaDlzky() + " " + gps2.getPoziciaSirky());
-                }
+
+                System.out.println("Vkladam vrchol: " + vrchol1.getData().toString());
                 this.strom.vloz(vrchol1);
                 this.strom.vloz(vrchol2);
                 this.zoznamVlozenychVrcholov.add(vrchol1);

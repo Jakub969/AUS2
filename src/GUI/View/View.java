@@ -1,28 +1,50 @@
 package GUI.View;
 
+import GUI.Model.Model;
+import triedy.Nehnutelnost;
+
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class View extends JFrame {
-    private JButton button;
-    private JLabel label;
+    private JButton searchButton;
+    private JTextField dlzkaField;
+    private JTextField sirkaField;
+    private JTextArea resultArea;
 
     public View() {
-        button = new JButton("Increment");
-        label = new JLabel("Counter: 0");
+        searchButton = new JButton("Vyhladaj");
+        dlzkaField = new JTextField(10);
+        sirkaField = new JTextField(10);
+        resultArea = new JTextArea(10, 30);
+        resultArea.setEditable(false);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(300, 200);
+        this.setSize(400, 300);
         this.setLayout(new java.awt.FlowLayout());
-        this.add(label);
-        this.add(button);
+        this.add(new JLabel("Dlzka:"));
+        this.add(dlzkaField);
+        this.add(new JLabel("Sirka:"));
+        this.add(sirkaField);
+        this.add(searchButton);
+        this.add(new JScrollPane(resultArea));
     }
 
-    public void setLabelText(String text) {
-        label.setText(text);
+    public String getDlzka() {
+        return dlzkaField.getText();
     }
 
-    public void addButtonListener(ActionListener listener) {
-        button.addActionListener(listener);
+    public String getSirka() {
+        return sirkaField.getText();
+    }
+
+    public void setResultText(String text) {
+        resultArea.setText(text);
+    }
+
+    public void addSearchButtonListener(ActionListener listener) {
+        searchButton.addActionListener(listener);
     }
 }

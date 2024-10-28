@@ -12,8 +12,8 @@ public class GeneratorOperacii2<T extends IKluc<T>> {
     private ArrayList<Vrchol<T>> zoznamVlozenychVrcholov;
     private final Random random;
 
-    public GeneratorOperacii2(int parPocetOperacii, int parMaxRozsah) {
-        this.strom = new KdStrom<>(4);
+    public GeneratorOperacii2(KdStrom<T> kdStrom, int parPocetOperacii, int parMaxRozsah) {
+        this.strom = kdStrom;
         this.pocetOperacii = parPocetOperacii;
         this.maxRozsah = parMaxRozsah;
         this.zoznamVlozenychVrcholov = new ArrayList<>();
