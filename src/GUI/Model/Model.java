@@ -34,5 +34,10 @@ public class Model {
                 .collect(Collectors.toList());
     }
 
+    public void addNehnutelnost(int supisneCislo, String popis, List<GPS> gpsPositions) {
+        Nehnutelnost newNehnutelnost = new Nehnutelnost(supisneCislo, popis, null, null, gpsPositions.get(0));
+        Vrchol<Nehnutelnost> newVrchol = new Vrchol<>(newNehnutelnost);
+        kdStromNehnutelnosti.vloz(newVrchol);
+    }
 
 }
