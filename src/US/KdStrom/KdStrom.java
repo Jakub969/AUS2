@@ -45,7 +45,6 @@ public class KdStrom<T extends IKluc<T>> {
                     int porovnanieDuplicity = vrchol.getData().porovnaj(aktualny.getData(), (poradieKluca + 1) % this.pocetKlucov);
                     if (porovnanieDuplicity == 0) {
                         aktualny.addDuplicitu(vrchol);
-                        pocetVrcholov++;
                         return;
                     }
                 }
@@ -130,15 +129,16 @@ public class KdStrom<T extends IKluc<T>> {
                     odstranList(vrchol1, vrchol);
                 } else {
                     nahradVrchol(vrchol1);
-                    odstranVrchol(vrchol1);
+                    odstranVrchol(vrchol1, vrchol);
                 }
             }
             return true;
         }
     }
 
-    private void odstranVrchol(Vrchol<T> vrchol) {
+    private void odstranVrchol(Vrchol<T> vrchol, Vrchol<T> kluc) {
         if (vrchol == null) return;
+
 
         vrchol.setRodic(null);
         vrchol.setLavySyn(null);

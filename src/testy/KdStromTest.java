@@ -82,7 +82,7 @@ class KdStromTest {
             Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(new Nehnutelnost(i, "popis", null, null, new GPS('N', i, 'E', i)));
             kdStromNehnutelnosti.vloz(vrchol1);
         }
-        assertEquals(7, kdStromNehnutelnosti.getPocetVrcholov());
+        assertEquals(6, kdStromNehnutelnosti.getPocetVrcholov());
     }
 
     @org.junit.jupiter.api.Test
@@ -239,7 +239,7 @@ class KdStromTest {
         kluce.add(vrchol70);
         kluce.add(vrchol71);
         kluce.add(vrchol80);
-        int[] pocetVrcholov = {15,12,6,3,1};
+        int[] pocetVrcholov = {14,12,6,3,1};
         int[] pocetMazanychVrcholov = {5, 3, 6, 3, 2};
         int zaciatok = 0;
         for (int i = 0; i < 5; i++) {
