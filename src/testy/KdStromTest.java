@@ -155,7 +155,10 @@ class KdStromTest {
         int[] pocetVrcholov = {3,5,2,2,13};
         for (int i = 0; i < 5; i++) {
             int index = i * 2; // Každý pár je na indexoch 0-1, 2-3, 4-5, atď.
-            ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.vyhladaj(kluce.get(index).getData(), kluce.get(index + 1).getData());
+            ArrayList<Vrchol<Nehnutelnost>> kluceVyhladavania = new ArrayList<>();
+            kluceVyhladavania.add(kluce.get(index));
+            kluceVyhladavania.add(kluce.get(index + 1));
+            ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.bodoveVyhladavanie(kluceVyhladavania);
 
             System.out.println("Vyhľadávam v rozsahu: x(" + kluce.get(index).getData().getGPSsuradnice().getPoziciaDlzky() + " ; " + kluce.get(index + 1).getData().getGPSsuradnice().getPoziciaDlzky() + ") a y(" + kluce.get(index).getData().getGPSsuradnice().getPoziciaSirky() + " ; " + kluce.get(index + 1).getData().getGPSsuradnice().getPoziciaSirky() + ")");
 

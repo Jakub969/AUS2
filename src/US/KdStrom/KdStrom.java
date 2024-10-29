@@ -42,7 +42,11 @@ public class KdStrom<T extends IKluc<T>> {
             // porovnanie klucov, ak je vrchol mensi alebo rovnaky, ideme dolava, inak doprava
             if (porovnanie == -1 || porovnanie == 0) {
                 if (porovnanie == 0) {
-                    aktualny.addDuplicitu(vrchol);
+                    int porovnanieDuplicity = vrchol.getData().porovnaj(aktualny.getData(), poradieKluca + 1);
+                    if (porovnanieDuplicity == 0) {
+                        aktualny.addDuplicitu(vrchol);
+                        return;
+                    }
                 }
                 aktualny = aktualny.getLavySyn();
                 lavy = true;
@@ -58,16 +62,12 @@ public class KdStrom<T extends IKluc<T>> {
         vrchol.setRodic(rodic);
 
         // vkladanie vrchola do stromu ako lavy alebo pravy syn
-        if (rodic == null) {
-            this.koren = vrchol;
-            pocetVrcholov++;
-        } else if (lavy) {
+        if (lavy) {
             rodic.setLavySyn(vrchol);
-            pocetVrcholov++;
         } else {
             rodic.setPravySyn(vrchol);
-            pocetVrcholov++;
         }
+        pocetVrcholov++;
 
         // aktualizacia hlbky stromu
         if (lokalnaHlbka > this.hlbka) {
@@ -75,42 +75,32 @@ public class KdStrom<T extends IKluc<T>> {
         }
     }
 
-    public ArrayList<Vrchol<T>> vyhladaj(T kluc1, T kluc2) {
+    private ArrayList<Vrchol<T>> vyhladaj(Vrchol<T> kluc) {
         ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
-        Stack<Vrchol<T>> stack = new Stack<>();
-        Stack<Integer> hlbkaStack = new Stack<>();
-
-        stack.push(this.koren);
-        hlbkaStack.push(0);
-
-        while (!stack.isEmpty()) {
-            Vrchol<T> aktualny = stack.pop();
-            int hlbka = hlbkaStack.pop();
-
-            if (aktualny == null) {
-                continue;
-            }
-
-            int poradieKluca = hlbka % this.pocetKlucov;
-            // Zabezpečenie, že kluc1 má menšie hodnoty ako kluc2
-            if (kluc1.porovnaj(kluc2, poradieKluca) == 1) {
-                T temp = kluc1;
-                kluc1 = kluc2;
-                kluc2 = temp;
-            }
-            int patriDoObdlznika = aktualny.getData().vyhladaj(kluc1, kluc2);
-            if (patriDoObdlznika == 0) {
+        Vrchol<T> aktualny = this.koren;
+        while (aktualny != null) {
+            int poradieKluca = getHlbkaVrchola(aktualny) % this.pocetKlucov;
+            if (aktualny.getData().porovnaj(kluc.getData(), poradieKluca) == 0) {
                 vrcholy.add(aktualny);
+                vrcholy.addAll(aktualny.getDuplicity());
+                return vrcholy;
+            } else if (aktualny.getData().porovnaj(kluc.getData(), poradieKluca) == -1) {
+                aktualny = aktualny.getLavySyn();
+            } else {
+                aktualny = aktualny.getPravySyn();
             }
+        }
+        return vrcholy;
+    }
 
-            if (aktualny.getData().porovnaj(kluc1, poradieKluca) >= 0) {
-                stack.push(aktualny.getLavySyn());
-                hlbkaStack.push(hlbka + 1);
-            }
-            if (aktualny.getData().porovnaj(kluc2, poradieKluca) <= 0) {
-                stack.push(aktualny.getPravySyn());
-                hlbkaStack.push(hlbka + 1);
-            }
+    public ArrayList<Vrchol<T>> bodoveVyhladavanie(ArrayList<Vrchol<T>> kluce) {
+        if (kluce.size() != this.pocetKlucov) {
+            throw new IllegalArgumentException("Nespravny pocet klucov");
+        }
+
+        ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
+        for (Vrchol<T> vrchol : kluce) {
+            vrcholy.addAll(vyhladaj(vrchol));
         }
 
         return vrcholy;
@@ -118,19 +108,17 @@ public class KdStrom<T extends IKluc<T>> {
 
 
     public boolean vyrad(Vrchol<T> vrchol) {
-        ArrayList<Vrchol<T>> vrcholy = this.vyhladaj(vrchol.getData(), vrchol.getData());
+        ArrayList<Vrchol<T>> vrcholy = this.vyhladaj(vrchol);
         if (vrcholy.isEmpty()) {
             return false;
         } else {
             for (Vrchol<T> vrchol1 : vrcholy) {
-                if (vrchol1.getData().vyrad(vrchol.getData())) {
                     if (vrchol1.getLavySyn() == null && vrchol1.getPravySyn() == null) {
                         odstranList(vrchol1);
                     } else {
                         nahradVrchol(vrchol1);
                         odstranVrchol(vrchol1);
                     }
-                }
             }
             return true;
         }
@@ -163,7 +151,7 @@ public class KdStrom<T extends IKluc<T>> {
                 nahrada = vrcholNaNahradenie;
             }
         }
-        // Ak existuje najnižšia možná náhrada, pristúpime k výmene
+        // Nahradíme mazaný vrchol
         if (nahrada != null) {
             opravPrepojenia(vrchol, nahrada);
         }

@@ -1,9 +1,10 @@
 package GUI.Model;
 
-import US.KdStrom.GeneratorOperacii;
+import testy.VkladanieGeografickychObjektov;
 import US.KdStrom.KdStrom;
 import US.KdStrom.Vrchol;
 import triedy.GPS;
+import triedy.GeografickyObjekt;
 import triedy.Nehnutelnost;
 import triedy.Parcela;
 
@@ -13,17 +14,21 @@ import java.util.stream.Collectors;
 
 public class Model {
     private KdStrom<Nehnutelnost> kdStromNehnutelnosti;
-    private KdStrom<Parcela> kdStromParcel;
+    private KdStrom<Parcela> kdStromParciel;
+    private KdStrom<GeografickyObjekt> kdStromGeografickychObjektov;
 
     public Model() {
         this.kdStromNehnutelnosti = new KdStrom<>(2);
-        GeneratorOperacii<Nehnutelnost> generatorOperacii = new GeneratorOperacii<>(this.kdStromNehnutelnosti, 20, 0,0, 10, Nehnutelnost.class);
+        VkladanieGeografickychObjektov<Nehnutelnost> vkladanieGeografickychObjektov = new VkladanieGeografickychObjektov<>(this.kdStromNehnutelnosti);
     }
 
     public List<Nehnutelnost> searchNehnutelnosti(double dlzka, double sirka) {
         GPS searchGPS = new GPS('N', sirka, 'E', dlzka);
         Nehnutelnost nehnutelnostVyhladavania = new Nehnutelnost(0, "", null, null, searchGPS);
-        ArrayList<Vrchol<Nehnutelnost>> results = kdStromNehnutelnosti.vyhladaj(nehnutelnostVyhladavania, nehnutelnostVyhladavania);
+        Vrchol<Nehnutelnost> vrcholVyhladavania = new Vrchol<>(nehnutelnostVyhladavania);
+        ArrayList<Vrchol<Nehnutelnost>> kluce = new ArrayList<>();
+        kluce.add(vrcholVyhladavania);
+        ArrayList<Vrchol<Nehnutelnost>> results = kdStromNehnutelnosti.bodoveVyhladavanie(kluce);
         return results.stream()
                 .map(Vrchol::getData)
                 .filter(nehnutelnost -> {

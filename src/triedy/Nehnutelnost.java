@@ -50,65 +50,21 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
     }
 
     @Override
-    public int vyhladaj(Nehnutelnost objekt1, Nehnutelnost objekt2) {
-        if (objekt1 instanceof Nehnutelnost GPSsuradnice1 && objekt2 instanceof Nehnutelnost GPSsuradnice2) {
-            double tolerancia = 0.000001;
-
-            // Kontrola súradníc dĺžky
-            double minDlzka = Math.min(GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky(), GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky());
-            double maxDlzka = Math.max(GPSsuradnice1.getGPSsuradnice().getPoziciaDlzky(), GPSsuradnice2.getGPSsuradnice().getPoziciaDlzky());
-            boolean vRozsahuDlzka = (minDlzka < this.getGPSsuradnice().getPoziciaDlzky() && this.getGPSsuradnice().getPoziciaDlzky() < maxDlzka) ||
-                    (Math.abs(this.getGPSsuradnice().getPoziciaDlzky() - minDlzka) <= tolerancia) ||
-                    (Math.abs(maxDlzka - this.getGPSsuradnice().getPoziciaDlzky()) <= tolerancia);
-
-            // Kontrola súradníc šírky
-            double minSirka = Math.min(GPSsuradnice1.getGPSsuradnice().getPoziciaSirky(), GPSsuradnice2.getGPSsuradnice().getPoziciaSirky());
-            double maxSirka = Math.max(GPSsuradnice1.getGPSsuradnice().getPoziciaSirky(), GPSsuradnice2.getGPSsuradnice().getPoziciaSirky());
-            boolean vRozsahuSirka = (minSirka < this.getGPSsuradnice().getPoziciaSirky() && this.getGPSsuradnice().getPoziciaSirky() < maxSirka) ||
-                    (Math.abs(this.getGPSsuradnice().getPoziciaSirky() - minSirka) <= tolerancia) ||
-                    (Math.abs(maxSirka - this.getGPSsuradnice().getPoziciaSirky()) <= tolerancia);
-
-            // Ak sú obe súradnice v rozsahu, vrchol patrí do obdĺžnika
-            if (vRozsahuDlzka && vRozsahuSirka) {
-                return 0;
-            } else {
-                return -1;
-            }
-        } else {
-            return -2;
-        }
-    }
-
-
-    @Override
-    public void pridaj(Nehnutelnost objekt) {
-
-    }
-
-    @Override
-    public void edituj(Nehnutelnost objekt) {
-
-    }
-
-    @Override
-    public boolean vyrad(Nehnutelnost objekt) {
-        if (objekt instanceof Nehnutelnost dataNehnutelnost) {
-            return this.uuid.equals(dataNehnutelnost.uuid);
-        }
-        return false;
-    }
-
-    @Override
     public int porovnaj(Nehnutelnost objekt, int poradieKluca) {
         if (objekt instanceof Nehnutelnost dataNehnutelnost) {
             if (poradieKluca == 0) {
-                return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataNehnutelnost.GPSsuradnice.getPoziciaDlzky());
+                return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataNehnutelnost.getGPSsuradnice().getPoziciaDlzky());
             } else {
-                return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataNehnutelnost.GPSsuradnice.getPoziciaSirky());
+                return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataNehnutelnost.getGPSsuradnice().getPoziciaSirky());
             }
         } else {
             return -2;
         }
+    }
+
+    @Override
+    public boolean zhodneUuid(Nehnutelnost objekt) {
+        return this.uuid.equals(objekt.getUuid());
     }
 
     @Override

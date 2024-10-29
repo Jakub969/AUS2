@@ -1,5 +1,7 @@
-package US.KdStrom;
+package testy;
 
+import US.KdStrom.KdStrom;
+import US.KdStrom.Vrchol;
 import rozhrania.IKluc;
 
 import java.util.ArrayList;
@@ -72,7 +74,9 @@ public class GeneratorOperacii2<T extends IKluc<T>> {
         int index = (random.nextInt(this.zoznamVlozenychVrcholov.size()));
         Vrchol<T> vrchol = this.zoznamVlozenychVrcholov.get(index);
         System.out.println("Vyhladavam vrchol: " + vrchol.getData().toString());
-        ArrayList<Vrchol<T>> vysledok = this.strom.vyhladaj(vrchol.getData(), vrchol.getData());
+        ArrayList<Vrchol<T>> kluce = new ArrayList<>();
+        kluce.add(vrchol);
+        ArrayList<Vrchol<T>> vysledok = this.strom.bodoveVyhladavanie(kluce);
         if (vysledok.isEmpty()) {
             System.out.println("Vrchol nebol najdeny");
         } else {

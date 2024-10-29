@@ -1,4 +1,4 @@
-package US.KdStrom;
+package testy;
 
 import rozhrania.IKluc;
 
@@ -7,12 +7,14 @@ public class GenerovaneData implements IKluc<GenerovaneData> {
     private final String atributB;
     private final int atributC;
     private final double atributD;
+    private String uuid;
 
     public GenerovaneData(double parAtributA, String parAtributB, int parAtributC, double parAtributD) {
         this.atributA = parAtributA;
         this.atributB = parAtributB;
         this.atributC = parAtributC;
         this.atributD = parAtributD;
+        this.uuid = java.util.UUID.randomUUID().toString();
     }
 
     public double getAtributA() {
@@ -31,6 +33,10 @@ public class GenerovaneData implements IKluc<GenerovaneData> {
         return atributD;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
     @Override
     public String toString() {
         return "GenerovaneData{" +
@@ -39,28 +45,6 @@ public class GenerovaneData implements IKluc<GenerovaneData> {
                 ", atributC=" + atributC +
                 ", atributD=" + atributD +
                 '}';
-    }
-
-    @Override
-    public int vyhladaj(GenerovaneData objekt1, GenerovaneData objekt2) {
-        double tolerancia = 0.000001;
-        return (Math.abs(this.atributA - objekt1.atributA) <= tolerancia) && this.atributB.equals(objekt1.getAtributB()) &&
-                this.atributC == objekt1.getAtributC() && (Math.abs(this.atributA - objekt2.atributA) <= tolerancia) ? 0 : -1;
-    }
-
-    @Override
-    public void pridaj(GenerovaneData objekt) {
-
-    }
-
-    @Override
-    public void edituj(GenerovaneData objekt) {
-
-    }
-
-    @Override
-    public boolean vyrad(GenerovaneData objekt) {
-        return false;
     }
 
     /*
@@ -103,5 +87,10 @@ public class GenerovaneData implements IKluc<GenerovaneData> {
             default:
                 return -1;
         }
+    }
+
+    @Override
+    public boolean zhodneUuid(GenerovaneData objekt) {
+        return this.uuid.equals(objekt.getUuid());
     }
 }
