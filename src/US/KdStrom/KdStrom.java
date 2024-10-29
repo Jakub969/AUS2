@@ -127,7 +127,7 @@ public class KdStrom<T extends IKluc<T>> {
         } else {
             for (Vrchol<T> vrchol1 : vrcholy) {
                 if (vrchol1.getLavySyn() == null && vrchol1.getPravySyn() == null) {
-                    odstranList(vrchol1);
+                    odstranList(vrchol1, vrchol);
                 } else {
                     nahradVrchol(vrchol1);
                     odstranVrchol(vrchol1);
@@ -262,14 +262,51 @@ public class KdStrom<T extends IKluc<T>> {
         return lokalnaHlbka;
     }
 
-    private void odstranList(Vrchol<T> vrchol) {
+    private void odstranList(Vrchol<T> vrchol, Vrchol<T> kluc) {
         Vrchol<T> rodic = vrchol.getRodic();
-        if (rodic == null) {
-            this.koren = null;
-        } else if (rodic.getLavySyn() == vrchol) {
-            rodic.setLavySyn(null);
+        ArrayList<Vrchol<T>> duplicity = vrchol.getDuplicity();
+        Vrchol<T> mazanyVrchol = null;
+        if (vrchol.getData().zhodneUuid(kluc.getData())) {
+            mazanyVrchol = vrchol;
+        } else if (!duplicity.isEmpty()) {
+            for (Vrchol<T> tVrchol : duplicity) {
+                if (tVrchol.getData().zhodneUuid(kluc.getData())) {
+                    mazanyVrchol = tVrchol;
+                    break;
+                }
+            }
+            duplicity.remove(mazanyVrchol);
+        }
+        if (mazanyVrchol != vrchol) {
+            if (rodic == null) {
+                this.koren = duplicity.removeFirst();
+                this.koren.setDuplicity(duplicity);
+            } else if (rodic.getLavySyn() == vrchol) {
+                Vrchol<T> nahrada = duplicity.removeFirst();
+                rodic.setLavySyn(nahrada);
+                nahrada.setRodic(rodic);
+                nahrada.setDuplicity(duplicity);
+                nahrada.setPravySyn(vrchol.getPravySyn());
+                nahrada.setLavySyn(vrchol.getLavySyn());
+            } else {
+                Vrchol<T> nahrada = duplicity.removeFirst();
+                rodic.setPravySyn(nahrada);
+                nahrada.setRodic(rodic);
+                nahrada.setDuplicity(duplicity);
+                nahrada.setPravySyn(vrchol.getPravySyn());
+                nahrada.setLavySyn(vrchol.getLavySyn());
+            }
+            if (mazanyVrchol != null) {
+                mazanyVrchol.setRodic(null);
+            }
         } else {
-            rodic.setPravySyn(null);
+            if (rodic == null) {
+                this.koren = null;
+            } else if (rodic.getLavySyn() == vrchol) {
+                rodic.setLavySyn(null);
+            } else {
+                rodic.setPravySyn(null);
+            }
         }
         pocetVrcholov--;
     }
