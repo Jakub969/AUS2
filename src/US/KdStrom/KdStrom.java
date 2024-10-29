@@ -77,18 +77,30 @@ public class KdStrom<T extends IKluc<T>> {
 
     private ArrayList<Vrchol<T>> vyhladaj(Vrchol<T> kluc) {
         ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
-        Vrchol<T> aktualny = this.koren;
-        while (aktualny != null) {
-            int poradieKluca = getHlbkaVrchola(aktualny) % this.pocetKlucov;
+        if (this.koren == null) {
+            return vrcholy;
+        }
+        Stack<Vrchol<T>> vrcholyPrehladavania = new Stack<>();
+        vrcholyPrehladavania.push(this.koren);
+
+        int hlbka = 0;
+
+        while (!vrcholyPrehladavania.isEmpty()) {
+            Vrchol<T> aktualny = vrcholyPrehladavania.pop();
+            int poradieKluca = hlbka % this.pocetKlucov;
             if (aktualny.getData().porovnaj(kluc.getData(), poradieKluca) == 0) {
                 vrcholy.add(aktualny);
-                vrcholy.addAll(aktualny.getDuplicity());
-                return vrcholy;
-            } else if (aktualny.getData().porovnaj(kluc.getData(), poradieKluca) == -1) {
-                aktualny = aktualny.getLavySyn();
-            } else {
-                aktualny = aktualny.getPravySyn();
+                if (aktualny.getData().porovnaj(kluc.getData(), poradieKluca + 1) == 0) {
+                    vrcholy.addAll(aktualny.getDuplicity());
+                }
             }
+            if (aktualny.getData().porovnaj(kluc.getData(), poradieKluca) <= 0 && aktualny.getLavySyn() != null) {
+                vrcholyPrehladavania.push(aktualny.getLavySyn());
+            }
+            if (aktualny.getData().porovnaj(kluc.getData(), poradieKluca) >= 0 && aktualny.getPravySyn() != null) {
+                vrcholyPrehladavania.push(aktualny.getPravySyn());
+            }
+            hlbka++;
         }
         return vrcholy;
     }
