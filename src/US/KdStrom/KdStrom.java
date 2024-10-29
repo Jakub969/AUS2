@@ -42,9 +42,10 @@ public class KdStrom<T extends IKluc<T>> {
             // porovnanie klucov, ak je vrchol mensi alebo rovnaky, ideme dolava, inak doprava
             if (porovnanie == -1 || porovnanie == 0) {
                 if (porovnanie == 0) {
-                    int porovnanieDuplicity = vrchol.getData().porovnaj(aktualny.getData(), poradieKluca + 1);
+                    int porovnanieDuplicity = vrchol.getData().porovnaj(aktualny.getData(), (poradieKluca + 1) % this.pocetKlucov);
                     if (porovnanieDuplicity == 0) {
                         aktualny.addDuplicitu(vrchol);
+                        pocetVrcholov++;
                         return;
                     }
                 }
@@ -88,16 +89,16 @@ public class KdStrom<T extends IKluc<T>> {
         while (!vrcholyPrehladavania.isEmpty()) {
             Vrchol<T> aktualny = vrcholyPrehladavania.pop();
             int poradieKluca = hlbka % this.pocetKlucov;
-            if (aktualny.getData().porovnaj(kluc.getData(), poradieKluca) == 0) {
+            int porovnanie = kluc.getData().porovnaj(aktualny.getData(), poradieKluca);
+            if (porovnanie == 0 && aktualny.getData().porovnaj(kluc.getData(), (poradieKluca + 1) % this.pocetKlucov) == 0) {
                 vrcholy.add(aktualny);
-                if (aktualny.getData().porovnaj(kluc.getData(), poradieKluca + 1) == 0) {
-                    vrcholy.addAll(aktualny.getDuplicity());
-                }
+                vrcholy.addAll(aktualny.getDuplicity());
+                return vrcholy;
             }
-            if (aktualny.getData().porovnaj(kluc.getData(), poradieKluca) <= 0 && aktualny.getLavySyn() != null) {
+            if (porovnanie <= 0 && aktualny.getLavySyn() != null) {
                 vrcholyPrehladavania.push(aktualny.getLavySyn());
             }
-            if (aktualny.getData().porovnaj(kluc.getData(), poradieKluca) >= 0 && aktualny.getPravySyn() != null) {
+            if (porovnanie > 0 && aktualny.getPravySyn() != null) {
                 vrcholyPrehladavania.push(aktualny.getPravySyn());
             }
             hlbka++;
@@ -125,12 +126,12 @@ public class KdStrom<T extends IKluc<T>> {
             return false;
         } else {
             for (Vrchol<T> vrchol1 : vrcholy) {
-                    if (vrchol1.getLavySyn() == null && vrchol1.getPravySyn() == null) {
-                        odstranList(vrchol1);
-                    } else {
-                        nahradVrchol(vrchol1);
-                        odstranVrchol(vrchol1);
-                    }
+                if (vrchol1.getLavySyn() == null && vrchol1.getPravySyn() == null) {
+                    odstranList(vrchol1);
+                } else {
+                    nahradVrchol(vrchol1);
+                    odstranVrchol(vrchol1);
+                }
             }
             return true;
         }
@@ -218,8 +219,6 @@ public class KdStrom<T extends IKluc<T>> {
 
     private Vrchol<T> vyhladajNahradu(Vrchol<T> vrchol, int poradieKluca) {
         Vrchol<T> nahrada;
-
-
         // Pokúsi sa nájsť náhradu vrchola podľa aktuálneho poradia kľúča
         if (vrchol.getPravySyn() != null) {
             nahrada = najdiNajmensiVrchol(vrchol.getPravySyn(), poradieKluca);
