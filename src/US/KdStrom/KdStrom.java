@@ -211,9 +211,37 @@ public class KdStrom<T extends IKluc<T>> {
         }
         if (pravySyn != nahrada) {
             nahrada.setPravySyn(pravySyn);
+            if (nahrada.getData().porovnaj(pravySyn.getData(), getHlbkaVrchola(nahrada) % this.pocetKlucov) == 0) {
+                znovuVlozVrcholy(pravySyn, nahrada);
+            }
             if (pravySyn != null) {
                 pravySyn.setRodic(nahrada);
             }
+        }
+    }
+
+    private void znovuVlozVrcholy(Vrchol<T> pravySyn, Vrchol<T> nahrada) {
+        int poradieKluca = getHlbkaVrchola(nahrada) % this.pocetKlucov;
+        ArrayList<Vrchol<T>> vrcholyNaZnovuVlozenie = new ArrayList<>();
+        Stack<Vrchol<T>> stack = new Stack<>();
+        stack.push(pravySyn);
+
+        while (!stack.isEmpty()) {
+            Vrchol<T> vrchol = stack.pop();
+            if (vrchol.getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
+                vrcholyNaZnovuVlozenie.add(vrchol);
+            }
+            if (vrchol.getLavySyn() != null) {
+                stack.push(vrchol.getLavySyn());
+            }
+            if (vrchol.getPravySyn() != null) {
+                stack.push(vrchol.getPravySyn());
+            }
+        }
+
+        for (Vrchol<T> vrchol : vrcholyNaZnovuVlozenie) {
+            vyrad(vrchol);
+            vloz(vrchol);
         }
     }
 
