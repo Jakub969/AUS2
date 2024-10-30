@@ -91,13 +91,12 @@ public class KdStrom<T extends IKluc<T>> {
             int porovnanie = kluc.getData().porovnaj(aktualny.getData(), poradieKluca);
             if (porovnanie == 0 && aktualny.getData().porovnaj(kluc.getData(), (poradieKluca + 1) % this.pocetKlucov) == 0) {
                 vrcholy.add(aktualny);
-                vrcholy.addAll(aktualny.getDuplicity());
                 return vrcholy;
             }
             if (porovnanie <= 0 && aktualny.getLavySyn() != null) {
                 vrcholyPrehladavania.push(aktualny.getLavySyn());
             }
-            if (porovnanie > 0 && aktualny.getPravySyn() != null) {
+            if (porovnanie >= 0 && aktualny.getPravySyn() != null) {
                 vrcholyPrehladavania.push(aktualny.getPravySyn());
             }
             hlbka++;
@@ -157,7 +156,7 @@ public class KdStrom<T extends IKluc<T>> {
             poradieKluca = getHlbkaVrchola(nahrada) % this.pocetKlucov;
             nahrada = vyhladajNahradu(nahrada, poradieKluca);
         }
-        if (zasobnik.size() > 1 && nahrada != null) {
+        if (!zasobnik.isEmpty() && nahrada != null) {
             Vrchol<T> vrcholNaNahradenie;
             while (!zasobnik.isEmpty()) {
                 vrcholNaNahradenie = nahradNahradu(zasobnik, nahrada);
@@ -277,7 +276,7 @@ public class KdStrom<T extends IKluc<T>> {
             }
             duplicity.remove(mazanyVrchol);
         }
-        if (mazanyVrchol != vrchol) {
+        if (!duplicity.isEmpty()) {
             if (rodic == null) {
                 this.koren = duplicity.removeFirst();
                 this.koren.setDuplicity(duplicity);
@@ -307,8 +306,8 @@ public class KdStrom<T extends IKluc<T>> {
             } else {
                 rodic.setPravySyn(null);
             }
+            pocetVrcholov--;
         }
-        pocetVrcholov--;
     }
 
     public ArrayList<Vrchol<T>> inOrderPrehliadka() {

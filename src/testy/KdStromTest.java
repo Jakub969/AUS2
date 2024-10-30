@@ -239,7 +239,7 @@ class KdStromTest {
         kluce.add(vrchol70);
         kluce.add(vrchol71);
         kluce.add(vrchol80);
-        int[] pocetVrcholov = {14,12,6,3,1};
+        int[] pocetVrcholov = {14,11,5,2,1};
         int[] pocetMazanychVrcholov = {5, 3, 6, 3, 2};
         int zaciatok = 0;
         for (int i = 0; i < 5; i++) {
