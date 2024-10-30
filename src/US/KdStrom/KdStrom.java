@@ -75,33 +75,32 @@ public class KdStrom<T extends IKluc<T>> {
         }
     }
 
-    private ArrayList<Vrchol<T>> vyhladaj(Vrchol<T> kluc) {
-        ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
+    private Vrchol<T> vyhladaj(Vrchol<T> kluc) {
         if (this.koren == null) {
-            return vrcholy;
+            return null;
         }
+        Vrchol<T> aktualny = null;
         Stack<Vrchol<T>> vrcholyPrehladavania = new Stack<>();
         vrcholyPrehladavania.push(this.koren);
 
         int hlbka = 0;
 
         while (!vrcholyPrehladavania.isEmpty()) {
-            Vrchol<T> aktualny = vrcholyPrehladavania.pop();
+            aktualny = vrcholyPrehladavania.pop();
             int poradieKluca = hlbka % this.pocetKlucov;
             int porovnanie = kluc.getData().porovnaj(aktualny.getData(), poradieKluca);
             if (porovnanie == 0 && aktualny.getData().porovnaj(kluc.getData(), (poradieKluca + 1) % this.pocetKlucov) == 0) {
-                vrcholy.add(aktualny);
-                return vrcholy;
+                return aktualny;
             }
             if (porovnanie <= 0 && aktualny.getLavySyn() != null) {
                 vrcholyPrehladavania.push(aktualny.getLavySyn());
             }
-            if (porovnanie >= 0 && aktualny.getPravySyn() != null) {
+            if (porovnanie > 0 && aktualny.getPravySyn() != null) {
                 vrcholyPrehladavania.push(aktualny.getPravySyn());
             }
             hlbka++;
         }
-        return vrcholy;
+        return aktualny;
     }
 
     public ArrayList<Vrchol<T>> bodoveVyhladavanie(ArrayList<Vrchol<T>> kluce) {
@@ -111,7 +110,7 @@ public class KdStrom<T extends IKluc<T>> {
 
         ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
         for (Vrchol<T> vrchol : kluce) {
-            vrcholy.addAll(vyhladaj(vrchol));
+            vrcholy.add(vyhladaj(vrchol));
         }
 
         return vrcholy;
@@ -119,17 +118,15 @@ public class KdStrom<T extends IKluc<T>> {
 
 
     public boolean vyrad(Vrchol<T> vrchol) {
-        ArrayList<Vrchol<T>> vrcholy = this.vyhladaj(vrchol);
-        if (vrcholy.isEmpty()) {
+        Vrchol<T> vyhladanyVrchol = this.vyhladaj(vrchol);
+        if (vyhladanyVrchol == null) {
             return false;
         } else {
-            for (Vrchol<T> vrchol1 : vrcholy) {
-                if (vrchol1.getLavySyn() == null && vrchol1.getPravySyn() == null) {
-                    odstranList(vrchol1, vrchol);
-                } else {
-                    nahradVrchol(vrchol1);
-                    odstranVrchol(vrchol1, vrchol);
-                }
+            if (vyhladanyVrchol.getLavySyn() == null && vyhladanyVrchol.getPravySyn() == null) {
+                odstranList(vyhladanyVrchol, vrchol);
+            } else {
+                nahradVrchol(vyhladanyVrchol);
+                odstranVrchol(vyhladanyVrchol, vrchol);
             }
             return true;
         }
@@ -176,6 +173,10 @@ public class KdStrom<T extends IKluc<T>> {
     }
 
     private void opravPrepojenia(Vrchol<T> vrchol, Vrchol<T> nahrada) {
+        /*„Ak sa pri mazaní v strome presúva na nové miesto prvok, ktorého kľúč sa podľa dimenzie nového
+            umiestnenia prvku v pravom podstrome nového umiestnenia prvku už nachádza, musíme následne
+            všetky takéto prvky zo stromu tiež odobrať a opätovne vložiť do stromu."*/
+
         Vrchol<T> rodicVrchola = vrchol.getRodic();
         Vrchol<T> lavySyn = vrchol.getLavySyn();
         Vrchol<T> pravySyn = vrchol.getPravySyn();
