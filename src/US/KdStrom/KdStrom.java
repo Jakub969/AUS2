@@ -118,7 +118,7 @@ public class KdStrom<T extends IKluc<T>> {
 
 
     public boolean vyrad(Vrchol<T> vrchol) {
-        Vrchol<T> vyhladanyVrchol = this.vyhladaj(vrchol);
+        Vrchol<T> vyhladanyVrchol = this.vyhladaj(vrchol); //TODO prečo vyhladaný vrchol nie je spravny pri znovu vkladaní vrchola ak sa nachádza v pravom podstrome
         if (vyhladanyVrchol == null) {
             return false;
         } else {
@@ -211,11 +211,11 @@ public class KdStrom<T extends IKluc<T>> {
         }
         if (pravySyn != nahrada) {
             nahrada.setPravySyn(pravySyn);
-            if (nahrada.getData().porovnaj(pravySyn.getData(), getHlbkaVrchola(nahrada) % this.pocetKlucov) == 0) {
-                znovuVlozVrcholy(pravySyn, nahrada);
-            }
             if (pravySyn != null) {
                 pravySyn.setRodic(nahrada);
+                if (nahrada.getData().porovnaj(pravySyn.getData(), getHlbkaVrchola(nahrada) % this.pocetKlucov) == 0) {
+                    znovuVlozVrcholy(pravySyn, nahrada);
+                }
             }
         }
     }
