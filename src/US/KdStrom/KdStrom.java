@@ -2,9 +2,6 @@ package US.KdStrom;
 
 
 import rozhrania.IKluc;
-import triedy.GPS;
-import triedy.Nehnutelnost;
-import triedy.Parcela;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -79,24 +76,20 @@ public class KdStrom<T extends IKluc<T>> {
         if (this.koren == null) {
             return null;
         }
-        Vrchol<T> aktualny = null;
-        Stack<Vrchol<T>> vrcholyPrehladavania = new Stack<>();
-        vrcholyPrehladavania.push(this.koren);
-
+        Vrchol<T> aktualny = this.koren;
         int hlbka = 0;
 
-        while (!vrcholyPrehladavania.isEmpty()) {
-            aktualny = vrcholyPrehladavania.pop();
+        while (aktualny != null) {
             int poradieKluca = hlbka % this.pocetKlucov;
             int porovnanie = kluc.getData().porovnaj(aktualny.getData(), poradieKluca);
             if (porovnanie == 0 && aktualny.getData().porovnaj(kluc.getData(), (poradieKluca + 1) % this.pocetKlucov) == 0) {
                 return aktualny;
             }
             if (porovnanie <= 0 && aktualny.getLavySyn() != null) {
-                vrcholyPrehladavania.push(aktualny.getLavySyn());
+                aktualny = aktualny.getLavySyn();
             }
-            if (porovnanie > 0 && aktualny.getPravySyn() != null) {
-                vrcholyPrehladavania.push(aktualny.getPravySyn());
+            else if (porovnanie > 0 && aktualny.getPravySyn() != null) {
+                aktualny = aktualny.getPravySyn();
             }
             hlbka++;
         }
@@ -118,28 +111,18 @@ public class KdStrom<T extends IKluc<T>> {
 
 
     public boolean vyrad(Vrchol<T> vrchol) {
-        Vrchol<T> vyhladanyVrchol = this.vyhladaj(vrchol); //TODO prečo vyhladaný vrchol nie je spravny pri znovu vkladaní vrchola ak sa nachádza v pravom podstrome
+        Vrchol<T> vyhladanyVrchol = this.vyhladaj(vrchol);
         if (vyhladanyVrchol == null) {
             return false;
         } else {
             if (vyhladanyVrchol.getLavySyn() == null && vyhladanyVrchol.getPravySyn() == null) {
-                odstranList(vyhladanyVrchol, vrchol);
+                odstranVrchol(vyhladanyVrchol, vrchol, true);
             } else {
                 nahradVrchol(vyhladanyVrchol);
-                odstranVrchol(vyhladanyVrchol, vrchol);
+                odstranVrchol(vyhladanyVrchol, vrchol, false);
             }
             return true;
         }
-    }
-
-    private void odstranVrchol(Vrchol<T> vrchol, Vrchol<T> kluc) {
-        if (vrchol == null) return;
-
-
-        vrchol.setRodic(null);
-        vrchol.setLavySyn(null);
-        vrchol.setPravySyn(null);
-        pocetVrcholov--;
     }
 
     private void nahradVrchol(Vrchol<T> vrchol) {
@@ -231,16 +214,17 @@ public class KdStrom<T extends IKluc<T>> {
             if (vrchol.getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
                 vrcholyNaZnovuVlozenie.add(vrchol);
             }
-            if (vrchol.getLavySyn() != null) {
+            if (vrchol.getLavySyn() != null && vrchol.getLavySyn().getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
                 stack.push(vrchol.getLavySyn());
             }
-            if (vrchol.getPravySyn() != null) {
+            if (vrchol.getPravySyn() != null && vrchol.getPravySyn().getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
                 stack.push(vrchol.getPravySyn());
             }
         }
 
         for (Vrchol<T> vrchol : vrcholyNaZnovuVlozenie) {
-            vyrad(vrchol);
+            nahradVrchol(vrchol);
+            odstranVrchol(vrchol, vrchol, vrchol.getLavySyn() == null && vrchol.getPravySyn() == null);
             vloz(vrchol);
         }
     }
@@ -290,7 +274,7 @@ public class KdStrom<T extends IKluc<T>> {
         return lokalnaHlbka;
     }
 
-    private void odstranList(Vrchol<T> vrchol, Vrchol<T> kluc) {
+    private void odstranVrchol(Vrchol<T> vrchol, Vrchol<T> kluc, boolean jeList) {
         Vrchol<T> rodic = vrchol.getRodic();
         ArrayList<Vrchol<T>> duplicity = vrchol.getDuplicity();
         Vrchol<T> mazanyVrchol = null;
@@ -328,12 +312,18 @@ public class KdStrom<T extends IKluc<T>> {
                 mazanyVrchol.setRodic(null);
             }
         } else {
-            if (rodic == null) {
-                this.koren = null;
-            } else if (rodic.getLavySyn() == vrchol) {
-                rodic.setLavySyn(null);
+            if (jeList) {
+                if (rodic == null) {
+                    this.koren = null;
+                } else if (rodic.getLavySyn() == vrchol) {
+                    rodic.setLavySyn(null);
+                } else {
+                    rodic.setPravySyn(null);
+                }
             } else {
-                rodic.setPravySyn(null);
+                vrchol.setRodic(null);
+                vrchol.setLavySyn(null);
+                vrchol.setPravySyn(null);
             }
             pocetVrcholov--;
         }

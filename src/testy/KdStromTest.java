@@ -250,6 +250,17 @@ class KdStromTest {
                 System.out.println("Počet vrcholov po mazaní: " + this.kdStromNehnutelnosti.getPocetVrcholov());
                 ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.inOrderPrehliadka();
                 System.out.println("InOrder prehliadka po mazaní: " + vysledok.size());
+                if (false) { //j == 9
+                    for (Vrchol<Nehnutelnost> nehnutelnostVrchol : vysledok) {
+                        System.out.println(nehnutelnostVrchol.getData().toString());
+                        if (nehnutelnostVrchol.getLavySyn() != null) {
+                            System.out.println("Lavy syn: " + nehnutelnostVrchol.getLavySyn().getData().toString());
+                        }
+                        if (nehnutelnostVrchol.getPravySyn() != null) {
+                            System.out.println("Pravy syn: " + nehnutelnostVrchol.getPravySyn().getData().toString());
+                        }
+                    }
+                }
                 for (Vrchol<Nehnutelnost> nehnutelnostVrchol : vysledok) {
                     System.out.print("Vrchol: " + nehnutelnostVrchol.getData().getSupisneCislo() + ", ");
                 }
