@@ -9,6 +9,7 @@ import triedy.GPS;
 import triedy.Nehnutelnost;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -239,10 +240,11 @@ class KdStromTest {
         kluce.add(vrchol70);
         kluce.add(vrchol71);
         kluce.add(vrchol80);
-        int[] pocetVrcholov = {14,11,5,2,1};
-        int[] pocetMazanychVrcholov = {5, 3, 6, 3, 2};
+        kluce.add(vrchol81);
+        int[] pocetVrcholov = {14,11,5,2,1,0};
+        int[] pocetMazanychVrcholov = {5, 3, 6, 3, 2, 1};
         int zaciatok = 0;
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             int koniec = zaciatok + pocetMazanychVrcholov[i];
             for (int j = zaciatok; j < koniec; j++) {
                 System.out.println("Mazaný vrchol: " + kluce.get(j).getData().getSupisneCislo() + " ; " + kluce.get(j).getData().toString());
@@ -250,17 +252,6 @@ class KdStromTest {
                 System.out.println("Počet vrcholov po mazaní: " + this.kdStromNehnutelnosti.getPocetVrcholov());
                 ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.inOrderPrehliadka();
                 System.out.println("InOrder prehliadka po mazaní: " + vysledok.size());
-                if (false) { //j == 9
-                    for (Vrchol<Nehnutelnost> nehnutelnostVrchol : vysledok) {
-                        System.out.println(nehnutelnostVrchol.getData().toString());
-                        if (nehnutelnostVrchol.getLavySyn() != null) {
-                            System.out.println("Lavy syn: " + nehnutelnostVrchol.getLavySyn().getData().toString());
-                        }
-                        if (nehnutelnostVrchol.getPravySyn() != null) {
-                            System.out.println("Pravy syn: " + nehnutelnostVrchol.getPravySyn().getData().toString());
-                        }
-                    }
-                }
                 for (Vrchol<Nehnutelnost> nehnutelnostVrchol : vysledok) {
                     System.out.print("Vrchol: " + nehnutelnostVrchol.getData().getSupisneCislo() + ", ");
                 }
@@ -271,6 +262,22 @@ class KdStromTest {
             assertEquals(pocetVrcholov[i], vysledok.size());
             System.out.println();
             System.out.println("-------------------------------------------------------------------------------------------------");
+        }
+        for (int i = 0; i < 3; i++) {
+            Random random = new Random();
+            int randomIndex = random.nextInt(vrcholy.size());
+            this.kdStromNehnutelnosti.vloz(vrcholy.get(randomIndex));
+        }
+        ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.inOrderPrehliadka();
+        System.out.println("Počet: " + vysledok.size());
+        for (Vrchol<Nehnutelnost> nehnutelnostVrchol : vysledok) {
+            System.out.println(nehnutelnostVrchol.getData().toString());
+            if (nehnutelnostVrchol.getLavySyn() != null) {
+                System.out.println("Lavý syn: " + nehnutelnostVrchol.getLavySyn().getData().toString());
+            }
+            if (nehnutelnostVrchol.getPravySyn() != null) {
+                System.out.println("Pravý syn: " + nehnutelnostVrchol.getPravySyn().getData().toString());
+            }
         }
     }
 }
