@@ -60,10 +60,17 @@ public class Parcela implements IKluc<Parcela> {
 
     @Override
     public int porovnaj(Parcela objekt, int poradieKluca) {
+        double tolerancia = 0.000001;
         if (objekt instanceof Parcela dataParcela) {
             if (poradieKluca == 0) {
+                if (Math.abs(this.GPSsuradnice.getPoziciaDlzky() - dataParcela.getGPSsuradnice().getPoziciaDlzky()) <= tolerancia) {
+                    return 0;
+                }
                 return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataParcela.getGPSsuradnice().getPoziciaDlzky());
             } else {
+                if (Math.abs(this.GPSsuradnice.getPoziciaSirky() - dataParcela.getGPSsuradnice().getPoziciaSirky()) <= tolerancia) {
+                    return 0;
+                }
                 return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataParcela.getGPSsuradnice().getPoziciaSirky());
             }
         } else {

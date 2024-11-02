@@ -25,17 +25,30 @@ public class GeografickyObjekt implements IKluc<GeografickyObjekt> {
 
     @Override
     public int porovnaj(GeografickyObjekt objekt, int poradieKluca) {
+        double tolerancia = 0.000001;
         if (objekt.nehnutelnost instanceof Nehnutelnost dataNehnutelnost) {
             if (poradieKluca == 0) {
-                return Double.compare(this.nehnutelnost.getGPSsuradnice().getPoziciaDlzky(), dataNehnutelnost.getGPSsuradnice().getPoziciaDlzky());
+                if (Math.abs(this.GPSsuradnice.getPoziciaDlzky() - dataNehnutelnost.getGPSsuradnice().getPoziciaDlzky()) <= tolerancia) {
+                    return 0;
+                }
+                return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataNehnutelnost.getGPSsuradnice().getPoziciaDlzky());
             } else {
-                return Double.compare(this.nehnutelnost.getGPSsuradnice().getPoziciaSirky(), dataNehnutelnost.getGPSsuradnice().getPoziciaSirky());
+                if (Math.abs(this.GPSsuradnice.getPoziciaSirky() - dataNehnutelnost.getGPSsuradnice().getPoziciaSirky()) <= tolerancia) {
+                    return 0;
+                }
+                return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataNehnutelnost.getGPSsuradnice().getPoziciaSirky());
             }
         } else if (objekt.parcela instanceof Parcela dataParcela) {
             if (poradieKluca == 0) {
-                return Double.compare(this.parcela.getGPSsuradnice().getPoziciaDlzky(), dataParcela.getGPSsuradnice().getPoziciaDlzky());
+                if (Math.abs(this.GPSsuradnice.getPoziciaDlzky() - dataParcela.getGPSsuradnice().getPoziciaDlzky()) <= tolerancia) {
+                    return 0;
+                }
+                return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataParcela.getGPSsuradnice().getPoziciaDlzky());
             } else {
-                return Double.compare(this.parcela.getGPSsuradnice().getPoziciaSirky(), dataParcela.getGPSsuradnice().getPoziciaSirky());
+                if (Math.abs(this.GPSsuradnice.getPoziciaSirky() - dataParcela.getGPSsuradnice().getPoziciaSirky()) <= tolerancia) {
+                    return 0;
+                }
+                return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataParcela.getGPSsuradnice().getPoziciaSirky());
             }
         } else {
             return -2;

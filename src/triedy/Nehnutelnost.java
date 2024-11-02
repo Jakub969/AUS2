@@ -55,10 +55,17 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
 
     @Override
     public int porovnaj(Nehnutelnost objekt, int poradieKluca) {
+        double tolerancia = 0.000001;
         if (objekt instanceof Nehnutelnost dataNehnutelnost) {
             if (poradieKluca == 0) {
+                if (Math.abs(this.GPSsuradnice.getPoziciaDlzky() - dataNehnutelnost.getGPSsuradnice().getPoziciaDlzky()) <= tolerancia) {
+                    return 0;
+                }
                 return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataNehnutelnost.getGPSsuradnice().getPoziciaDlzky());
             } else {
+                if (Math.abs(this.GPSsuradnice.getPoziciaSirky() - dataNehnutelnost.getGPSsuradnice().getPoziciaSirky()) <= tolerancia) {
+                    return 0;
+                }
                 return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataNehnutelnost.getGPSsuradnice().getPoziciaSirky());
             }
         } else {

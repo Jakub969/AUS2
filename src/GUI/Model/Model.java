@@ -25,26 +25,33 @@ public class Model {
     }
 
     public List<Nehnutelnost> searchNehnutelnosti(double dlzka, double sirka) {
+        // Create a temporary `Nehnutelnost` for comparison purposes
         GPS searchGPS = new GPS('N', sirka, 'E', dlzka);
-        Nehnutelnost nehnutelnostVyhladavania = new Nehnutelnost(0, "", null, null, searchGPS);
-        Vrchol<Nehnutelnost> vrcholVyhladavania = new Vrchol<>(nehnutelnostVyhladavania);
+        Nehnutelnost searchNehnutelnost = new Nehnutelnost(0, "", null, null, searchGPS);
+
+        // Perform the KD-tree search based on the initial GPS position
+        Vrchol<Nehnutelnost> vrcholVyhladavania = new Vrchol<>(searchNehnutelnost);
         ArrayList<Vrchol<Nehnutelnost>> kluce = new ArrayList<>();
         kluce.add(vrcholVyhladavania);
         ArrayList<Vrchol<Nehnutelnost>> results = kdStromNehnutelnosti.bodoveVyhladavanie(kluce);
+
+        // Filter results by using the `porovnaj` method to check if they match within tolerance
         return results.stream()
                 .map(Vrchol::getData)
                 .filter(nehnutelnost -> {
-                    double tolerancia = 0.000001;
-                    return Math.abs(nehnutelnost.getGPSsuradnice().getPoziciaDlzky() - dlzka) < tolerancia &&
-                            Math.abs(nehnutelnost.getGPSsuradnice().getPoziciaSirky() - sirka) < tolerancia;
+                    // Use `porovnaj` for both longitude (poradieKluca 0) and latitude (poradieKluca 1)
+                    return searchNehnutelnost.porovnaj(nehnutelnost, 0) == 0 &&
+                            searchNehnutelnost.porovnaj(nehnutelnost, 1) == 0;
                 })
                 .collect(Collectors.toList());
     }
 
+
     public void addNehnutelnost(int supisneCislo, String popis, List<GPS> gpsPositions) {
+        // Modify Nehnutelnost to store all GPS positions if needed
         Nehnutelnost newNehnutelnost = new Nehnutelnost(supisneCislo, popis, null, null, gpsPositions.get(0));
+
         Vrchol<Nehnutelnost> newVrchol = new Vrchol<>(newNehnutelnost);
         kdStromNehnutelnosti.vloz(newVrchol);
     }
-
 }
