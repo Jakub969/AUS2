@@ -7,14 +7,14 @@ import rozhrania.IKluc;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GeneratorOperacii2<T extends IKluc<T>> {
+public class GeneratorOperacii<T extends IKluc<T>> {
     private final KdStrom<T> strom;
     private final int pocetOperacii;
     private final int maxRozsah;
     private ArrayList<Vrchol<T>> zoznamVlozenychVrcholov;
     private final Random random;
 
-    public GeneratorOperacii2(KdStrom<T> kdStrom, int parPocetOperacii, int parMaxRozsah) {
+    public GeneratorOperacii(KdStrom<T> kdStrom, int parPocetOperacii, int parMaxRozsah) {
         this.strom = kdStrom;
         this.pocetOperacii = parPocetOperacii;
         this.maxRozsah = parMaxRozsah;

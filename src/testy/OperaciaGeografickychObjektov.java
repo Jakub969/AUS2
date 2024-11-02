@@ -3,17 +3,13 @@ package testy;
 import US.KdStrom.KdStrom;
 import US.KdStrom.Vrchol;
 import rozhrania.IKluc;
-import triedy.GPS;
 import triedy.Nehnutelnost;
 import triedy.Parcela;
 
-import java.util.ArrayList;
-import java.util.Random;
-
-public class VkladanieGeografickychObjektov<T extends IKluc<T>> {
+public class OperaciaGeografickychObjektov<T extends IKluc<T>> {
     private final KdStrom<T> strom;
 
-    public VkladanieGeografickychObjektov(KdStrom<T> kdStrom) {
+    public OperaciaGeografickychObjektov(KdStrom<T> kdStrom) {
         this.strom = kdStrom;
     }
 

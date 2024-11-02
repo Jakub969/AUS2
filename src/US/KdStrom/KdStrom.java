@@ -116,10 +116,10 @@ public class KdStrom<T extends IKluc<T>> {
             return false;
         } else {
             if (vyhladanyVrchol.getLavySyn() == null && vyhladanyVrchol.getPravySyn() == null) {
-                odstranVrchol(vyhladanyVrchol, vrchol, true);
+                odstranVrchol(vyhladanyVrchol, vrchol, true, false);
             } else {
                 nahradVrchol(vyhladanyVrchol);
-                odstranVrchol(vyhladanyVrchol, vrchol, false);
+                odstranVrchol(vyhladanyVrchol, vrchol, false, false);
             }
             return true;
         }
@@ -206,25 +206,25 @@ public class KdStrom<T extends IKluc<T>> {
     private void znovuVlozVrcholy(Vrchol<T> pravySyn, Vrchol<T> nahrada) {
         int poradieKluca = getHlbkaVrchola(nahrada) % this.pocetKlucov;
         ArrayList<Vrchol<T>> vrcholyNaZnovuVlozenie = new ArrayList<>();
-        Stack<Vrchol<T>> stack = new Stack<>();
-        stack.push(pravySyn);
+        Stack<Vrchol<T>> zasobnik = new Stack<>();
+        zasobnik.push(pravySyn);
 
-        while (!stack.isEmpty()) {
-            Vrchol<T> vrchol = stack.pop();
+        while (!zasobnik.isEmpty()) {
+            Vrchol<T> vrchol = zasobnik.pop();
             if (vrchol.getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
                 vrcholyNaZnovuVlozenie.add(vrchol);
             }
             if (vrchol.getLavySyn() != null && vrchol.getLavySyn().getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
-                stack.push(vrchol.getLavySyn());
+                zasobnik.push(vrchol.getLavySyn());
             }
             if (vrchol.getPravySyn() != null && vrchol.getPravySyn().getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
-                stack.push(vrchol.getPravySyn());
+                zasobnik.push(vrchol.getPravySyn());
             }
         }
 
         for (Vrchol<T> vrchol : vrcholyNaZnovuVlozenie) {
             nahradVrchol(vrchol);
-            odstranVrchol(vrchol, vrchol, vrchol.getLavySyn() == null && vrchol.getPravySyn() == null);
+            odstranVrchol(vrchol, vrchol, vrchol.getLavySyn() == null && vrchol.getPravySyn() == null, true);
             vloz(vrchol);
         }
     }
@@ -274,7 +274,7 @@ public class KdStrom<T extends IKluc<T>> {
         return lokalnaHlbka;
     }
 
-    private void odstranVrchol(Vrchol<T> vrchol, Vrchol<T> kluc, boolean jeList) {
+    private void odstranVrchol(Vrchol<T> vrchol, Vrchol<T> kluc, boolean jeList, boolean znovuVkladanieVrchola) {
         Vrchol<T> rodic = vrchol.getRodic();
         ArrayList<Vrchol<T>> duplicity = vrchol.getDuplicity();
         Vrchol<T> mazanyVrchol = null;
@@ -289,7 +289,7 @@ public class KdStrom<T extends IKluc<T>> {
             }
             duplicity.remove(mazanyVrchol);
         }
-        if (!duplicity.isEmpty()) {
+        if (!duplicity.isEmpty() && !znovuVkladanieVrchola) {
             if (rodic == null) {
                 this.koren = duplicity.removeFirst();
                 this.koren.setDuplicity(duplicity);

@@ -1,6 +1,6 @@
 package GUI.Model;
 
-import testy.VkladanieGeografickychObjektov;
+import testy.OperaciaGeografickychObjektov;
 import US.KdStrom.KdStrom;
 import US.KdStrom.Vrchol;
 import triedy.GPS;
@@ -19,7 +19,9 @@ public class Model {
 
     public Model() {
         this.kdStromNehnutelnosti = new KdStrom<>(2);
-        VkladanieGeografickychObjektov<Nehnutelnost> vkladanieGeografickychObjektov = new VkladanieGeografickychObjektov<>(this.kdStromNehnutelnosti);
+        OperaciaGeografickychObjektov<Nehnutelnost> operacieNehnutelnosti = new OperaciaGeografickychObjektov<>(this.kdStromNehnutelnosti);
+        this.kdStromParciel = new KdStrom<>(2);
+        OperaciaGeografickychObjektov<Parcela> operacieParciel = new OperaciaGeografickychObjektov<>(this.kdStromParciel);
     }
 
     public List<Nehnutelnost> searchNehnutelnosti(double dlzka, double sirka) {

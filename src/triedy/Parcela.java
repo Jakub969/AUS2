@@ -49,6 +49,10 @@ public class Parcela implements IKluc<Parcela> {
         return uuid;
     }
 
+    public void addNehnutelnost(Nehnutelnost nehnutelnost) {
+        this.zoznamNehnutelnosti.add(nehnutelnost);
+    }
+
     @Override
     public boolean zhodneUuid(Parcela objekt) {
         return this.uuid.equals(objekt.getUuid());

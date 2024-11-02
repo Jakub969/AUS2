@@ -1,12 +1,7 @@
 package GUI.View;
 
-import GUI.Model.Model;
-import triedy.Nehnutelnost;
-
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 public class View extends JFrame {
     private JButton searchButton;
