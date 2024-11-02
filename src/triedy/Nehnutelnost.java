@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Nehnutelnost implements IKluc<Nehnutelnost> {
     private final int supisneCislo;
     private final String popis;
-    private ArrayList<Parcela> zoznamParcel;
+    private ArrayList<Parcela> zoznamParciel;
     private Nehnutelnost referenciaNaRovnakuNehnutelnostSInymiGPS;
     private final GPS GPSsuradnice;
     private final String uuid;
@@ -15,7 +15,7 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
     public Nehnutelnost(int supisneCislo, String popis, ArrayList<Parcela> zoznamParcel, Nehnutelnost referenciaNaRovnakuNehnutelnostSInymiGPS, GPS GPSsuradnice) {
         this.supisneCislo = supisneCislo;
         this.popis = popis;
-        this.zoznamParcel = zoznamParcel;
+        this.zoznamParciel = zoznamParcel;
         this.referenciaNaRovnakuNehnutelnostSInymiGPS = referenciaNaRovnakuNehnutelnostSInymiGPS;
         this.GPSsuradnice = GPSsuradnice;
         this.uuid = java.util.UUID.randomUUID().toString();
@@ -29,8 +29,8 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
         return popis;
     }
 
-    public ArrayList<Parcela> getZoznamParcel() {
-        return zoznamParcel;
+    public ArrayList<Parcela> getZoznamParciel() {
+        return zoznamParciel;
     }
 
     public GPS getGPSsuradnice() {
@@ -46,7 +46,7 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
     }
 
     public void addParcela(Parcela parcela) {
-        this.zoznamParcel.add(parcela);
+        this.zoznamParciel.add(parcela);
     }
 
     public String getUuid() {

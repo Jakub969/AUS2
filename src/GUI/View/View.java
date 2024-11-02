@@ -5,12 +5,13 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class View extends JFrame {
-    private JButton tlacidloVyhladavaniaNehnutelnosti, tlacidloVyhladavaniaParciel, tlacidloVyhladavaniaVsetkych, tlacidloUpravovania, tlacidloMazania, tlacidloPridaniaNehnutelnosti, tlacidloPridaniaParcely, vygenerujDataButton;
-    private JTextField dlzkaField1, sirkaField1, dlzkaField2, sirkaField2, supisneCisloNehnutelnostiField, popisNehnutelnostiField, gpsPozicieNehnutelnostiField, supisneCisloParcelyField, popisParcelyField, gpsPozicieParcelyField,
-            sirkaNehnutelnostiField, dlzkaNehnutelnostiField, sirkaParcelyField, dlzkaParcelyField, pocetNehnutelnostiField, pocetParcielField, pravdepodobnostPrekrytiaField;
+    private JButton tlacidloVyhladavaniaNehnutelnosti, tlacidloVyhladavaniaParciel, tlacidloVyhladavaniaVsetkych, tlacidloUpravovania, tlacidloMazania, tlacidloPridaniaNehnutelnosti, tlacidloPridaniaParcely, vygenerujDataButton, tlacidloUkladania, tlacidloNacitania;
+    private JTextField dlzkaField1, sirkaField1, dlzkaField2, sirkaField2, supisneCisloNehnutelnostiField, popisNehnutelnostiField, supisneCisloParcelyField, popisParcelyField,
+            sirkaNehnutelnostiField1, sirkaNehnutelnostiField2, dlzkaNehnutelnostiField1, dlzkaNehnutelnostiField2, sirkaParcelyField1, sirkaParcelyField2, dlzkaParcelyField1, dlzkaParcelyField2, pocetNehnutelnostiField, pocetParcielField, pravdepodobnostPrekrytiaField;
     private JTextArea zobrazenieVysledkov;
 
-    private JComboBox<String> sirkaComboBox1, dlzkaComboBox1, sirkaComboBox2, dlzkaComboBox2, pridanieSirkaNehnutelnostiComboBox, pridanieDlzkaNehnutelnostiComboBox, pridanieSirkaParcelyComboBox, pridanieDlzkaParcelyComboBox;
+    private JComboBox<String> sirkaComboBox1, dlzkaComboBox1, sirkaComboBox2, dlzkaComboBox2, pridanieSirkaNehnutelnostiComboBox1, pridanieDlzkaNehnutelnostiComboBox1, pridanieSirkaNehnutelnostiComboBox2, pridanieDlzkaNehnutelnostiComboBox2, pridanieSirkaParcelyComboBox1,
+            pridanieSirkaParcelyComboBox2, pridanieDlzkaParcelyComboBox1, pridanieDlzkaParcelyComboBox2;
 
     public View() {
         tlacidloVyhladavaniaNehnutelnosti = new JButton("Vyhladaj Nehnutelnosti");
@@ -20,6 +21,8 @@ public class View extends JFrame {
         tlacidloMazania = new JButton("Vymaz");
         tlacidloPridaniaNehnutelnosti = new JButton("Pridaj Nehnutelnost");
         tlacidloPridaniaParcely = new JButton("Pridaj Parcelu");
+        tlacidloUkladania = new JButton("Uloz");
+        tlacidloNacitania = new JButton("Nacitaj");
 
         dlzkaField1 = new JTextField(10);
         sirkaField1 = new JTextField(10);
@@ -27,14 +30,16 @@ public class View extends JFrame {
         sirkaField2 = new JTextField(10);
         supisneCisloNehnutelnostiField = new JTextField(10);
         popisNehnutelnostiField = new JTextField(10);
-        gpsPozicieNehnutelnostiField = new JTextField(30);
         supisneCisloParcelyField = new JTextField(10);
         popisParcelyField = new JTextField(10);
-        gpsPozicieParcelyField = new JTextField(30);
-        sirkaNehnutelnostiField = new JTextField(10);
-        dlzkaNehnutelnostiField = new JTextField(10);
-        sirkaParcelyField = new JTextField(10);
-        dlzkaParcelyField = new JTextField(10);
+        sirkaNehnutelnostiField1 = new JTextField(10);
+        dlzkaNehnutelnostiField1 = new JTextField(10);
+        sirkaNehnutelnostiField2 = new JTextField(10);
+        dlzkaNehnutelnostiField2 = new JTextField(10);
+        sirkaParcelyField1 = new JTextField(10);
+        dlzkaParcelyField1 = new JTextField(10);
+        sirkaParcelyField2 = new JTextField(10);
+        dlzkaParcelyField2 = new JTextField(10);
         pocetNehnutelnostiField = new JTextField(10);
         pocetParcielField = new JTextField(10);
         pravdepodobnostPrekrytiaField = new JTextField(10);
@@ -45,10 +50,14 @@ public class View extends JFrame {
         dlzkaComboBox1 = new JComboBox<>(new String[]{"E", "W"});
         sirkaComboBox2 = new JComboBox<>(new String[]{"N", "S"});
         dlzkaComboBox2 = new JComboBox<>(new String[]{"E", "W"});
-        pridanieSirkaNehnutelnostiComboBox = new JComboBox<>(new String[]{"N", "S"});
-        pridanieDlzkaNehnutelnostiComboBox = new JComboBox<>(new String[]{"E", "W"});
-        pridanieSirkaParcelyComboBox = new JComboBox<>(new String[]{"N", "S"});
-        pridanieDlzkaParcelyComboBox = new JComboBox<>(new String[]{"E", "W"});
+        pridanieSirkaNehnutelnostiComboBox1 = new JComboBox<>(new String[]{"N", "S"});
+        pridanieDlzkaNehnutelnostiComboBox1 = new JComboBox<>(new String[]{"E", "W"});
+        pridanieSirkaNehnutelnostiComboBox2 = new JComboBox<>(new String[]{"N", "S"});
+        pridanieDlzkaNehnutelnostiComboBox2 = new JComboBox<>(new String[]{"E", "W"});
+        pridanieSirkaParcelyComboBox1 = new JComboBox<>(new String[]{"N", "S"});
+        pridanieDlzkaParcelyComboBox1 = new JComboBox<>(new String[]{"E", "W"});
+        pridanieSirkaParcelyComboBox2 = new JComboBox<>(new String[]{"N", "S"});
+        pridanieDlzkaParcelyComboBox2 = new JComboBox<>(new String[]{"E", "W"});
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1200, 800);
@@ -89,37 +98,55 @@ public class View extends JFrame {
         actionPanel.add(tlacidloVyhladavaniaNehnutelnosti);
         actionPanel.add(tlacidloVyhladavaniaParciel);
         actionPanel.add(tlacidloVyhladavaniaVsetkych);
+        actionPanel.add(tlacidloUkladania);
+        actionPanel.add(tlacidloNacitania);
 
-        JPanel propertyPanel1 = new JPanel(new GridLayout(3, 2, 5, 5));
+        JPanel propertyPanel1 = new JPanel(new GridLayout(4, 2, 5, 5));
         propertyPanel1.setBorder(BorderFactory.createTitledBorder("Pridanie Nehnuteľnosti"));
         propertyPanel1.add(new JLabel("Súpisné číslo:"));
         propertyPanel1.add(supisneCisloNehnutelnostiField);
         propertyPanel1.add(new JLabel("Popis:"));
         propertyPanel1.add(popisNehnutelnostiField);
-        propertyPanel1.add(new JLabel("GPS Pozície:"));
-        JPanel gpsPozicieNehnutelnostiPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        gpsPozicieNehnutelnostiPanel.add(pridanieSirkaNehnutelnostiComboBox);
-        gpsPozicieNehnutelnostiPanel.add(sirkaNehnutelnostiField);
-        gpsPozicieNehnutelnostiPanel.add(pridanieDlzkaNehnutelnostiComboBox);
-        gpsPozicieNehnutelnostiPanel.add(dlzkaNehnutelnostiField);
-        propertyPanel1.add(gpsPozicieNehnutelnostiPanel);
+        propertyPanel1.add(new JLabel("GPS Pozície 1:"));
+        JPanel gpsPozicieNehnutelnostiPanel1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        gpsPozicieNehnutelnostiPanel1.add(pridanieSirkaNehnutelnostiComboBox1);
+        gpsPozicieNehnutelnostiPanel1.add(sirkaNehnutelnostiField1);
+        gpsPozicieNehnutelnostiPanel1.add(pridanieDlzkaNehnutelnostiComboBox1);
+        gpsPozicieNehnutelnostiPanel1.add(dlzkaNehnutelnostiField1);
+        propertyPanel1.add(gpsPozicieNehnutelnostiPanel1);
+        propertyPanel1.add(new JLabel("GPS Pozície 2:"));
+        JPanel gpsPozicieNehnutelnostiPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        gpsPozicieNehnutelnostiPanel2.add(pridanieSirkaNehnutelnostiComboBox2);
+        gpsPozicieNehnutelnostiPanel2.add(sirkaNehnutelnostiField2);
+        gpsPozicieNehnutelnostiPanel2.add(pridanieDlzkaNehnutelnostiComboBox2);
+        gpsPozicieNehnutelnostiPanel2.add(dlzkaNehnutelnostiField2);
+        propertyPanel1.add(gpsPozicieNehnutelnostiPanel2);
 
         JPanel addButtonPanel1 = new JPanel();
         addButtonPanel1.add(tlacidloPridaniaNehnutelnosti);
 
-        JPanel propertyPanel2 = new JPanel(new GridLayout(3, 2, 5, 5));
+        JPanel propertyPanel2 = new JPanel(new GridLayout(4, 2, 5, 5));
         propertyPanel2.setBorder(BorderFactory.createTitledBorder("Pridanie Parcely"));
         propertyPanel2.add(new JLabel("Súpisné číslo:"));
         propertyPanel2.add(supisneCisloParcelyField);
         propertyPanel2.add(new JLabel("Popis:"));
         propertyPanel2.add(popisParcelyField);
-        JPanel gpsPozicieParcelyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        propertyPanel2.add(new JLabel("GPS Pozície:"));
-        gpsPozicieParcelyPanel.add(pridanieSirkaParcelyComboBox);
-        gpsPozicieParcelyPanel.add(sirkaParcelyField);
-        gpsPozicieParcelyPanel.add(pridanieDlzkaParcelyComboBox);
-        gpsPozicieParcelyPanel.add(dlzkaParcelyField);
-        propertyPanel2.add(gpsPozicieParcelyPanel);
+        propertyPanel2.add(new JLabel("GPS Pozície 1:"));
+        JPanel gpsPozicieParcelyPanel1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        gpsPozicieParcelyPanel1.add(pridanieSirkaParcelyComboBox1);
+        gpsPozicieParcelyPanel1.add(sirkaParcelyField1);
+        gpsPozicieParcelyPanel1.add(pridanieDlzkaParcelyComboBox1);
+        gpsPozicieParcelyPanel1.add(dlzkaParcelyField1);
+        propertyPanel2.add(gpsPozicieParcelyPanel1);
+        propertyPanel2.add(new JLabel("GPS Pozície 2:"));
+        JPanel gpsPozicieParcelyPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        gpsPozicieParcelyPanel2.add(pridanieSirkaParcelyComboBox2);
+        gpsPozicieParcelyPanel2.add(sirkaParcelyField2);
+        gpsPozicieParcelyPanel2.add(pridanieDlzkaParcelyComboBox2);
+        gpsPozicieParcelyPanel2.add(dlzkaParcelyField2);
+        propertyPanel2.add(gpsPozicieParcelyPanel2);
+
+
 
         JPanel addButtonPanel2 = new JPanel();
         addButtonPanel2.add(tlacidloPridaniaParcely);
@@ -141,13 +168,13 @@ public class View extends JFrame {
         resultPanel.setBorder(BorderFactory.createTitledBorder("Výsledky"));
         resultPanel.add(new JScrollPane(zobrazenieVysledkov), BorderLayout.CENTER);
 
-        JPanel gpsPanelContainer = new JPanel(new GridLayout(2, 1, 10, 10));
+        JPanel gpsPanelContainer = new JPanel(new GridLayout(3, 1, 10, 10));
         gpsPanelContainer.add(gpsSearchPanel1);
         gpsPanelContainer.add(gpsSearchPanel2);
+        gpsPanelContainer.add(actionPanel);
 
         JPanel leftPanel = new JPanel(new BorderLayout(10, 10));
         leftPanel.add(gpsPanelContainer, BorderLayout.NORTH);
-        leftPanel.add(actionPanel, BorderLayout.CENTER);
 
         JPanel rightPanelNehnutelnost = new JPanel(new BorderLayout(10, 10));
         rightPanelNehnutelnost.add(propertyPanel1, BorderLayout.NORTH);
@@ -187,8 +214,9 @@ public class View extends JFrame {
 
     resultPanel.add(buttonPanel, BorderLayout.SOUTH);
     this.zobrazenieVysledkov.add(resultPanel);
-    this.zobrazenieVysledkov.revalidate();
-    this.zobrazenieVysledkov.repaint();
+    this.zobrazenieVysledkov.setText(resultText);
+    //this.zobrazenieVysledkov.revalidate();
+    //this.zobrazenieVysledkov.repaint();
 }
 
     public String getDlzka1() {
@@ -200,11 +228,11 @@ public class View extends JFrame {
     }
 
     public char getSirkaOrientation1() {
-        return (char) sirkaComboBox1.getSelectedItem();
+        return ((String) sirkaComboBox1.getSelectedItem()).charAt(0);
     }
 
     public char getDlzkaOrientation1() {
-        return (char) dlzkaComboBox1.getSelectedItem();
+        return ((String) dlzkaComboBox1.getSelectedItem()).charAt(0);
     }
 
     public String getDlzka2() {
@@ -216,23 +244,55 @@ public class View extends JFrame {
     }
 
     public char getSirkaOrientation2() {
-        return (char) sirkaComboBox2.getSelectedItem();
+        return ((String) sirkaComboBox2.getSelectedItem()).charAt(0);
     }
 
     public char getDlzkaOrientation2() {
-        return (char) dlzkaComboBox2.getSelectedItem();
+        return ((String) dlzkaComboBox2.getSelectedItem()).charAt(0);
     }
 
-    public String getSupisneCislo() {
+    public String getSupisneCisloNehnutelnosti() {
         return supisneCisloNehnutelnostiField.getText();
     }
 
-    public String getPopis() {
+    public String getPopisNehnutelnosti() {
         return popisNehnutelnostiField.getText();
     }
 
-    public String getNehnutelnostGpsPositions() {
-        return gpsPozicieNehnutelnostiField.getText();
+    public char getSirkaNehnutelnostiComboBox1() {
+        return ((String) pridanieSirkaNehnutelnostiComboBox1.getSelectedItem()).charAt(0);
+    }
+
+    public String getSirkaNehnutelnosti1() {
+        return sirkaNehnutelnostiField1.getText();
+    }
+
+    public char getDlzkaNehnutelnostiComboBox1() {
+        return ((String) pridanieDlzkaNehnutelnostiComboBox1.getSelectedItem()).charAt(0);
+    }
+
+    public String getDlzkaNehnutelnosti1() {
+        return dlzkaNehnutelnostiField1.getText();
+    }
+
+    public char getSirkaNehnutelnostiComboBox2() {
+        return ((String) pridanieSirkaNehnutelnostiComboBox2.getSelectedItem()).charAt(0);
+    }
+
+    public String getSirkaNehnutelnosti2() {
+        return sirkaNehnutelnostiField2.getText();
+    }
+
+    public char getDlzkaNehnutelnostiComboBox2() {
+        return ((String) pridanieDlzkaNehnutelnostiComboBox2.getSelectedItem()).charAt(0);
+    }
+
+    public String getDlzkaNehnutelnosti2() {
+        return dlzkaNehnutelnostiField2.getText();
+    }
+
+    public String getPopisParcely() {
+        return popisParcelyField.getText();
     }
 
     public String getPocetNehnutelnosti() {
@@ -257,8 +317,20 @@ public class View extends JFrame {
     }
 
     // Listener Methods
-    public void addSearchButtonListener(ActionListener listener) {
+    public void searchNehnutelnostButtonListener(ActionListener listener) {
         tlacidloVyhladavaniaNehnutelnosti.addActionListener(listener);
+    }
+
+    public void searchParcelaButtonListener(ActionListener listener) {
+        tlacidloVyhladavaniaParciel.addActionListener(listener);
+    }
+
+    public void addSaveButtonListener(ActionListener listener) {
+        tlacidloUkladania.addActionListener(listener);
+    }
+
+    public void addLoadButtonListener(ActionListener listener) {
+        tlacidloNacitania.addActionListener(listener);
     }
 
     public void addSearchParcelyButtonListener(ActionListener listener) {
@@ -277,11 +349,11 @@ public class View extends JFrame {
         tlacidloMazania.addActionListener(listener);
     }
 
-    public void addAddButtonListener(ActionListener listener) {
+    public void addNehnutelnostButtonListener(ActionListener listener) {
         tlacidloPridaniaNehnutelnosti.addActionListener(listener);
     }
 
-    public void addAddParcelaButtonListener(ActionListener listener) {
+    public void addParcelaButtonListener(ActionListener listener) {
         tlacidloPridaniaParcely.addActionListener(listener);
     }
 

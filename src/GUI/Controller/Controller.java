@@ -18,14 +18,16 @@ public class Controller {
         this.model = model;
         this.view = view;
 
-        this.view.addSearchButtonListener(new SearchButtonListener());
-        this.view.addAddButtonListener(new AddButtonListener());
+        this.view.searchNehnutelnostButtonListener(new SearchNehnutelnostButtonListener());
+        this.view.addNehnutelnostButtonListener(new AddNehnutelnostButtonListener());
+        this.view.addParcelaButtonListener(new AddParcelaButtonListener());
+        this.view.searchParcelaButtonListener(new SearchParcelaButtonListener());
         this.view.addEditButtonListener(new EditButtonListener());
         this.view.addDeleteButtonListener(new DeleteButtonListener());
         this.view.addGenerateButtonListener(new GenerateButtonListener());
     }
 
-    class SearchButtonListener implements ActionListener {
+    class SearchNehnutelnostButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             try {
                 double poziciaDlzky1 = Double.parseDouble(view.getDlzka1());
@@ -40,8 +42,8 @@ public class Controller {
                 char sirka2 = view.getSirkaOrientation2();
                 char dlzka2 = view.getDlzkaOrientation2();
 
-                GPS pozicia1 = new GPS(dlzka1, poziciaDlzky1, sirka1, poziciaSirky1);
-                GPS pozicia2 = new GPS(dlzka2, poziciaDlzky2, sirka2, poziciaSirky2);
+                GPS pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
+                GPS pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
 
                 ArrayList<GPS> gpsPositions = new ArrayList<>();
                 gpsPositions.add(pozicia1);
@@ -60,33 +62,37 @@ public class Controller {
         }
     }
 
-    class AddButtonListener implements ActionListener {
+    class AddNehnutelnostButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             try {
-                int supisneCislo = Integer.parseInt(view.getSupisneCislo());
-                String popis = view.getPopis();
-
-                String[] gpsPositionsStr = view.getNehnutelnostGpsPositions().split(";");
-                List<GPS> gpsPositions = new ArrayList<>();
-
-                for (String gpsStr : gpsPositionsStr) {
-                    String[] parts = gpsStr.split(",");
-                    char dlzkaChar = parts[0].charAt(0); // E or W
-                    double dlzka = Double.parseDouble(parts[1]);
-                    char sirkaChar = parts[2].charAt(0); // N or S
-                    double sirka = Double.parseDouble(parts[3]);
-                    gpsPositions.add(new GPS(dlzkaChar, dlzka, sirkaChar, sirka));
-                }
+                int supisneCislo = Integer.parseInt(view.getSupisneCisloNehnutelnosti());
+                String popis = view.getPopisNehnutelnosti();
+                List<GPS> gpsPositions = getGps();
 
                 model.pridajNehnutelnost(supisneCislo, popis, gpsPositions);
 
-                view.setResultText("Nehnutelnost (Supisne Cislo: " + supisneCislo +
-                        ", Popis: " + popis +
-                        ", GPS Pozicie: " + gpsPositions.get(0).getPoziciaDlzky() +
-                        " " + gpsPositions.get(0).getPoziciaSirky() + ") pridaná!");
+                view.setResultText("Nehnuteľnosť pridaná úspešne!");
             } catch (NumberFormatException ex) {
                 view.setResultText("Nesprávny vstup!");
             }
+        }
+
+        private List<GPS> getGps() {
+            List<GPS> gpsPositions = new ArrayList<>();
+
+            char sirka1 = view.getSirkaNehnutelnostiComboBox1();
+            char dlzka1 = view.getDlzkaNehnutelnostiComboBox1();
+            double poziciaDlzky1 = Double.parseDouble(view.getDlzkaNehnutelnosti1());
+            double poziciaSirky1 = Double.parseDouble(view.getSirkaNehnutelnosti1());
+            GPS pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
+            gpsPositions.add(pozicia1);
+            char sirka2 = view.getSirkaNehnutelnostiComboBox2();
+            char dlzka2 = view.getDlzkaNehnutelnostiComboBox2();
+            double poziciaDlzky2 = Double.parseDouble(view.getDlzkaNehnutelnosti2());
+            double poziciaSirky2 = Double.parseDouble(view.getSirkaNehnutelnosti2());
+            GPS pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
+            gpsPositions.add(pozicia2);
+            return gpsPositions;
         }
     }
 
@@ -118,6 +124,20 @@ public class Controller {
             } catch (NumberFormatException ex) {
                 view.setResultText("Nesprávny vstup!");
             }
+        }
+    }
+
+    private class AddParcelaButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+        }
+    }
+
+    private class SearchParcelaButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
         }
     }
 }
