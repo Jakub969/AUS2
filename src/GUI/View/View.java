@@ -5,11 +5,12 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class View extends JFrame {
-    private JButton tlacidloVyhladavaniaNehnutelnosti, tlacidloVyhladavaniaParciel, tlacidloVyhladavaniaVsetkych, tlacidloUpravovania, tlacidloMazania, tlacidloPridania;
-    private JTextField dlzkaField1, sirkaField1, dlzkaField2, sirkaField2, supisneCisloField, popisField, gpsPozicieField;
+    private JButton tlacidloVyhladavaniaNehnutelnosti, tlacidloVyhladavaniaParciel, tlacidloVyhladavaniaVsetkych, tlacidloUpravovania, tlacidloMazania, tlacidloPridaniaNehnutelnosti, tlacidloPridaniaParcely;
+    private JTextField dlzkaField1, sirkaField1, dlzkaField2, sirkaField2, supisneCisloNehnutelnostiField, popisNehnutelnostiField, gpsPozicieNehnutelnostiField, supisneCisloParcelyField, popisParcelyField, gpsPozicieParcelyField,
+            sirkaNehnutelnostiField, dlzkaNehnutelnostiField, sirkaParcelyField, dlzkaParcelyField;
     private JTextArea zobrazenieVysledkov;
 
-    private JComboBox<String> sirkaComboBox1, dlzkaComboBox1, sirkaComboBox2, dlzkaComboBox2;
+    private JComboBox<String> sirkaComboBox1, dlzkaComboBox1, sirkaComboBox2, dlzkaComboBox2, pridanieSirkaNehnutelnostiComboBox, pridanieDlzkaNehnutelnostiComboBox, pridanieSirkaParcelyComboBox, pridanieDlzkaParcelyComboBox;
 
     public View() {
         tlacidloVyhladavaniaNehnutelnosti = new JButton("Vyhladaj Nehnutelnosti");
@@ -17,15 +18,23 @@ public class View extends JFrame {
         tlacidloVyhladavaniaVsetkych = new JButton("Vyhladaj Vsetko");
         tlacidloUpravovania = new JButton("Edituj");
         tlacidloMazania = new JButton("Vymaz");
-        tlacidloPridania = new JButton("Pridaj Nehnutelnost");
+        tlacidloPridaniaNehnutelnosti = new JButton("Pridaj Nehnutelnost");
+        tlacidloPridaniaParcely = new JButton("Pridaj Parcelu");
 
         dlzkaField1 = new JTextField(10);
         sirkaField1 = new JTextField(10);
         dlzkaField2 = new JTextField(10);
         sirkaField2 = new JTextField(10);
-        supisneCisloField = new JTextField(10);
-        popisField = new JTextField(10);
-        gpsPozicieField = new JTextField(30);
+        supisneCisloNehnutelnostiField = new JTextField(10);
+        popisNehnutelnostiField = new JTextField(10);
+        gpsPozicieNehnutelnostiField = new JTextField(30);
+        supisneCisloParcelyField = new JTextField(10);
+        popisParcelyField = new JTextField(10);
+        gpsPozicieParcelyField = new JTextField(30);
+        sirkaNehnutelnostiField = new JTextField(10);
+        dlzkaNehnutelnostiField = new JTextField(10);
+        sirkaParcelyField = new JTextField(10);
+        dlzkaParcelyField = new JTextField(10);
         zobrazenieVysledkov = new JTextArea(10, 30);
         zobrazenieVysledkov.setEditable(false);
 
@@ -33,6 +42,10 @@ public class View extends JFrame {
         dlzkaComboBox1 = new JComboBox<>(new String[]{"E", "W"});
         sirkaComboBox2 = new JComboBox<>(new String[]{"N", "S"});
         dlzkaComboBox2 = new JComboBox<>(new String[]{"E", "W"});
+        pridanieSirkaNehnutelnostiComboBox = new JComboBox<>(new String[]{"N", "S"});
+        pridanieDlzkaNehnutelnostiComboBox = new JComboBox<>(new String[]{"E", "W"});
+        pridanieSirkaParcelyComboBox = new JComboBox<>(new String[]{"N", "S"});
+        pridanieDlzkaParcelyComboBox = new JComboBox<>(new String[]{"E", "W"});
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1200, 800);
@@ -53,7 +66,6 @@ public class View extends JFrame {
         dlzkaPanel1.add(dlzkaField1);
         gpsSearchPanel1.add(dlzkaPanel1);
 
-        // Panel for GPS Search (Bod 1)
         JPanel gpsSearchPanel2 = new JPanel(new GridLayout(3, 2, 5, 5));
         gpsSearchPanel2.setBorder(BorderFactory.createTitledBorder("Bod 2 - GPS Vyhľadávanie"));
 
@@ -77,17 +89,56 @@ public class View extends JFrame {
         actionPanel.add(tlacidloUpravovania);
         actionPanel.add(tlacidloMazania);
 
-        JPanel propertyPanel = new JPanel(new GridLayout(3, 2, 5, 5));
-        propertyPanel.setBorder(BorderFactory.createTitledBorder("Pridanie/Editácia Nehnuteľnosti"));
-        propertyPanel.add(new JLabel("Súpisné číslo:"));
-        propertyPanel.add(supisneCisloField);
-        propertyPanel.add(new JLabel("Popis:"));
-        propertyPanel.add(popisField);
-        propertyPanel.add(new JLabel("GPS Pozície:"));
-        propertyPanel.add(gpsPozicieField);
+        JPanel propertyPanel1 = new JPanel(new GridLayout(3, 2, 5, 5));
+        propertyPanel1.setBorder(BorderFactory.createTitledBorder("Pridanie Nehnuteľnosti"));
+        propertyPanel1.add(new JLabel("Súpisné číslo:"));
+        propertyPanel1.add(supisneCisloNehnutelnostiField);
+        propertyPanel1.add(new JLabel("Popis:"));
+        propertyPanel1.add(popisNehnutelnostiField);
+        propertyPanel1.add(new JLabel("GPS Pozície:"));
+        JPanel gpsPozicieNehnutelnostiPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        gpsPozicieNehnutelnostiPanel.add(pridanieSirkaNehnutelnostiComboBox);
+        gpsPozicieNehnutelnostiPanel.add(sirkaNehnutelnostiField);
+        gpsPozicieNehnutelnostiPanel.add(pridanieDlzkaNehnutelnostiComboBox);
+        gpsPozicieNehnutelnostiPanel.add(dlzkaNehnutelnostiField);
+        propertyPanel1.add(gpsPozicieNehnutelnostiPanel);
 
-        JPanel addButtonPanel = new JPanel();
-        addButtonPanel.add(tlacidloPridania);
+        JPanel addButtonPanel1 = new JPanel();
+        addButtonPanel1.add(tlacidloPridaniaNehnutelnosti);
+
+        JPanel propertyPanel2 = new JPanel(new GridLayout(3, 2, 5, 5));
+        propertyPanel2.setBorder(BorderFactory.createTitledBorder("Pridanie Parcely"));
+        propertyPanel2.add(new JLabel("Súpisné číslo:"));
+        propertyPanel2.add(supisneCisloParcelyField);
+        propertyPanel2.add(new JLabel("Popis:"));
+        propertyPanel2.add(popisParcelyField);
+        JPanel gpsPozicieParcelyPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        propertyPanel2.add(new JLabel("GPS Pozície:"));
+        gpsPozicieParcelyPanel.add(pridanieSirkaParcelyComboBox);
+        gpsPozicieParcelyPanel.add(sirkaParcelyField);
+        gpsPozicieParcelyPanel.add(pridanieDlzkaParcelyComboBox);
+        gpsPozicieParcelyPanel.add(dlzkaParcelyField);
+        propertyPanel2.add(gpsPozicieParcelyPanel);
+
+        JPanel addButtonPanel2 = new JPanel();
+        addButtonPanel2.add(tlacidloPridaniaParcely);
+
+        JPanel propertyPanel3 = new JPanel(new GridLayout(4, 1, 5, 5));
+        propertyPanel3.setBorder(BorderFactory.createTitledBorder("Generovanie dát"));
+        propertyPanel3.add(new JLabel("Počet nehnuteľnosti:"));
+        JTextField pocetNehnutelnostiField = new JTextField(10);
+        propertyPanel3.add(pocetNehnutelnostiField);
+        propertyPanel3.add(new JLabel("Počet parciel:"));
+        JTextField pocetParcielField = new JTextField(10);
+        propertyPanel3.add(pocetParcielField);
+        propertyPanel3.add(new JLabel("Pravdepodobnosť prekrytia:"));
+        JTextField pravdepodobnostPrekrytiaField = new JTextField(10);
+        propertyPanel3.add(pravdepodobnostPrekrytiaField);
+
+        JButton vygenerujDataButton = new JButton("Vygeneruj dáta");
+        JPanel generateButtonPanel = new JPanel();
+        generateButtonPanel.add(vygenerujDataButton);
+        propertyPanel3.add(generateButtonPanel);
 
         JPanel resultPanel = new JPanel(new BorderLayout());
         resultPanel.setBorder(BorderFactory.createTitledBorder("Výsledky"));
@@ -101,9 +152,18 @@ public class View extends JFrame {
         leftPanel.add(gpsPanelContainer, BorderLayout.NORTH);
         leftPanel.add(actionPanel, BorderLayout.CENTER);
 
-        JPanel rightPanel = new JPanel(new BorderLayout(10, 10));
-        rightPanel.add(propertyPanel, BorderLayout.NORTH);
-        rightPanel.add(addButtonPanel, BorderLayout.CENTER);
+        JPanel rightPanelNehnutelnost = new JPanel(new BorderLayout(10, 10));
+        rightPanelNehnutelnost.add(propertyPanel1, BorderLayout.NORTH);
+        rightPanelNehnutelnost.add(addButtonPanel1, BorderLayout.CENTER);
+
+        JPanel rightPanelParcela = new JPanel(new BorderLayout(10, 10));
+        rightPanelParcela.add(propertyPanel2, BorderLayout.NORTH);
+        rightPanelParcela.add(addButtonPanel2, BorderLayout.CENTER);
+
+        JPanel rightPanel = new JPanel(new GridLayout(3, 1, 10, 10));
+        rightPanel.add(rightPanelNehnutelnost);
+        rightPanel.add(rightPanelParcela);
+        rightPanel.add(propertyPanel3);
 
         this.add(leftPanel, BorderLayout.WEST);
         this.add(rightPanel, BorderLayout.CENTER);
@@ -143,17 +203,16 @@ public class View extends JFrame {
     }
 
     public String getSupisneCislo() {
-        return supisneCisloField.getText();
+        return supisneCisloNehnutelnostiField.getText();
     }
 
     public String getPopis() {
-        return popisField.getText();
+        return popisNehnutelnostiField.getText();
     }
 
     public String getGpsPositions() {
-        return gpsPozicieField.getText();
+        return gpsPozicieNehnutelnostiField.getText();
     }
-
 
 
     public void setResultText(String text) {
@@ -182,6 +241,6 @@ public class View extends JFrame {
     }
 
     public void addAddButtonListener(ActionListener listener) {
-        tlacidloPridania.addActionListener(listener);
+        tlacidloPridaniaNehnutelnosti.addActionListener(listener);
     }
 }
