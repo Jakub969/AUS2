@@ -8,6 +8,7 @@ public class Vrchol<T> {
     private Vrchol<T> rodic;
     private final T data;
     private ArrayList<Vrchol<T>> duplicity;
+    private boolean jeDuplicita;
 
     public Vrchol(T data) {
         this.data = data;
@@ -15,6 +16,7 @@ public class Vrchol<T> {
         this.pravySyn = null;
         this.rodic = null;
         this.duplicity = new ArrayList<>();
+        this.jeDuplicita = false;
     }
 
     public Vrchol<T> getLavySyn() {
@@ -55,5 +57,13 @@ public class Vrchol<T> {
 
     public void setDuplicity(ArrayList<Vrchol<T>> duplicity) {
         this.duplicity = duplicity;
+    }
+
+    public boolean isJeDuplicita() {
+        return jeDuplicita;
+    }
+
+    public void setJeDuplicita(boolean jeDuplicita) {
+        this.jeDuplicita = jeDuplicita;
     }
 }

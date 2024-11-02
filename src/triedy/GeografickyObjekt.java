@@ -5,8 +5,8 @@ import rozhrania.IKluc;
 public class GeografickyObjekt implements IKluc<GeografickyObjekt> {
     private final GPS GPSsuradnice;
     private final String uuid;
-    Nehnutelnost nehnutelnost;
-    Parcela parcela;
+    private Nehnutelnost nehnutelnost;
+    private Parcela parcela;
 
     public GeografickyObjekt(GPS GPSsuradnice, Nehnutelnost nehnutelnost, Parcela parcela) {
         this.GPSsuradnice = GPSsuradnice;
@@ -21,6 +21,14 @@ public class GeografickyObjekt implements IKluc<GeografickyObjekt> {
 
     public String getUuid() {
         return uuid;
+    }
+
+    public Nehnutelnost getNehnutelnost() {
+        return nehnutelnost;
+    }
+
+    public Parcela getParcela() {
+        return parcela;
     }
 
     @Override

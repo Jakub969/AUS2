@@ -41,10 +41,27 @@ public class OperacieGeografickychObjektov<T extends IKluc<T>> {
             this.strom.vloz(vrchol1);
             Vrchol<T> vrchol2 = new Vrchol<>(objekt2);
             this.strom.vloz(vrchol2);
-            ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
-            vrcholy.add(vrchol1);
-            vrcholy.add(vrchol2);
-            return vrcholy;
+            if (vrchol1.isJeDuplicita()) {
+                Nehnutelnost nehnutelnost = dataGeografickyObjekt1.getNehnutelnost();
+                Parcela parcela = dataGeografickyObjekt1.getParcela();
+                Vrchol<T> duplicita = this.strom.vyhladaj(vrchol1);
+                if (duplicita.getData() instanceof Nehnutelnost nehnutelnostDuplicita && parcela != null) {
+                    parcela.addNehnutelnost(nehnutelnostDuplicita);
+                } else if (duplicita.getData() instanceof Parcela parcelaDuplicita && nehnutelnost != null) {
+                    nehnutelnost.addParcela(parcelaDuplicita);
+                }
+            }
+            if (vrchol2.isJeDuplicita()) {
+                Nehnutelnost nehnutelnost = dataGeografickyObjekt2.getNehnutelnost();
+                Parcela parcela = dataGeografickyObjekt2.getParcela();
+                Vrchol<T> duplicita = this.strom.vyhladaj(vrchol2);
+                if (duplicita.getData() instanceof Nehnutelnost nehnutelnostDuplicita && parcela != null) {
+                    parcela.addNehnutelnost(nehnutelnostDuplicita);
+                } else if (duplicita.getData() instanceof Parcela parcelaDuplicita && nehnutelnost != null) {
+                    nehnutelnost.addParcela(parcelaDuplicita);
+                }
+            }
+            return null;
         } else {
             return null;
         }

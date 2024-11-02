@@ -42,6 +42,7 @@ public class KdStrom<T extends IKluc<T>> {
                     int porovnanieDuplicity = vrchol.getData().porovnaj(aktualny.getData(), (poradieKluca + 1) % this.pocetKlucov);
                     if (porovnanieDuplicity == 0) {
                         aktualny.addDuplicitu(vrchol);
+                        vrchol.setJeDuplicita(true);
                         return;
                     }
                 }
@@ -72,7 +73,7 @@ public class KdStrom<T extends IKluc<T>> {
         }
     }
 
-    private Vrchol<T> vyhladaj(Vrchol<T> kluc) {
+    public Vrchol<T> vyhladaj(Vrchol<T> kluc) {
         if (this.koren == null) {
             return null;
         }
@@ -110,18 +111,15 @@ public class KdStrom<T extends IKluc<T>> {
     }
 
 
-    public boolean vyrad(Vrchol<T> vrchol) {
+    public void vyrad(Vrchol<T> vrchol) {
         Vrchol<T> vyhladanyVrchol = this.vyhladaj(vrchol);
-        if (vyhladanyVrchol == null) {
-            return false;
-        } else {
+        if (vyhladanyVrchol != null) {
             if (vyhladanyVrchol.getLavySyn() == null && vyhladanyVrchol.getPravySyn() == null) {
                 odstranVrchol(vyhladanyVrchol, vrchol, true, false);
             } else {
                 nahradVrchol(vyhladanyVrchol);
                 odstranVrchol(vyhladanyVrchol, vrchol, false, false);
             }
-            return true;
         }
     }
 
@@ -300,6 +298,7 @@ public class KdStrom<T extends IKluc<T>> {
                 nahrada.setDuplicity(duplicity);
                 nahrada.setPravySyn(vrchol.getPravySyn());
                 nahrada.setLavySyn(vrchol.getLavySyn());
+                nahrada.setJeDuplicita(false);
             } else {
                 Vrchol<T> nahrada = duplicity.removeFirst();
                 rodic.setPravySyn(nahrada);
@@ -307,6 +306,7 @@ public class KdStrom<T extends IKluc<T>> {
                 nahrada.setDuplicity(duplicity);
                 nahrada.setPravySyn(vrchol.getPravySyn());
                 nahrada.setLavySyn(vrchol.getLavySyn());
+                nahrada.setJeDuplicita(false);
             }
             if (mazanyVrchol != null) {
                 mazanyVrchol.setRodic(null);
