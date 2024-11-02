@@ -5,19 +5,19 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class View extends JFrame {
-    private JButton searchButton, searchParcelyButton, searchAllButton, editButton, deleteButton, addButton;
-    private JTextField dlzkaField1, sirkaField1, dlzkaField2, sirkaField2, supisneCisloField, popisField, gpsPositionsField;
-    private JTextArea resultArea;
+    private JButton tlacidloVyhladavaniaNehnutelnosti, tlacidloVyhladavaniaParciel, tlacidloVyhladavaniaVsetkych, tlacidloUpravovania, tlacidloMazania, tlacidloPridania;
+    private JTextField dlzkaField1, sirkaField1, dlzkaField2, sirkaField2, supisneCisloField, popisField, gpsPozicieField;
+    private JTextArea zobrazenieVysledkov;
 
-    private JComboBox<String> sirkaOrientationComboBox1, dlzkaOrientationComboBox1 , sirkaOrientationComboBox2, dlzkaOrientationComboBox2;
+    private JComboBox<String> sirkaComboBox1, dlzkaComboBox1, sirkaComboBox2, dlzkaComboBox2;
 
     public View() {
-        searchButton = new JButton("Vyhladaj Nehnutelnosti");
-        searchParcelyButton = new JButton("Vyhladaj Parcely");
-        searchAllButton = new JButton("Vyhladaj Vsetko");
-        editButton = new JButton("Edituj");
-        deleteButton = new JButton("Vymaz");
-        addButton = new JButton("Pridaj Nehnutelnost");
+        tlacidloVyhladavaniaNehnutelnosti = new JButton("Vyhladaj Nehnutelnosti");
+        tlacidloVyhladavaniaParciel = new JButton("Vyhladaj Parcely");
+        tlacidloVyhladavaniaVsetkych = new JButton("Vyhladaj Vsetko");
+        tlacidloUpravovania = new JButton("Edituj");
+        tlacidloMazania = new JButton("Vymaz");
+        tlacidloPridania = new JButton("Pridaj Nehnutelnost");
 
         dlzkaField1 = new JTextField(10);
         sirkaField1 = new JTextField(10);
@@ -25,14 +25,14 @@ public class View extends JFrame {
         sirkaField2 = new JTextField(10);
         supisneCisloField = new JTextField(10);
         popisField = new JTextField(10);
-        gpsPositionsField = new JTextField(30);
-        resultArea = new JTextArea(10, 30);
-        resultArea.setEditable(false);
+        gpsPozicieField = new JTextField(30);
+        zobrazenieVysledkov = new JTextArea(10, 30);
+        zobrazenieVysledkov.setEditable(false);
 
-        sirkaOrientationComboBox1 = new JComboBox<>(new String[]{"N", "S"});
-        dlzkaOrientationComboBox1 = new JComboBox<>(new String[]{"E", "W"});
-        sirkaOrientationComboBox2 = new JComboBox<>(new String[]{"N", "S"});
-        dlzkaOrientationComboBox2 = new JComboBox<>(new String[]{"E", "W"});
+        sirkaComboBox1 = new JComboBox<>(new String[]{"N", "S"});
+        dlzkaComboBox1 = new JComboBox<>(new String[]{"E", "W"});
+        sirkaComboBox2 = new JComboBox<>(new String[]{"N", "S"});
+        dlzkaComboBox2 = new JComboBox<>(new String[]{"E", "W"});
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1200, 800);
@@ -43,13 +43,13 @@ public class View extends JFrame {
 
         gpsSearchPanel1.add(new JLabel("Zemepisná šírka:"));
         JPanel sirkaPanel1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        sirkaPanel1.add(sirkaOrientationComboBox1);
+        sirkaPanel1.add(sirkaComboBox1);
         sirkaPanel1.add(sirkaField1);
         gpsSearchPanel1.add(sirkaPanel1);
 
         gpsSearchPanel1.add(new JLabel("Zemepisná dĺžka:"));
         JPanel dlzkaPanel1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        dlzkaPanel1.add(dlzkaOrientationComboBox1);
+        dlzkaPanel1.add(dlzkaComboBox1);
         dlzkaPanel1.add(dlzkaField1);
         gpsSearchPanel1.add(dlzkaPanel1);
 
@@ -59,23 +59,23 @@ public class View extends JFrame {
 
         gpsSearchPanel2.add(new JLabel("Zemepisná šírka:"));
         JPanel sirkaPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        sirkaPanel2.add(sirkaOrientationComboBox2);
+        sirkaPanel2.add(sirkaComboBox2);
         sirkaPanel2.add(sirkaField2);
         gpsSearchPanel2.add(sirkaPanel2);
 
         gpsSearchPanel2.add(new JLabel("Zemepisná dĺžka:"));
         JPanel dlzkaPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        dlzkaPanel2.add(dlzkaOrientationComboBox2);
+        dlzkaPanel2.add(dlzkaComboBox2);
         dlzkaPanel2.add(dlzkaField2);
         gpsSearchPanel2.add(dlzkaPanel2);
 
         JPanel actionPanel = new JPanel(new GridLayout(2, 3, 5, 5));
         actionPanel.setBorder(BorderFactory.createTitledBorder("Funkcie"));
-        actionPanel.add(searchButton);
-        actionPanel.add(searchParcelyButton);
-        actionPanel.add(searchAllButton);
-        actionPanel.add(editButton);
-        actionPanel.add(deleteButton);
+        actionPanel.add(tlacidloVyhladavaniaNehnutelnosti);
+        actionPanel.add(tlacidloVyhladavaniaParciel);
+        actionPanel.add(tlacidloVyhladavaniaVsetkych);
+        actionPanel.add(tlacidloUpravovania);
+        actionPanel.add(tlacidloMazania);
 
         JPanel propertyPanel = new JPanel(new GridLayout(3, 2, 5, 5));
         propertyPanel.setBorder(BorderFactory.createTitledBorder("Pridanie/Editácia Nehnuteľnosti"));
@@ -84,14 +84,14 @@ public class View extends JFrame {
         propertyPanel.add(new JLabel("Popis:"));
         propertyPanel.add(popisField);
         propertyPanel.add(new JLabel("GPS Pozície:"));
-        propertyPanel.add(gpsPositionsField);
+        propertyPanel.add(gpsPozicieField);
 
         JPanel addButtonPanel = new JPanel();
-        addButtonPanel.add(addButton);
+        addButtonPanel.add(tlacidloPridania);
 
         JPanel resultPanel = new JPanel(new BorderLayout());
         resultPanel.setBorder(BorderFactory.createTitledBorder("Výsledky"));
-        resultPanel.add(new JScrollPane(resultArea), BorderLayout.CENTER);
+        resultPanel.add(new JScrollPane(zobrazenieVysledkov), BorderLayout.CENTER);
 
         JPanel gpsPanelContainer = new JPanel(new GridLayout(2, 1, 10, 10));
         gpsPanelContainer.add(gpsSearchPanel1);
@@ -110,20 +110,36 @@ public class View extends JFrame {
         this.add(resultPanel, BorderLayout.SOUTH);
     }
 
-    public String getDlzka() {
+    public String getDlzka1() {
         return dlzkaField1.getText();
     }
 
-    public String getSirka() {
+    public String getSirka1() {
         return sirkaField1.getText();
     }
 
-    public String getSirkaOrientation() {
-        return (String) sirkaOrientationComboBox1.getSelectedItem();
+    public char getSirkaOrientation1() {
+        return (char) sirkaComboBox1.getSelectedItem();
     }
 
-    public String getDlzkaOrientation() {
-        return (String) dlzkaOrientationComboBox1.getSelectedItem();
+    public char getDlzkaOrientation1() {
+        return (char) dlzkaComboBox1.getSelectedItem();
+    }
+
+    public String getDlzka2() {
+        return dlzkaField2.getText();
+    }
+
+    public String getSirka2() {
+        return sirkaField2.getText();
+    }
+
+    public char getSirkaOrientation2() {
+        return (char) sirkaComboBox2.getSelectedItem();
+    }
+
+    public char getDlzkaOrientation2() {
+        return (char) dlzkaComboBox2.getSelectedItem();
     }
 
     public String getSupisneCislo() {
@@ -135,35 +151,37 @@ public class View extends JFrame {
     }
 
     public String getGpsPositions() {
-        return gpsPositionsField.getText();
+        return gpsPozicieField.getText();
     }
 
+
+
     public void setResultText(String text) {
-        resultArea.setText(text);
+        zobrazenieVysledkov.setText(text);
     }
 
     // Listener Methods
     public void addSearchButtonListener(ActionListener listener) {
-        searchButton.addActionListener(listener);
+        tlacidloVyhladavaniaNehnutelnosti.addActionListener(listener);
     }
 
     public void addSearchParcelyButtonListener(ActionListener listener) {
-        searchParcelyButton.addActionListener(listener);
+        tlacidloVyhladavaniaParciel.addActionListener(listener);
     }
 
     public void addSearchAllButtonListener(ActionListener listener) {
-        searchAllButton.addActionListener(listener);
+        tlacidloVyhladavaniaVsetkych.addActionListener(listener);
     }
 
     public void addEditButtonListener(ActionListener listener) {
-        editButton.addActionListener(listener);
+        tlacidloUpravovania.addActionListener(listener);
     }
 
     public void addDeleteButtonListener(ActionListener listener) {
-        deleteButton.addActionListener(listener);
+        tlacidloMazania.addActionListener(listener);
     }
 
     public void addAddButtonListener(ActionListener listener) {
-        addButton.addActionListener(listener);
+        tlacidloPridania.addActionListener(listener);
     }
 }

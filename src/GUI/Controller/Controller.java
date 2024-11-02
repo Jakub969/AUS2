@@ -25,33 +25,34 @@ public class Controller {
     class SearchButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             try {
-                // Get the latitude and longitude values from the view
-                double dlzka = Double.parseDouble(view.getDlzka());
-                double sirka = Double.parseDouble(view.getSirka());
+                double poziciaDlzky1 = Double.parseDouble(view.getDlzka1());
+                double poziciaSirky1 = Double.parseDouble(view.getSirka1());
 
-                // Get orientation for both latitude and longitude
-                String sirkaOrientation = view.getSirkaOrientation(); // "N" or "S"
-                String dlzkaOrientation = view.getDlzkaOrientation(); // "E" or "W"
+                char sirka1 = view.getSirkaOrientation1();
+                char dlzka1 = view.getDlzkaOrientation1();
 
-                // Adjust the latitude and longitude values based on the orientation
-                if (sirkaOrientation.equals("S")) {
-                    sirka = -sirka; // Negative for southern hemisphere
-                }
-                if (dlzkaOrientation.equals("W")) {
-                    dlzka = -dlzka; // Negative for western hemisphere
-                }
+                double poziciaDlzky2 = Double.parseDouble(view.getDlzka2());
+                double poziciaSirky2 = Double.parseDouble(view.getSirka2());
 
-                // Perform search with adjusted coordinates
-                List<Nehnutelnost> results = model.searchNehnutelnosti(dlzka, sirka);
+                char sirka2 = view.getSirkaOrientation2();
+                char dlzka2 = view.getDlzkaOrientation2();
 
-                // Display results
+                GPS pozicia1 = new GPS(dlzka1, poziciaDlzky1, sirka1, poziciaSirky1);
+                GPS pozicia2 = new GPS(dlzka2, poziciaDlzky2, sirka2, poziciaSirky2);
+
+                ArrayList<GPS> gpsPositions = new ArrayList<>();
+                gpsPositions.add(pozicia1);
+                gpsPositions.add(pozicia2);
+
+                List<Nehnutelnost> results = model.vyhladajNehnutelnost(gpsPositions);
+
                 StringBuilder resultText = new StringBuilder();
                 for (Nehnutelnost nehnutelnost : results) {
                     resultText.append(nehnutelnost.toString()).append("\n");
                 }
                 view.setResultText(resultText.toString());
             } catch (NumberFormatException ex) {
-                view.setResultText("Invalid GPS coordinates.");
+                view.setResultText("Nesprávne súradnice GPS.");
             }
         }
     }
@@ -59,11 +60,9 @@ public class Controller {
     class AddButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             try {
-                // Parse the property details from the view
                 int supisneCislo = Integer.parseInt(view.getSupisneCislo());
                 String popis = view.getPopis();
 
-                // Parse GPS positions from the GPS positions field
                 String[] gpsPositionsStr = view.getGpsPositions().split(";");
                 List<GPS> gpsPositions = new ArrayList<>();
 
@@ -73,28 +72,17 @@ public class Controller {
                     double dlzka = Double.parseDouble(parts[1]);
                     char sirkaChar = parts[2].charAt(0); // N or S
                     double sirka = Double.parseDouble(parts[3]);
-
-                    // Adjust latitude and longitude values based on orientation
-                    if (sirkaChar == 'S') {
-                        sirka = -sirka;
-                    }
-                    if (dlzkaChar == 'W') {
-                        dlzka = -dlzka;
-                    }
-
                     gpsPositions.add(new GPS(dlzkaChar, dlzka, sirkaChar, sirka));
                 }
 
-                // Add new property with the parsed details
-                model.addNehnutelnost(supisneCislo, popis, gpsPositions);
+                model.pridajNehnutelnost(supisneCislo, popis, gpsPositions);
 
-                // Display confirmation message
                 view.setResultText("Nehnutelnost (Supisne Cislo: " + supisneCislo +
                         ", Popis: " + popis +
                         ", GPS Pozicie: " + gpsPositions.get(0).getPoziciaDlzky() +
                         " " + gpsPositions.get(0).getPoziciaSirky() + ") pridaná!");
             } catch (NumberFormatException ex) {
-                view.setResultText("Invalid input.");
+                view.setResultText("Nesprávny vstup!");
             }
         }
     }

@@ -1,18 +1,15 @@
-package testy;
+package triedy;
 
 import US.KdStrom.KdStrom;
 import US.KdStrom.Vrchol;
 import rozhrania.IKluc;
-import triedy.GeografickyObjekt;
-import triedy.Nehnutelnost;
-import triedy.Parcela;
 
 import java.util.ArrayList;
 
-public class OperaciaGeografickychObjektov<T extends IKluc<T>> {
+public class OperacieGeografickychObjektov<T extends IKluc<T>> {
     private final KdStrom<T> strom;
 
-    public OperaciaGeografickychObjektov(KdStrom<T> kdStrom) {
+    public OperacieGeografickychObjektov(KdStrom<T> kdStrom) {
         this.strom = kdStrom;
     }
 

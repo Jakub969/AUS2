@@ -1,6 +1,6 @@
 package GUI.Model;
 
-import testy.OperaciaGeografickychObjektov;
+import triedy.OperacieGeografickychObjektov;
 import US.KdStrom.KdStrom;
 import US.KdStrom.Vrchol;
 import triedy.GPS;
@@ -16,44 +16,37 @@ public class Model {
     private KdStrom<Nehnutelnost> kdStromNehnutelnosti;
     private KdStrom<Parcela> kdStromParciel;
     private KdStrom<GeografickyObjekt> kdStromGeografickychObjektov;
-    OperaciaGeografickychObjektov<Nehnutelnost> operacieNehnutelnosti;
-    OperaciaGeografickychObjektov<Parcela> operacieParciel;
-    OperaciaGeografickychObjektov<GeografickyObjekt> operacieGeografickychObjektov;
+    OperacieGeografickychObjektov<Nehnutelnost> operacieNehnutelnosti;
+    OperacieGeografickychObjektov<Parcela> operacieParciel;
+    OperacieGeografickychObjektov<GeografickyObjekt> operacieGeografickychObjektov;
 
     public Model() {
         this.kdStromNehnutelnosti = new KdStrom<>(2);
-        this.operacieNehnutelnosti = new OperaciaGeografickychObjektov<>(this.kdStromNehnutelnosti);
+        this.operacieNehnutelnosti = new OperacieGeografickychObjektov<>(this.kdStromNehnutelnosti);
         this.kdStromParciel = new KdStrom<>(2);
-        this.operacieParciel = new OperaciaGeografickychObjektov<>(this.kdStromParciel);
+        this.operacieParciel = new OperacieGeografickychObjektov<>(this.kdStromParciel);
         this.kdStromGeografickychObjektov = new KdStrom<>(2);
-        this.operacieGeografickychObjektov = new OperaciaGeografickychObjektov<>(this.kdStromGeografickychObjektov);
+        this.operacieGeografickychObjektov = new OperacieGeografickychObjektov<>(this.kdStromGeografickychObjektov);
     }
 
-    public List<Nehnutelnost> searchNehnutelnosti(double dlzka, double sirka) {
-        // Create a temporary `Nehnutelnost` for comparison purposes
-        GPS searchGPS = new GPS('N', sirka, 'E', dlzka);
-        Nehnutelnost searchNehnutelnost = new Nehnutelnost(0, "", null, null, searchGPS);
+    public List<Nehnutelnost> vyhladajNehnutelnost(ArrayList<GPS> gpsPositions) {
 
-        // Perform the KD-tree search based on the initial GPS position
-        Vrchol<Nehnutelnost> vrcholVyhladavania = new Vrchol<>(searchNehnutelnost);
+        Nehnutelnost vyhladavanaNehnutelnost1 = new Nehnutelnost(0, "", null, null, gpsPositions.getFirst());
+        Nehnutelnost vyhladavanaNehnutelnost2 = new Nehnutelnost(0, "", null, null, gpsPositions.getLast());
+
+        Vrchol<Nehnutelnost> vrcholVyhladavania = new Vrchol<>(vyhladavanaNehnutelnost1);
+        Vrchol<Nehnutelnost> vrcholVyhladavania2 = new Vrchol<>(vyhladavanaNehnutelnost2);
         ArrayList<Vrchol<Nehnutelnost>> kluce = new ArrayList<>();
         kluce.add(vrcholVyhladavania);
+        kluce.add(vrcholVyhladavania2);
         ArrayList<Vrchol<Nehnutelnost>> results = kdStromNehnutelnosti.bodoveVyhladavanie(kluce);
 
-        // Filter results by using the `porovnaj` method to check if they match within tolerance
         return results.stream()
                 .map(Vrchol::getData)
-                .filter(nehnutelnost -> {
-                    // Use `porovnaj` for both longitude (poradieKluca 0) and latitude (poradieKluca 1)
-                    return searchNehnutelnost.porovnaj(nehnutelnost, 0) == 0 &&
-                            searchNehnutelnost.porovnaj(nehnutelnost, 1) == 0;
-                })
                 .collect(Collectors.toList());
     }
 
-
-    public void addNehnutelnost(int supisneCislo, String popis, List<GPS> gpsPositions) {
-        // Modify Nehnutelnost to store all GPS positions if needed
+    public void pridajNehnutelnost(int supisneCislo, String popis, List<GPS> gpsPositions) {
         Nehnutelnost newNehnutelnost1 = new Nehnutelnost(supisneCislo, popis, null, null, gpsPositions.getFirst());
         Nehnutelnost newNehnutelnost2 = new Nehnutelnost(supisneCislo, popis, null, null, gpsPositions.getLast());
         ArrayList<Vrchol<Nehnutelnost>> vysledok = operacieNehnutelnosti.metodaVkladania(newNehnutelnost1, newNehnutelnost2);
@@ -62,32 +55,28 @@ public class Model {
         operacieGeografickychObjektov.metodaVkladania(newGeografickyObjekt1, newGeografickyObjekt2);
     }
 
-    public void addParcela(int cisloParcely, String popis, List<GPS> gpsPositions) {
-        Parcela newParcela = new Parcela(cisloParcely, popis, null, null, gpsPositions.get(0));
+    public List<Parcela> vyhladajParcelu(ArrayList<GPS> gpsPositions) {
+        Parcela vyhladavanaParcela1 = new Parcela(0, "", null, null, gpsPositions.getFirst());
+        Parcela vyhladavanaParcela2 = new Parcela(0, "", null, null, gpsPositions.getLast());
 
-        Vrchol<Parcela> newVrchol = new Vrchol<>(newParcela);
-        kdStromParciel.vloz(newVrchol);
-    }
-
-    public List<Parcela>  searchParcela(double dlzka, double sirka) {
-        // Create a temporary `Parcela` for comparison purposes
-        GPS searchGPS = new GPS('N', sirka, 'E', dlzka);
-        Parcela searchParcela = new Parcela(0, "", null, null, searchGPS);
-
-        // Perform the KD-tree search based on the initial GPS position
-        Vrchol<Parcela> vrcholVyhladavania = new Vrchol<>(searchParcela);
+        Vrchol<Parcela> vrcholVyhladavania1 = new Vrchol<>(vyhladavanaParcela1);
+        Vrchol<Parcela> vrcholVyhladavania2 = new Vrchol<>(vyhladavanaParcela2);
         ArrayList<Vrchol<Parcela>> kluce = new ArrayList<>();
-        kluce.add(vrcholVyhladavania);
+        kluce.add(vrcholVyhladavania1);
+        kluce.add(vrcholVyhladavania2);
         ArrayList<Vrchol<Parcela>> results = kdStromParciel.bodoveVyhladavanie(kluce);
 
-        // Filter results by using the `porovnaj` method to check if they match within tolerance
         return results.stream()
                 .map(Vrchol::getData)
-                .filter(parcela -> {
-                    // Use `porovnaj` for both longitude (poradieKluca 0) and latitude (poradieKluca 1)
-                    return searchParcela.porovnaj(parcela, 0) == 0 &&
-                            searchParcela.porovnaj(parcela, 1) == 0;
-                })
                 .collect(Collectors.toList());
+    }
+
+    public void pridajParcelu(int cisloParcely, String popis, List<GPS> gpsPositions) {
+        Parcela newParcela1 = new Parcela(cisloParcely, popis, null, null, gpsPositions.getFirst());
+        Parcela newParcela2 = new Parcela(cisloParcely, popis, null, null, gpsPositions.getLast());
+        ArrayList<Vrchol<Parcela>> vysledok = operacieParciel.metodaVkladania(newParcela1, newParcela2);
+        GeografickyObjekt newGeografickyObjekt1 = new GeografickyObjekt(gpsPositions.getFirst(), null, vysledok.getFirst().getData());
+        GeografickyObjekt newGeografickyObjekt2 = new GeografickyObjekt(gpsPositions.getLast(), null, vysledok.getLast().getData());
+        operacieGeografickychObjektov.metodaVkladania(newGeografickyObjekt1, newGeografickyObjekt2);
     }
 }
