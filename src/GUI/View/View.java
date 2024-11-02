@@ -5,9 +5,9 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class View extends JFrame {
-    private JButton tlacidloVyhladavaniaNehnutelnosti, tlacidloVyhladavaniaParciel, tlacidloVyhladavaniaVsetkych, tlacidloUpravovania, tlacidloMazania, tlacidloPridaniaNehnutelnosti, tlacidloPridaniaParcely;
+    private JButton tlacidloVyhladavaniaNehnutelnosti, tlacidloVyhladavaniaParciel, tlacidloVyhladavaniaVsetkych, tlacidloUpravovania, tlacidloMazania, tlacidloPridaniaNehnutelnosti, tlacidloPridaniaParcely, vygenerujDataButton;
     private JTextField dlzkaField1, sirkaField1, dlzkaField2, sirkaField2, supisneCisloNehnutelnostiField, popisNehnutelnostiField, gpsPozicieNehnutelnostiField, supisneCisloParcelyField, popisParcelyField, gpsPozicieParcelyField,
-            sirkaNehnutelnostiField, dlzkaNehnutelnostiField, sirkaParcelyField, dlzkaParcelyField;
+            sirkaNehnutelnostiField, dlzkaNehnutelnostiField, sirkaParcelyField, dlzkaParcelyField, pocetNehnutelnostiField, pocetParcielField, pravdepodobnostPrekrytiaField;
     private JTextArea zobrazenieVysledkov;
 
     private JComboBox<String> sirkaComboBox1, dlzkaComboBox1, sirkaComboBox2, dlzkaComboBox2, pridanieSirkaNehnutelnostiComboBox, pridanieDlzkaNehnutelnostiComboBox, pridanieSirkaParcelyComboBox, pridanieDlzkaParcelyComboBox;
@@ -35,6 +35,9 @@ public class View extends JFrame {
         dlzkaNehnutelnostiField = new JTextField(10);
         sirkaParcelyField = new JTextField(10);
         dlzkaParcelyField = new JTextField(10);
+        pocetNehnutelnostiField = new JTextField(10);
+        pocetParcielField = new JTextField(10);
+        pravdepodobnostPrekrytiaField = new JTextField(10);
         zobrazenieVysledkov = new JTextArea(10, 30);
         zobrazenieVysledkov.setEditable(false);
 
@@ -86,8 +89,6 @@ public class View extends JFrame {
         actionPanel.add(tlacidloVyhladavaniaNehnutelnosti);
         actionPanel.add(tlacidloVyhladavaniaParciel);
         actionPanel.add(tlacidloVyhladavaniaVsetkych);
-        actionPanel.add(tlacidloUpravovania);
-        actionPanel.add(tlacidloMazania);
 
         JPanel propertyPanel1 = new JPanel(new GridLayout(3, 2, 5, 5));
         propertyPanel1.setBorder(BorderFactory.createTitledBorder("Pridanie Nehnuteľnosti"));
@@ -126,19 +127,15 @@ public class View extends JFrame {
         JPanel propertyPanel3 = new JPanel(new GridLayout(4, 1, 5, 5));
         propertyPanel3.setBorder(BorderFactory.createTitledBorder("Generovanie dát"));
         propertyPanel3.add(new JLabel("Počet nehnuteľnosti:"));
-        JTextField pocetNehnutelnostiField = new JTextField(10);
         propertyPanel3.add(pocetNehnutelnostiField);
         propertyPanel3.add(new JLabel("Počet parciel:"));
-        JTextField pocetParcielField = new JTextField(10);
         propertyPanel3.add(pocetParcielField);
         propertyPanel3.add(new JLabel("Pravdepodobnosť prekrytia:"));
-        JTextField pravdepodobnostPrekrytiaField = new JTextField(10);
         propertyPanel3.add(pravdepodobnostPrekrytiaField);
 
-        JButton vygenerujDataButton = new JButton("Vygeneruj dáta");
+        vygenerujDataButton = new JButton("Vygeneruj dáta");
         JPanel generateButtonPanel = new JPanel();
         generateButtonPanel.add(vygenerujDataButton);
-        propertyPanel3.add(generateButtonPanel);
 
         JPanel resultPanel = new JPanel(new BorderLayout());
         resultPanel.setBorder(BorderFactory.createTitledBorder("Výsledky"));
@@ -160,15 +157,39 @@ public class View extends JFrame {
         rightPanelParcela.add(propertyPanel2, BorderLayout.NORTH);
         rightPanelParcela.add(addButtonPanel2, BorderLayout.CENTER);
 
+        JPanel rightPanelGenerovanie = new JPanel(new BorderLayout(10, 10));
+        rightPanelGenerovanie.add(propertyPanel3, BorderLayout.NORTH);
+        rightPanelGenerovanie.add(generateButtonPanel, BorderLayout.CENTER);
+
         JPanel rightPanel = new JPanel(new GridLayout(3, 1, 10, 10));
         rightPanel.add(rightPanelNehnutelnost);
         rightPanel.add(rightPanelParcela);
-        rightPanel.add(propertyPanel3);
+        rightPanel.add(rightPanelGenerovanie);
 
         this.add(leftPanel, BorderLayout.WEST);
         this.add(rightPanel, BorderLayout.CENTER);
         this.add(resultPanel, BorderLayout.SOUTH);
     }
+
+    public void addResult(String resultText, ActionListener editListener, ActionListener deleteListener) {
+    JPanel resultPanel = new JPanel(new BorderLayout());
+    JTextArea resultArea = new JTextArea(resultText);
+    resultArea.setEditable(false);
+    resultPanel.add(new JScrollPane(resultArea), BorderLayout.CENTER);
+
+    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    JButton editButton = new JButton("Edituj");
+    editButton.addActionListener(editListener);
+    JButton deleteButton = new JButton("Vymaz");
+    deleteButton.addActionListener(deleteListener);
+    buttonPanel.add(editButton);
+    buttonPanel.add(deleteButton);
+
+    resultPanel.add(buttonPanel, BorderLayout.SOUTH);
+    this.zobrazenieVysledkov.add(resultPanel);
+    this.zobrazenieVysledkov.revalidate();
+    this.zobrazenieVysledkov.repaint();
+}
 
     public String getDlzka1() {
         return dlzkaField1.getText();
@@ -210,13 +231,29 @@ public class View extends JFrame {
         return popisNehnutelnostiField.getText();
     }
 
-    public String getGpsPositions() {
+    public String getNehnutelnostGpsPositions() {
         return gpsPozicieNehnutelnostiField.getText();
     }
 
+    public String getPocetNehnutelnosti() {
+        return pocetNehnutelnostiField.getText();
+    }
+
+    public String getPocetParciel() {
+        return pocetParcielField.getText();
+    }
+
+    public String getPravdepodobnostPrekrytia() {
+        return pravdepodobnostPrekrytiaField.getText();
+    }
+
+    public String getSupisneCisloParcely() {
+        return supisneCisloParcelyField.getText();
+    }
 
     public void setResultText(String text) {
-        zobrazenieVysledkov.setText(text);
+        this.zobrazenieVysledkov.removeAll();
+        addResult(text, null, null);
     }
 
     // Listener Methods
@@ -242,5 +279,13 @@ public class View extends JFrame {
 
     public void addAddButtonListener(ActionListener listener) {
         tlacidloPridaniaNehnutelnosti.addActionListener(listener);
+    }
+
+    public void addAddParcelaButtonListener(ActionListener listener) {
+        tlacidloPridaniaParcely.addActionListener(listener);
+    }
+
+    public void addGenerateButtonListener(ActionListener listener) {
+        vygenerujDataButton.addActionListener(listener);
     }
 }

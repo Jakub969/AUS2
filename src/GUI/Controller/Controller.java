@@ -20,6 +20,9 @@ public class Controller {
 
         this.view.addSearchButtonListener(new SearchButtonListener());
         this.view.addAddButtonListener(new AddButtonListener());
+        this.view.addEditButtonListener(new EditButtonListener());
+        this.view.addDeleteButtonListener(new DeleteButtonListener());
+        this.view.addGenerateButtonListener(new GenerateButtonListener());
     }
 
     class SearchButtonListener implements ActionListener {
@@ -50,7 +53,7 @@ public class Controller {
                 for (Nehnutelnost nehnutelnost : results) {
                     resultText.append(nehnutelnost.toString()).append("\n");
                 }
-                view.setResultText(resultText.toString());
+                view.addResult(resultText.toString(), new EditButtonListener(), new DeleteButtonListener());
             } catch (NumberFormatException ex) {
                 view.setResultText("Nesprávne súradnice GPS.");
             }
@@ -63,7 +66,7 @@ public class Controller {
                 int supisneCislo = Integer.parseInt(view.getSupisneCislo());
                 String popis = view.getPopis();
 
-                String[] gpsPositionsStr = view.getGpsPositions().split(";");
+                String[] gpsPositionsStr = view.getNehnutelnostGpsPositions().split(";");
                 List<GPS> gpsPositions = new ArrayList<>();
 
                 for (String gpsStr : gpsPositionsStr) {
@@ -81,6 +84,37 @@ public class Controller {
                         ", Popis: " + popis +
                         ", GPS Pozicie: " + gpsPositions.get(0).getPoziciaDlzky() +
                         " " + gpsPositions.get(0).getPoziciaSirky() + ") pridaná!");
+            } catch (NumberFormatException ex) {
+                view.setResultText("Nesprávny vstup!");
+            }
+        }
+    }
+
+    private class EditButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Implement edit functionality here
+        }
+    }
+
+    private class DeleteButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Implement delete functionality here
+        }
+    }
+
+    private class GenerateButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                int pocetNehnutelnosti = Integer.parseInt(view.getPocetNehnutelnosti());
+                int pocetParciel = Integer.parseInt(view.getPocetParciel());
+                double pravdepodobnostPrekrytia = Double.parseDouble(view.getPravdepodobnostPrekrytia());
+
+                // Implement data generation logic here
+
+                view.setResultText("Dáta vygenerované úspešne!");
             } catch (NumberFormatException ex) {
                 view.setResultText("Nesprávny vstup!");
             }
