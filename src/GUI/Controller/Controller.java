@@ -32,6 +32,7 @@ public class Controller {
         this.view.addSaveButtonListener(new SaveButtonListener());
         this.view.addLoadButtonListener(new LoadButtonListener());
         this.view.addSearchAllButtonListener(new SearchAllButtonListener());
+        this.view.addPrintAllButtonListener(new PrintAllButtonListener());
     }
 
     class SearchNehnutelnostButtonListener implements ActionListener {
@@ -139,6 +140,7 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
+                view.clearResults();
                 int pocetNehnutelnosti = Integer.parseInt(view.getPocetNehnutelnosti());
                 int pocetParciel = Integer.parseInt(view.getPocetParciel());
                 double pravdepodobnostPrekrytia = Double.parseDouble(view.getPravdepodobnostPrekrytia());
@@ -249,6 +251,7 @@ public class Controller {
                 fileChooser.setDialogTitle("Uložiť dáta");
                 int userSelection = fileChooser.showSaveDialog(view);
                 if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    view.clearResults();
                     model.saveData(fileChooser.getSelectedFile().getAbsolutePath());
                     view.addResult("Uloženie", "N/A", "N/A", "N/A", "Dáta boli uložené!");
                 }
@@ -266,6 +269,7 @@ public class Controller {
                 fileChooser.setDialogTitle("Načítať dáta");
                 int userSelection = fileChooser.showOpenDialog(view);
                 if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    view.clearResults();
                     model.loadData(fileChooser.getSelectedFile().getAbsolutePath());
                     view.addResult("Načítanie", "N/A", "N/A", "N/A", "Dáta boli načítané!");
                 }
@@ -308,6 +312,43 @@ public class Controller {
                     duplicity.addAll(result.getDuplicity());
                 }
                 results.addAll(duplicity);
+                for (Vrchol<GeografickyObjekt> result : results) {
+                    if (result.getData().getNehnutelnost() != null) {
+                        nehnutelnosti.add(result.getData().getNehnutelnost());
+                    } else if (result.getData().getParcela() != null) {
+                        parcely.add(result.getData().getParcela());
+                    }
+                }
+                if (nehnutelnosti.isEmpty() && parcely.isEmpty()) {
+                    view.addResult("Chyba", "N/A", "N/A", "N/A", "Žiadne dáta neboli nájdené!");
+                } else {
+                    for (Nehnutelnost nehnutelnost : nehnutelnosti) {
+                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis());
+                    }
+                    for (Parcela parcela : parcely) {
+                        view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis());
+                    }
+                }
+
+            } catch (Exception ex) {
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Chyba pri vyhľadávaní dát!");
+            }
+        }
+    }
+
+    private class PrintAllButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                view.clearResults();
+                ArrayList<Vrchol<GeografickyObjekt>> results = model.vypisVsetky();
+                ArrayList<Vrchol<GeografickyObjekt>> duplicity = new ArrayList<>();
+                for (Vrchol<GeografickyObjekt> result : results) {
+                    duplicity.addAll(result.getDuplicity());
+                }
+                results.addAll(duplicity);
+                ArrayList<Nehnutelnost> nehnutelnosti = new ArrayList<>();
+                ArrayList<Parcela> parcely = new ArrayList<>();
                 for (Vrchol<GeografickyObjekt> result : results) {
                     if (result.getData().getNehnutelnost() != null) {
                         nehnutelnosti.add(result.getData().getNehnutelnost());

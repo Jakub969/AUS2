@@ -5,6 +5,7 @@ import US.KdStrom.Vrchol;
 import rozhrania.IKluc;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class OperacieGeografickychObjektov<T extends IKluc<T>> {
     private final KdStrom<T> strom;
@@ -64,16 +65,6 @@ public class OperacieGeografickychObjektov<T extends IKluc<T>> {
             return null;
         } else {
             return null;
-        }
-    }
-
-    public void generujData(int pocetNehnutelnosti, int pocetParciel, double pravdepodobnostPrekrytia, OperacieGeografickychObjektov<Parcela> operacieParciel, OperacieGeografickychObjektov<GeografickyObjekt> operacieGeografickychObjektov) {
-        int vacsieCislo = Math.max(pocetNehnutelnosti, pocetParciel);
-        boolean pocetNehnutelnostiJeVacsie = pocetNehnutelnosti > pocetParciel;
-        for (int i = 0; i < vacsieCislo; i++) {
-            if (pocetNehnutelnostiJeVacsie) {
-
-            }
         }
     }
 }

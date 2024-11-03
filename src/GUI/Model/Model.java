@@ -11,6 +11,7 @@ import triedy.Parcela;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Model {
     private KdStrom<Nehnutelnost> kdStromNehnutelnosti;
@@ -75,7 +76,53 @@ public class Model {
     }
 
     public void generujData(int pocetNehnutelnosti, int pocetParciel, double pravdepodobnostPrekrytia) {
-        operacieNehnutelnosti.generujData(pocetNehnutelnosti, pocetParciel, pravdepodobnostPrekrytia, operacieParciel, operacieGeografickychObjektov);
+        Random random = new Random(System.nanoTime());
+        int vygenerovanychNehnutelnosti = 0;
+        for (int i = 0; i < pocetParciel; i++) {
+            char sirka = 'N';
+            double poziciaSirky1 = random.nextDouble(100);
+            char dlzka = 'E';
+            double poziciaDlzky1 = random.nextDouble(100);
+            GPS GPSsuradnice1 = new GPS(sirka, poziciaSirky1, dlzka, poziciaDlzky1);
+            Parcela parcela1 = new Parcela(i, "Parcela " + i, null, null, GPSsuradnice1);
+            double poziciaSirky2 = random.nextDouble(100);
+            double poziciaDlzky2 = random.nextDouble(100);
+            GPS GPSsuradnice2 = new GPS(sirka, poziciaSirky2, dlzka, poziciaDlzky2);
+            Parcela parcela2 = new Parcela(i, "Parcela " + i, null, null, GPSsuradnice2);
+            operacieParciel.metodaVkladania(parcela1, parcela2);
+            GeografickyObjekt geografickyObjekt1 = new GeografickyObjekt(GPSsuradnice1, null, parcela1);
+            GeografickyObjekt geografickyObjekt2 = new GeografickyObjekt(GPSsuradnice2, null, parcela2);
+            operacieGeografickychObjektov.metodaVkladania(geografickyObjekt1, geografickyObjekt2);
+            if (vygenerovanychNehnutelnosti < pocetNehnutelnosti) {
+                if (random.nextDouble() < pravdepodobnostPrekrytia) {
+                    GPSsuradnice1 = new GPS(sirka, poziciaSirky1, dlzka, poziciaDlzky1);
+                    Nehnutelnost nehnutelnost1 = new Nehnutelnost(i, "Nehnutelnost " + i, null, null, GPSsuradnice1);
+                    poziciaSirky2 = random.nextDouble(100);
+                    poziciaDlzky2 = random.nextDouble(100);
+                    GPSsuradnice2 = new GPS(sirka, poziciaSirky2, dlzka, poziciaDlzky2);
+                    Nehnutelnost nehnutelnost2 = new Nehnutelnost(i, "Nehnutelnost " + i, null, null, GPSsuradnice2);
+                    operacieNehnutelnosti.metodaVkladania(nehnutelnost1, nehnutelnost2);
+                    GeografickyObjekt geografickyObjekt3 = new GeografickyObjekt(GPSsuradnice1, nehnutelnost1, null);
+                    GeografickyObjekt geografickyObjekt4 = new GeografickyObjekt(GPSsuradnice2, nehnutelnost2, null);
+                    operacieGeografickychObjektov.metodaVkladania(geografickyObjekt3, geografickyObjekt4);
+                    vygenerovanychNehnutelnosti++;
+                } else {
+                    poziciaSirky1 = random.nextDouble(100);
+                    poziciaDlzky1 = random.nextDouble(100);
+                    GPSsuradnice1 = new GPS(sirka, poziciaSirky1, dlzka, poziciaDlzky1);
+                    Nehnutelnost nehnutelnost1 = new Nehnutelnost(i, "Nehnutelnost " + i, null, null, GPSsuradnice1);
+                    poziciaSirky2 = random.nextDouble(100);
+                    poziciaDlzky2 = random.nextDouble(100);
+                    GPSsuradnice2 = new GPS(sirka, poziciaSirky2, dlzka, poziciaDlzky2);
+                    Nehnutelnost nehnutelnost2 = new Nehnutelnost(i, "Nehnutelnost " + i, null, null, GPSsuradnice2);
+                    operacieNehnutelnosti.metodaVkladania(nehnutelnost1, nehnutelnost2);
+                    GeografickyObjekt geografickyObjekt3 = new GeografickyObjekt(GPSsuradnice1, nehnutelnost1, null);
+                    GeografickyObjekt geografickyObjekt4 = new GeografickyObjekt(GPSsuradnice2, nehnutelnost2, null);
+                    operacieGeografickychObjektov.metodaVkladania(geografickyObjekt3, geografickyObjekt4);
+                    vygenerovanychNehnutelnosti++;
+                }
+            }
+        }
     }
 
     public void saveData(String path) {
@@ -247,5 +294,9 @@ public class Model {
         kluce.add(vrcholVyhladavania1);
         kluce.add(vrcholVyhladavania2);
         return kdStromGeografickychObjektov.bodoveVyhladavanie(kluce);
+    }
+
+    public ArrayList<Vrchol<GeografickyObjekt>> vypisVsetky() {
+        return kdStromGeografickychObjektov.preOrderPrehliadka();
     }
 }

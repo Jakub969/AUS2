@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 public class View extends JFrame {
-    private JButton tlacidloVyhladavaniaNehnutelnosti, tlacidloVyhladavaniaParciel, tlacidloVyhladavaniaVsetkych, tlacidloUpravovania, tlacidloMazania, tlacidloPridaniaNehnutelnosti, tlacidloPridaniaParcely, vygenerujDataButton, tlacidloUkladania, tlacidloNacitania;
+    private JButton tlacidloVyhladavaniaNehnutelnosti, tlacidloVyhladavaniaParciel, tlacidloVyhladavaniaVsetkych, tlacidloUpravovania, tlacidloMazania, tlacidloPridaniaNehnutelnosti, tlacidloPridaniaParcely, vygenerujDataButton, tlacidloUkladania, tlacidloNacitania, tlacidloVypisaniaVsetkeho;
     private JTextField dlzkaField1, sirkaField1, dlzkaField2, sirkaField2, supisneCisloNehnutelnostiField, popisNehnutelnostiField, supisneCisloParcelyField, popisParcelyField,
             sirkaNehnutelnostiField1, sirkaNehnutelnostiField2, dlzkaNehnutelnostiField1, dlzkaNehnutelnostiField2, sirkaParcelyField1, sirkaParcelyField2, dlzkaParcelyField1, dlzkaParcelyField2, pocetNehnutelnostiField, pocetParcielField, pravdepodobnostPrekrytiaField;
     private JTextArea zobrazenieVysledkov;
@@ -25,6 +25,7 @@ public class View extends JFrame {
         tlacidloPridaniaParcely = new JButton("Pridaj Parcelu");
         tlacidloUkladania = new JButton("Uloz");
         tlacidloNacitania = new JButton("Nacitaj");
+        tlacidloVypisaniaVsetkeho = new JButton("Vypis Vsetko");
 
         dlzkaField1 = new JTextField(10);
         sirkaField1 = new JTextField(10);
@@ -105,6 +106,7 @@ public class View extends JFrame {
         actionPanel.add(tlacidloVyhladavaniaVsetkych);
         actionPanel.add(tlacidloUkladania);
         actionPanel.add(tlacidloNacitania);
+        actionPanel.add(tlacidloVypisaniaVsetkeho);
 
         JPanel propertyPanel1 = new JPanel(new GridLayout(4, 2, 5, 5));
         propertyPanel1.setBorder(BorderFactory.createTitledBorder("Pridanie Nehnuteľnosti"));
@@ -337,6 +339,10 @@ public class View extends JFrame {
 
     public void addDeleteButtonListener(ActionListener listener) {
         tlacidloMazania.addActionListener(listener);
+    }
+
+    public void addPrintAllButtonListener(ActionListener listener) {
+        tlacidloVypisaniaVsetkeho.addActionListener(listener);
     }
 
     public void addNehnutelnostButtonListener(ActionListener listener) {
