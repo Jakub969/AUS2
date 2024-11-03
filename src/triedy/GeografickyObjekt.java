@@ -34,29 +34,19 @@ public class GeografickyObjekt implements IKluc<GeografickyObjekt> {
     @Override
     public int porovnaj(GeografickyObjekt objekt, int poradieKluca) {
         double tolerancia = 0.000001;
-        if (objekt.nehnutelnost instanceof Nehnutelnost dataNehnutelnost) {
+        if (objekt instanceof GeografickyObjekt dataGeografickyObjekt) {
             if (poradieKluca == 0) {
-                if (Math.abs(this.GPSsuradnice.getPoziciaDlzky() - dataNehnutelnost.getGPSsuradnice().getPoziciaDlzky()) <= tolerancia) {
+                if (this.GPSsuradnice.getPoziciaDlzky() - dataGeografickyObjekt.getGPSsuradnice().getPoziciaDlzky() <= tolerancia) {
                     return 0;
+                } else {
+                    return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataGeografickyObjekt.getGPSsuradnice().getPoziciaDlzky());
                 }
-                return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataNehnutelnost.getGPSsuradnice().getPoziciaDlzky());
             } else {
-                if (Math.abs(this.GPSsuradnice.getPoziciaSirky() - dataNehnutelnost.getGPSsuradnice().getPoziciaSirky()) <= tolerancia) {
+                if (this.GPSsuradnice.getPoziciaSirky() - dataGeografickyObjekt.getGPSsuradnice().getPoziciaSirky() <= tolerancia) {
                     return 0;
+                } else {
+                    return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataGeografickyObjekt.getGPSsuradnice().getPoziciaSirky());
                 }
-                return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataNehnutelnost.getGPSsuradnice().getPoziciaSirky());
-            }
-        } else if (objekt.parcela instanceof Parcela dataParcela) {
-            if (poradieKluca == 0) {
-                if (Math.abs(this.GPSsuradnice.getPoziciaDlzky() - dataParcela.getGPSsuradnice().getPoziciaDlzky()) <= tolerancia) {
-                    return 0;
-                }
-                return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataParcela.getGPSsuradnice().getPoziciaDlzky());
-            } else {
-                if (Math.abs(this.GPSsuradnice.getPoziciaSirky() - dataParcela.getGPSsuradnice().getPoziciaSirky()) <= tolerancia) {
-                    return 0;
-                }
-                return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataParcela.getGPSsuradnice().getPoziciaSirky());
             }
         } else {
             return -2;

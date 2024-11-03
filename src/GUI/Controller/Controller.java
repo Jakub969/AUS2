@@ -4,6 +4,7 @@ import GUI.Model.Model;
 import GUI.View.View;
 import US.KdStrom.Vrchol;
 import triedy.GPS;
+import triedy.GeografickyObjekt;
 import triedy.Nehnutelnost;
 import triedy.Parcela;
 
@@ -30,6 +31,7 @@ public class Controller {
         this.view.addGenerateButtonListener(new GenerateButtonListener());
         this.view.addSaveButtonListener(new SaveButtonListener());
         this.view.addLoadButtonListener(new LoadButtonListener());
+        this.view.addSearchAllButtonListener(new SearchAllButtonListener());
     }
 
     class SearchNehnutelnostButtonListener implements ActionListener {
@@ -269,6 +271,63 @@ public class Controller {
                 }
             } catch (Exception ex) {
                 view.addResult("Chyba", "N/A", "N/A", "N/A", "Chyba pri načítaní dát!");
+            }
+        }
+    }
+
+    private class SearchAllButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            try {
+                view.clearResults();
+
+                double poziciaDlzky1 = Double.parseDouble(view.getDlzka1());
+                double poziciaSirky1 = Double.parseDouble(view.getSirka1());
+
+                char sirka1 = view.getSirkaOrientation1();
+                char dlzka1 = view.getDlzkaOrientation1();
+
+                double poziciaDlzky2 = Double.parseDouble(view.getDlzka2());
+                double poziciaSirky2 = Double.parseDouble(view.getSirka2());
+
+                char sirka2 = view.getSirkaOrientation2();
+                char dlzka2 = view.getDlzkaOrientation2();
+
+                GPS pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
+                GPS pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
+
+                ArrayList<GPS> gpsPositions = new ArrayList<>();
+                gpsPositions.add(pozicia1);
+                gpsPositions.add(pozicia2);
+
+                ArrayList<Vrchol<GeografickyObjekt>> results = model.vyhladajVsetky(gpsPositions);
+                ArrayList<Nehnutelnost> nehnutelnosti = new ArrayList<>();
+                ArrayList<Parcela> parcely = new ArrayList<>();
+                ArrayList<Vrchol<GeografickyObjekt>> duplicity = new ArrayList<>();
+                for (Vrchol<GeografickyObjekt> result : results) {
+                    duplicity.addAll(result.getDuplicity());
+                }
+                results.addAll(duplicity);
+                for (Vrchol<GeografickyObjekt> result : results) {
+                    if (result.getData().getNehnutelnost() != null) {
+                        nehnutelnosti.add(result.getData().getNehnutelnost());
+                    } else if (result.getData().getParcela() != null) {
+                        parcely.add(result.getData().getParcela());
+                    }
+                }
+                if (nehnutelnosti.isEmpty() && parcely.isEmpty()) {
+                    view.addResult("Chyba", "N/A", "N/A", "N/A", "Žiadne dáta neboli nájdené!");
+                } else {
+                    for (Nehnutelnost nehnutelnost : nehnutelnosti) {
+                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis());
+                    }
+                    for (Parcela parcela : parcely) {
+                        view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis());
+                    }
+                }
+
+            } catch (Exception ex) {
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Chyba pri vyhľadávaní dát!");
             }
         }
     }

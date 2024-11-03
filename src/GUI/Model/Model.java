@@ -236,4 +236,16 @@ public class Model {
         e.printStackTrace();
     }
 }
+
+    public ArrayList<Vrchol<GeografickyObjekt>> vyhladajVsetky(ArrayList<GPS> gpsPositions) {
+        GeografickyObjekt vyhladavanyGeografickyObjekt1 = new GeografickyObjekt(gpsPositions.getFirst(), null, null);
+        GeografickyObjekt vyhladavanyGeografickyObjekt2 = new GeografickyObjekt(gpsPositions.getLast(), null, null);
+
+        Vrchol<GeografickyObjekt> vrcholVyhladavania1 = new Vrchol<>(vyhladavanyGeografickyObjekt1);
+        Vrchol<GeografickyObjekt> vrcholVyhladavania2 = new Vrchol<>(vyhladavanyGeografickyObjekt2);
+        ArrayList<Vrchol<GeografickyObjekt>> kluce = new ArrayList<>();
+        kluce.add(vrcholVyhladavania1);
+        kluce.add(vrcholVyhladavania2);
+        return kdStromGeografickychObjektov.bodoveVyhladavanie(kluce);
+    }
 }
