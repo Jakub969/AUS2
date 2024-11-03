@@ -36,13 +36,13 @@ public class GeografickyObjekt implements IKluc<GeografickyObjekt> {
         double tolerancia = 0.000001;
         if (objekt instanceof GeografickyObjekt dataGeografickyObjekt) {
             if (poradieKluca == 0) {
-                if (this.GPSsuradnice.getPoziciaDlzky() - dataGeografickyObjekt.getGPSsuradnice().getPoziciaDlzky() <= tolerancia) {
+                if (Math.abs(this.GPSsuradnice.getPoziciaDlzky() - dataGeografickyObjekt.getGPSsuradnice().getPoziciaDlzky()) <= tolerancia) {
                     return 0;
                 } else {
                     return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataGeografickyObjekt.getGPSsuradnice().getPoziciaDlzky());
                 }
             } else {
-                if (this.GPSsuradnice.getPoziciaSirky() - dataGeografickyObjekt.getGPSsuradnice().getPoziciaSirky() <= tolerancia) {
+                if (Math.abs(this.GPSsuradnice.getPoziciaSirky() - dataGeografickyObjekt.getGPSsuradnice().getPoziciaSirky()) <= tolerancia) {
                     return 0;
                 } else {
                     return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataGeografickyObjekt.getGPSsuradnice().getPoziciaSirky());
