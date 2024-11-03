@@ -43,4 +43,9 @@ public class GPS {
             return -poziciaDlzky;
         }
     }
+
+    @Override
+    public String toString() {
+        return this.sirka + " " + this.poziciaSirky + "; " + this.dlzka + " " + this.poziciaDlzky;
+    }
 }

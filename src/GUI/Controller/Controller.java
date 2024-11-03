@@ -30,6 +30,8 @@ public class Controller {
     class SearchNehnutelnostButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             try {
+                view.clearResults();
+
                 double poziciaDlzky1 = Double.parseDouble(view.getDlzka1());
                 double poziciaSirky1 = Double.parseDouble(view.getSirka1());
 
@@ -51,13 +53,15 @@ public class Controller {
 
                 List<Nehnutelnost> results = model.vyhladajNehnutelnost(gpsPositions);
 
-                StringBuilder resultText = new StringBuilder();
-                for (Nehnutelnost nehnutelnost : results) {
-                    resultText.append(nehnutelnost.toString()).append("\n");
+                if (results.isEmpty()) {
+                    view.addResult("Chyba", "N/A", "N/A", "N/A", "Nehnutelnost nebola nájdená!");
+                } else {
+                    for (Nehnutelnost result : results) {
+                        view.addResult("Nehnuteľnosť", result.getGPSsuradnice().toString(), result.getGPSsuradnice().toString(), String.valueOf(result.getSupisneCislo()), result.getPopis());
+                    }
                 }
-                view.addResult(resultText.toString(), new EditButtonListener(), new DeleteButtonListener());
             } catch (NumberFormatException ex) {
-                view.setResultText("Nesprávne súradnice GPS.");
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!");
             }
         }
     }
@@ -65,15 +69,22 @@ public class Controller {
     class AddNehnutelnostButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             try {
+                view.clearResults();
+
                 int supisneCislo = Integer.parseInt(view.getSupisneCisloNehnutelnosti());
                 String popis = view.getPopisNehnutelnosti();
                 List<GPS> gpsPositions = getGps();
 
                 model.pridajNehnutelnost(supisneCislo, popis, gpsPositions);
 
-                view.setResultText("Nehnuteľnosť pridaná úspešne!");
+                /*view.setResultText("Nehnuteľnosť " + supisneCislo + " " + popis + " GPS suradnice {: " + gpsPositions.getFirst().getSirka() + " " + gpsPositions.getFirst().getPoziciaSirky() + " " + gpsPositions.getFirst().getDlzka() + " " + gpsPositions.getFirst().getPoziciaDlzky() +
+                            " ; " + gpsPositions.getLast().getSirka() + " " + gpsPositions.getLast().getPoziciaSirky() + " " + gpsPositions.getLast().getDlzka() + " " + gpsPositions.getLast().getPoziciaDlzky() + "} pridaná úspešne!");*/
+                String gps1 = gpsPositions.getFirst().toString();
+                String gps2 = gpsPositions.getLast().toString();
+
+                view.addResult("Nehnuteľnosť", gps1, gps2, String.valueOf(supisneCislo), popis);
             } catch (NumberFormatException ex) {
-                view.setResultText("Nesprávny vstup!");
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!");
             }
         }
 
@@ -120,9 +131,9 @@ public class Controller {
 
                 // Implement data generation logic here
 
-                view.setResultText("Dáta vygenerované úspešne!");
+                view.addResult("Generovanie", "N/A", "N/A", "N/A", "Dáta boli vygenerované!");
             } catch (NumberFormatException ex) {
-                view.setResultText("Nesprávny vstup!");
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!");
             }
         }
     }

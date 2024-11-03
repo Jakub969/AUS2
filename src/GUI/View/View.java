@@ -9,7 +9,9 @@ public class View extends JFrame {
     private JTextField dlzkaField1, sirkaField1, dlzkaField2, sirkaField2, supisneCisloNehnutelnostiField, popisNehnutelnostiField, supisneCisloParcelyField, popisParcelyField,
             sirkaNehnutelnostiField1, sirkaNehnutelnostiField2, dlzkaNehnutelnostiField1, dlzkaNehnutelnostiField2, sirkaParcelyField1, sirkaParcelyField2, dlzkaParcelyField1, dlzkaParcelyField2, pocetNehnutelnostiField, pocetParcielField, pravdepodobnostPrekrytiaField;
     private JTextArea zobrazenieVysledkov;
-
+    private JFrame frame;
+    private JTable resultTable;
+    private ResultTableModel tableModel;
     private JComboBox<String> sirkaComboBox1, dlzkaComboBox1, sirkaComboBox2, dlzkaComboBox2, pridanieSirkaNehnutelnostiComboBox1, pridanieDlzkaNehnutelnostiComboBox1, pridanieSirkaNehnutelnostiComboBox2, pridanieDlzkaNehnutelnostiComboBox2, pridanieSirkaParcelyComboBox1,
             pridanieSirkaParcelyComboBox2, pridanieDlzkaParcelyComboBox1, pridanieDlzkaParcelyComboBox2;
 
@@ -58,6 +60,9 @@ public class View extends JFrame {
         pridanieDlzkaParcelyComboBox1 = new JComboBox<>(new String[]{"E", "W"});
         pridanieSirkaParcelyComboBox2 = new JComboBox<>(new String[]{"N", "S"});
         pridanieDlzkaParcelyComboBox2 = new JComboBox<>(new String[]{"E", "W"});
+
+        tableModel = new ResultTableModel();
+        resultTable = new JTable(tableModel);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(1200, 800);
@@ -164,9 +169,12 @@ public class View extends JFrame {
         JPanel generateButtonPanel = new JPanel();
         generateButtonPanel.add(vygenerujDataButton);
 
+        JScrollPane scrollPane = new JScrollPane(resultTable);
+        scrollPane.setPreferredSize(new Dimension(780, 170));
+
         JPanel resultPanel = new JPanel(new BorderLayout());
         resultPanel.setBorder(BorderFactory.createTitledBorder("Výsledky"));
-        resultPanel.add(new JScrollPane(zobrazenieVysledkov), BorderLayout.CENTER);
+        resultPanel.add(scrollPane, BorderLayout.CENTER);
 
         JPanel gpsPanelContainer = new JPanel(new GridLayout(3, 1, 10, 10));
         gpsPanelContainer.add(gpsSearchPanel1);
@@ -198,26 +206,9 @@ public class View extends JFrame {
         this.add(resultPanel, BorderLayout.SOUTH);
     }
 
-    public void addResult(String resultText, ActionListener editListener, ActionListener deleteListener) {
-    JPanel resultPanel = new JPanel(new BorderLayout());
-    JTextArea resultArea = new JTextArea(resultText);
-    resultArea.setEditable(false);
-    resultPanel.add(new JScrollPane(resultArea), BorderLayout.CENTER);
-
-    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-    JButton editButton = new JButton("Edituj");
-    editButton.addActionListener(editListener);
-    JButton deleteButton = new JButton("Vymaz");
-    deleteButton.addActionListener(deleteListener);
-    buttonPanel.add(editButton);
-    buttonPanel.add(deleteButton);
-
-    resultPanel.add(buttonPanel, BorderLayout.SOUTH);
-    this.zobrazenieVysledkov.add(resultPanel);
-    this.zobrazenieVysledkov.setText(resultText);
-    //this.zobrazenieVysledkov.revalidate();
-    //this.zobrazenieVysledkov.repaint();
-}
+    public void addResult(String geoObjekt, String gps1, String gps2, String supisneCislo, String popis) {
+        tableModel.addRow(geoObjekt, gps1, gps2, supisneCislo, popis);
+    }
 
     public String getDlzka1() {
         return dlzkaField1.getText();
@@ -311,15 +302,14 @@ public class View extends JFrame {
         return supisneCisloParcelyField.getText();
     }
 
-    public void setResultText(String text) {
-        this.zobrazenieVysledkov.removeAll();
-        addResult(text, null, null);
-    }
-
     // Listener Methods
     public void searchNehnutelnostButtonListener(ActionListener listener) {
         tlacidloVyhladavaniaNehnutelnosti.addActionListener(listener);
     }
+
+    public void clearResults() {
+    tableModel.clear();
+}
 
     public void searchParcelaButtonListener(ActionListener listener) {
         tlacidloVyhladavaniaParciel.addActionListener(listener);
