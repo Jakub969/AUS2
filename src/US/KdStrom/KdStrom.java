@@ -392,12 +392,4 @@ public class KdStrom<T extends IKluc<T>> {
     public int getPocetVrcholov() {
         return pocetVrcholov;
     }
-
-    public void saveData() {
-
-    }
-
-    public void loadData() {
-        
-    }
 }

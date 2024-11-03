@@ -8,9 +8,9 @@ import triedy.GeografickyObjekt;
 import triedy.Nehnutelnost;
 import triedy.Parcela;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Model {
     private KdStrom<Nehnutelnost> kdStromNehnutelnosti;
@@ -78,15 +78,162 @@ public class Model {
         operacieNehnutelnosti.generujData(pocetNehnutelnosti, pocetParciel, pravdepodobnostPrekrytia, operacieParciel, operacieGeografickychObjektov);
     }
 
-    public void saveData() {
-        kdStromNehnutelnosti.saveData();
-        kdStromParciel.saveData();
-        kdStromGeografickychObjektov.saveData();
+    public void saveData(String path) {
+        try (FileWriter writer = new FileWriter(path)) {
+            ArrayList<Vrchol<Nehnutelnost>> nehnutelnosti = kdStromNehnutelnosti.preOrderPrehliadka();
+            if (nehnutelnosti != null) {
+                for (Vrchol<Nehnutelnost> nehnutelnostVrchol : nehnutelnosti) {
+                    Nehnutelnost nehnutelnost = nehnutelnostVrchol.getData();
+                    int maReferenciu = nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS() != null ? 1 : 0;
+                    int pocetParciel = nehnutelnost.getZoznamParciel() != null ? nehnutelnost.getZoznamParciel().size() : 0;
+                    writer.write("Nehnutelnost," + nehnutelnost.getSupisneCislo() + "," + nehnutelnost.getPopis() + "," + nehnutelnost.getGPSsuradnice().getPoziciaSirky() + "," + nehnutelnost.getGPSsuradnice().getPoziciaDlzky() + "," + maReferenciu  + "," + pocetParciel +"\n");
+                    if (maReferenciu == 1) {
+                        Nehnutelnost referencia = nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS();
+                        writer.write("Nehnutelnost," + referencia.getSupisneCislo() + "," + referencia.getPopis() + "," + referencia.getGPSsuradnice().getPoziciaSirky() + "," + referencia.getGPSsuradnice().getPoziciaDlzky() + "\n");
+                    }
+                    if (pocetParciel != 0) {
+                        for (Parcela parcela : nehnutelnost.getZoznamParciel()) {
+                            writer.write("Parcela," + parcela.getCisloParcely() + "," + parcela.getPopis() + "," + parcela.getGPSsuradnice().getPoziciaSirky() + "," + parcela.getGPSsuradnice().getPoziciaDlzky() + "\n");
+                        }
+                    }
+                    ArrayList<Vrchol<Nehnutelnost>> duplicity = nehnutelnostVrchol.getDuplicity();
+                    int pocetDuplicity = duplicity != null ? duplicity.size() : 0;
+                    if (pocetDuplicity != 0) {
+                        for (Vrchol<Nehnutelnost> duplicityVrchol : duplicity) {
+                            Nehnutelnost duplicityNehnutelnost = duplicityVrchol.getData();
+                            writer.write("Nehnutelnost," + duplicityNehnutelnost.getSupisneCislo() + "," + duplicityNehnutelnost.getPopis() + "," + duplicityNehnutelnost.getGPSsuradnice().getPoziciaSirky() + "," + duplicityNehnutelnost.getGPSsuradnice().getPoziciaDlzky() + "\n");
+                        }
+                    }
+                }
+            }
+            ArrayList<Vrchol<Parcela>> parciel = kdStromParciel.preOrderPrehliadka();
+            if (parciel != null) {
+                for (Vrchol<Parcela> parcelaVrchol : parciel) {
+                    Parcela parcela = parcelaVrchol.getData();
+                    int maReferenciu = parcela.getReferenciaNaRovnakuParceluSInymiGPS() != null ? 1 : 0;
+                    int pocetNehnutelnosti = parcela.getZoznamNehnutelnosti() != null ? parcela.getZoznamNehnutelnosti().size() : 0;
+                    writer.write("Parcela," + parcela.getCisloParcely() + "," + parcela.getPopis() + "," + parcela.getGPSsuradnice().getPoziciaSirky() + "," + parcela.getGPSsuradnice().getPoziciaDlzky() + "," + maReferenciu + "," + pocetNehnutelnosti + "\n");
+                    if (maReferenciu == 1) {
+                        Parcela referencia = parcela.getReferenciaNaRovnakuParceluSInymiGPS();
+                        writer.write("Parcela," + referencia.getCisloParcely() + "," + referencia.getPopis() + "," + referencia.getGPSsuradnice().getPoziciaSirky() + "," + referencia.getGPSsuradnice().getPoziciaDlzky() + "\n");
+                    }
+                    if (pocetNehnutelnosti != 0) {
+                        for (Nehnutelnost nehnutelnost : parcela.getZoznamNehnutelnosti()) {
+                            writer.write("Nehnutelnost," + nehnutelnost.getSupisneCislo() + "," + nehnutelnost.getPopis() + "," + nehnutelnost.getGPSsuradnice().getPoziciaSirky() + "," + nehnutelnost.getGPSsuradnice().getPoziciaDlzky() + "\n");
+                        }
+                    }
+                    ArrayList<Vrchol<Parcela>> duplicity = parcelaVrchol.getDuplicity();
+                    int pocetDuplicity = duplicity != null ? duplicity.size() : 0;
+                    if (pocetDuplicity != 0) {
+                        for (Vrchol<Parcela> duplicityVrchol : duplicity) {
+                            Parcela duplicityParcela = duplicityVrchol.getData();
+                            writer.write("Parcela," + duplicityParcela.getCisloParcely() + "," + duplicityParcela.getPopis() + "," + duplicityParcela.getGPSsuradnice().getPoziciaSirky() + "," + duplicityParcela.getGPSsuradnice().getPoziciaDlzky() + "\n");
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void loadData() {
-        kdStromNehnutelnosti.loadData();
-        kdStromParciel.loadData();
-        kdStromGeografickychObjektov.loadData();
+    public void loadData(String path) {
+    try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split(",");
+            if (parts[0].equals("Nehnutelnost")) {
+                int supisneCislo = Integer.parseInt(parts[1]);
+                String popis = parts[2];
+                double poziciaSirky = Double.parseDouble(parts[3]);
+                char sirka = poziciaSirky < 0 ? 'S' : 'N';
+                double poziciaDlzky = Double.parseDouble(parts[4]);
+                char dlzka = poziciaDlzky < 0 ? 'W' : 'E';
+                GPS gps = new GPS(sirka, poziciaSirky, dlzka, poziciaDlzky);
+                int maReferenciu = Integer.parseInt(parts[5]);
+                Nehnutelnost nehnutelnostReferencia = null;
+                int pocetParciel = Integer.parseInt(parts[6]);
+                if (maReferenciu == 1) {
+                    line = reader.readLine();
+                    parts = line.split(",");
+                    int supisneCisloReferencie = Integer.parseInt(parts[1]);
+                    String popisReferencie = parts[2];
+                    double poziciaSirkyReferencie = Double.parseDouble(parts[3]);
+                    char sirkaReferencie = poziciaSirkyReferencie < 0 ? 'S' : 'N';
+                    double poziciaDlzkyReferencie = Double.parseDouble(parts[4]);
+                    char dlzkaReferencie = poziciaDlzkyReferencie < 0 ? 'W' : 'E';
+                    GPS gpsReferencie = new GPS(sirkaReferencie, poziciaSirkyReferencie, dlzkaReferencie, poziciaDlzkyReferencie);
+                    nehnutelnostReferencia = new Nehnutelnost(supisneCisloReferencie, popisReferencie, null, null, gpsReferencie);
+                }
+                ArrayList<Parcela> zoznamParciel = new ArrayList<>();
+                if (pocetParciel != 0) {
+                    for (int i = 0; i < pocetParciel; i++) {
+                        line = reader.readLine();
+                        parts = line.split(",");
+                        int cisloParcely = Integer.parseInt(parts[1]);
+                        String popisParcely = parts[2];
+                        double poziciaSirkyParcely = Double.parseDouble(parts[3]);
+                        char sirkaParcely = poziciaSirkyParcely < 0 ? 'S' : 'N';
+                        double poziciaDlzkyParcely = Double.parseDouble(parts[4]);
+                        char dlzkaParcely = poziciaDlzkyParcely < 0 ? 'W' : 'E';
+                        GPS gpsParcely = new GPS(sirkaParcely, poziciaSirkyParcely, dlzkaParcely, poziciaDlzkyParcely);
+                        Parcela parcela = new Parcela(cisloParcely, popisParcely, null, null, gpsParcely);
+                        zoznamParciel.add(parcela);
+                    }
+                }
+                Nehnutelnost nehnutelnost = new Nehnutelnost(supisneCislo, popis, zoznamParciel, nehnutelnostReferencia, gps);
+                Vrchol<Nehnutelnost> vrchol = new Vrchol<>(nehnutelnost);
+                kdStromNehnutelnosti.vloz(vrchol);
+                Vrchol<GeografickyObjekt> vrcholGeografickyObjekt = new Vrchol<>(new GeografickyObjekt(gps, nehnutelnost, null));
+                kdStromGeografickychObjektov.vloz(vrcholGeografickyObjekt);
+            } else if (parts[0].equals("Parcela")) {
+                int cisloParcely = Integer.parseInt(parts[1]);
+                String popis = parts[2];
+                double poziciaSirky = Double.parseDouble(parts[3]);
+                char sirka = poziciaSirky < 0 ? 'S' : 'N';
+                double poziciaDlzky = Double.parseDouble(parts[4]);
+                char dlzka = poziciaDlzky < 0 ? 'W' : 'E';
+                GPS gps = new GPS(sirka, poziciaSirky, dlzka, poziciaDlzky);
+                int maReferenciu = Integer.parseInt(parts[5]);
+                Parcela parcelaReferencia = null;
+                int pocetNehnutelnosti = Integer.parseInt(parts[6]);
+                if (maReferenciu == 1) {
+                    line = reader.readLine();
+                    parts = line.split(",");
+                    int cisloParcelyReferencie = Integer.parseInt(parts[1]);
+                    String popisReferencie = parts[2];
+                    double poziciaSirkyReferencie = Double.parseDouble(parts[3]);
+                    char sirkaReferencie = poziciaSirkyReferencie < 0 ? 'S' : 'N';
+                    double poziciaDlzkyReferencie = Double.parseDouble(parts[4]);
+                    char dlzkaReferencie = poziciaDlzkyReferencie < 0 ? 'W' : 'E';
+                    GPS gpsReferencie = new GPS(sirkaReferencie, poziciaSirkyReferencie, dlzkaReferencie, poziciaDlzkyReferencie);
+                    parcelaReferencia = new Parcela(cisloParcelyReferencie, popisReferencie, null, null, gpsReferencie);
+                }
+                ArrayList<Nehnutelnost> zoznamNehnutelnosti = new ArrayList<>();
+                if (pocetNehnutelnosti != 0) {
+                    for (int i = 0; i < pocetNehnutelnosti; i++) {
+                        line = reader.readLine();
+                        parts = line.split(",");
+                        int supisneCislo = Integer.parseInt(parts[1]);
+                        String popisNehnutelnosti = parts[2];
+                        double poziciaSirkyNehnutelnosti = Double.parseDouble(parts[3]);
+                        char sirkaNehnutelnosti = poziciaSirkyNehnutelnosti < 0 ? 'S' : 'N';
+                        double poziciaDlzkyNehnutelnosti = Double.parseDouble(parts[4]);
+                        char dlzkaNehnutelnosti = poziciaDlzkyNehnutelnosti < 0 ? 'W' : 'E';
+                        GPS gpsNehnutelnosti = new GPS(sirkaNehnutelnosti, poziciaSirkyNehnutelnosti, dlzkaNehnutelnosti, poziciaDlzkyNehnutelnosti);
+                        Nehnutelnost nehnutelnost = new Nehnutelnost(supisneCislo, popisNehnutelnosti, null, null, gpsNehnutelnosti);
+                        zoznamNehnutelnosti.add(nehnutelnost);
+                    }
+                }
+                Parcela parcela = new Parcela(cisloParcely, popis, zoznamNehnutelnosti, parcelaReferencia, gps);
+                Vrchol<Parcela> vrchol = new Vrchol<>(parcela);
+                kdStromParciel.vloz(vrchol);
+                Vrchol<GeografickyObjekt> vrcholGeografickyObjekt = new Vrchol<>(new GeografickyObjekt(gps, null, parcela));
+                kdStromGeografickychObjektov.vloz(vrcholGeografickyObjekt);
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
     }
+}
 }

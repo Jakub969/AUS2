@@ -7,6 +7,7 @@ import triedy.GPS;
 import triedy.Nehnutelnost;
 import triedy.Parcela;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -155,8 +156,8 @@ public class Controller {
             try {
                 view.clearResults();
 
-                int supisneCislo = Integer.parseInt(view.getSupisneCisloNehnutelnosti());
-                String popis = view.getPopisNehnutelnosti();
+                int supisneCislo = Integer.parseInt(view.getSupisneCisloParcely());
+                String popis = view.getPopisParcely();
                 ArrayList<GPS> gpsPositions = getGps();
 
                 model.pridajParcelu(supisneCislo, popis, gpsPositions);
@@ -166,7 +167,7 @@ public class Controller {
                 String gps1 = gpsPositions.getFirst().toString();
                 String gps2 = gpsPositions.getLast().toString();
 
-                view.addResult("Nehnuteľnosť", gps1, gps2, String.valueOf(supisneCislo), popis);
+                view.addResult("Parcela", gps1, gps2, String.valueOf(supisneCislo), popis);
             } catch (NumberFormatException ex) {
                 view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!");
             }
@@ -242,8 +243,13 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                model.saveData();
-                view.addResult("Uloženie", "N/A", "N/A", "N/A", "Dáta boli uložené!");
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Uložiť dáta");
+                int userSelection = fileChooser.showSaveDialog(view);
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    model.saveData(fileChooser.getSelectedFile().getAbsolutePath());
+                    view.addResult("Uloženie", "N/A", "N/A", "N/A", "Dáta boli uložené!");
+                }
             } catch (Exception ex) {
                 view.addResult("Chyba", "N/A", "N/A", "N/A", "Chyba pri ukladaní dát!");
             }
@@ -254,8 +260,13 @@ public class Controller {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                model.loadData();
-                view.addResult("Načítanie", "N/A", "N/A", "N/A", "Dáta boli načítané!");
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Načítať dáta");
+                int userSelection = fileChooser.showOpenDialog(view);
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    model.loadData(fileChooser.getSelectedFile().getAbsolutePath());
+                    view.addResult("Načítanie", "N/A", "N/A", "N/A", "Dáta boli načítané!");
+                }
             } catch (Exception ex) {
                 view.addResult("Chyba", "N/A", "N/A", "N/A", "Chyba pri načítaní dát!");
             }
