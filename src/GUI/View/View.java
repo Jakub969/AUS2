@@ -350,4 +350,36 @@ public class View extends JFrame {
     public void addGenerateButtonListener(ActionListener listener) {
         vygenerujDataButton.addActionListener(listener);
     }
+
+    public char getSirkaParcelyComboBox1() {
+        return ((String) pridanieSirkaParcelyComboBox1.getSelectedItem()).charAt(0);
+    }
+
+    public String getSirkaParcely1() {
+        return sirkaParcelyField1.getText();
+    }
+
+    public char getDlzkaParcelyComboBox1() {
+        return ((String) pridanieDlzkaParcelyComboBox1.getSelectedItem()).charAt(0);
+    }
+
+    public String getDlzkaParcely1() {
+        return dlzkaParcelyField1.getText();
+    }
+
+    public char getSirkaParcelyComboBox2() {
+        return ((String) pridanieSirkaParcelyComboBox2.getSelectedItem()).charAt(0);
+    }
+
+    public String getSirkaParcely2() {
+        return sirkaParcelyField2.getText();
+    }
+
+    public char getDlzkaParcelyComboBox2() {
+        return ((String) pridanieDlzkaParcelyComboBox2.getSelectedItem()).charAt(0);
+    }
+
+    public String getDlzkaParcely2() {
+        return dlzkaParcelyField2.getText();
+    }
 }

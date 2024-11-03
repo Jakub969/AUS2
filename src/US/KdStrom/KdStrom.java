@@ -361,6 +361,26 @@ public class KdStrom<T extends IKluc<T>> {
         return vrcholy;
     }
 
+    public ArrayList<Vrchol<T>> preOrderPrehliadka() {
+        Vrchol<T> aktualny = this.koren;
+        ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
+        Stack<Vrchol<T>> zasobnik = new Stack<>();
+        zasobnik.push(aktualny);
+
+        while (!zasobnik.isEmpty()) {
+            aktualny = zasobnik.pop();
+            vrcholy.add(aktualny);
+
+            if (aktualny.getPravySyn() != null) {
+                zasobnik.push(aktualny.getPravySyn());
+            }
+            if (aktualny.getLavySyn() != null) {
+                zasobnik.push(aktualny.getLavySyn());
+            }
+        }
+        return vrcholy;
+    }
+
     public Vrchol<T> getKoren() {
         return koren;
     }
@@ -371,5 +391,13 @@ public class KdStrom<T extends IKluc<T>> {
 
     public int getPocetVrcholov() {
         return pocetVrcholov;
+    }
+
+    public void saveData() {
+
+    }
+
+    public void loadData() {
+        
     }
 }

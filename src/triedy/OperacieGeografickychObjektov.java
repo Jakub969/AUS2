@@ -66,4 +66,14 @@ public class OperacieGeografickychObjektov<T extends IKluc<T>> {
             return null;
         }
     }
+
+    public void generujData(int pocetNehnutelnosti, int pocetParciel, double pravdepodobnostPrekrytia, OperacieGeografickychObjektov<Parcela> operacieParciel, OperacieGeografickychObjektov<GeografickyObjekt> operacieGeografickychObjektov) {
+        int vacsieCislo = Math.max(pocetNehnutelnosti, pocetParciel);
+        boolean pocetNehnutelnostiJeVacsie = pocetNehnutelnosti > pocetParciel;
+        for (int i = 0; i < vacsieCislo; i++) {
+            if (pocetNehnutelnostiJeVacsie) {
+
+            }
+        }
+    }
 }

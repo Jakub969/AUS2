@@ -73,4 +73,20 @@ public class Model {
         GeografickyObjekt newGeografickyObjekt2 = new GeografickyObjekt(gpsPositions.getLast(), null, vysledok.getLast().getData());
         operacieGeografickychObjektov.metodaVkladania(newGeografickyObjekt1, newGeografickyObjekt2);
     }
+
+    public void generujData(int pocetNehnutelnosti, int pocetParciel, double pravdepodobnostPrekrytia) {
+        operacieNehnutelnosti.generujData(pocetNehnutelnosti, pocetParciel, pravdepodobnostPrekrytia, operacieParciel, operacieGeografickychObjektov);
+    }
+
+    public void saveData() {
+        kdStromNehnutelnosti.saveData();
+        kdStromParciel.saveData();
+        kdStromGeografickychObjektov.saveData();
+    }
+
+    public void loadData() {
+        kdStromNehnutelnosti.loadData();
+        kdStromParciel.loadData();
+        kdStromGeografickychObjektov.loadData();
+    }
 }
