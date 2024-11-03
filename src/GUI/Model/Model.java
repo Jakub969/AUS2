@@ -29,7 +29,7 @@ public class Model {
         this.operacieGeografickychObjektov = new OperacieGeografickychObjektov<>(this.kdStromGeografickychObjektov);
     }
 
-    public List<Nehnutelnost> vyhladajNehnutelnost(ArrayList<GPS> gpsPositions) {
+    public ArrayList<Vrchol<Nehnutelnost>> vyhladajNehnutelnost(ArrayList<GPS> gpsPositions) {
 
         Nehnutelnost vyhladavanaNehnutelnost1 = new Nehnutelnost(0, "", null, null, gpsPositions.getFirst());
         Nehnutelnost vyhladavanaNehnutelnost2 = new Nehnutelnost(0, "", null, null, gpsPositions.getLast());
@@ -39,11 +39,7 @@ public class Model {
         ArrayList<Vrchol<Nehnutelnost>> kluce = new ArrayList<>();
         kluce.add(vrcholVyhladavania);
         kluce.add(vrcholVyhladavania2);
-        ArrayList<Vrchol<Nehnutelnost>> results = kdStromNehnutelnosti.bodoveVyhladavanie(kluce);
-
-        return results.stream()
-                .map(Vrchol::getData)
-                .collect(Collectors.toList());
+        return kdStromNehnutelnosti.bodoveVyhladavanie(kluce);
     }
 
     public void pridajNehnutelnost(int supisneCislo, String popis, List<GPS> gpsPositions) {
@@ -55,7 +51,7 @@ public class Model {
         operacieGeografickychObjektov.metodaVkladania(newGeografickyObjekt1, newGeografickyObjekt2);
     }
 
-    public List<Parcela> vyhladajParcelu(ArrayList<GPS> gpsPositions) {
+    public ArrayList<Vrchol<Parcela>> vyhladajParcelu(ArrayList<GPS> gpsPositions) {
         Parcela vyhladavanaParcela1 = new Parcela(0, "", null, null, gpsPositions.getFirst());
         Parcela vyhladavanaParcela2 = new Parcela(0, "", null, null, gpsPositions.getLast());
 
@@ -66,9 +62,7 @@ public class Model {
         kluce.add(vrcholVyhladavania2);
         ArrayList<Vrchol<Parcela>> results = kdStromParciel.bodoveVyhladavanie(kluce);
 
-        return results.stream()
-                .map(Vrchol::getData)
-                .collect(Collectors.toList());
+        return results;
     }
 
     public void pridajParcelu(int cisloParcely, String popis, List<GPS> gpsPositions) {

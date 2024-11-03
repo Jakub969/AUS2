@@ -2,6 +2,7 @@ package GUI.Controller;
 
 import GUI.Model.Model;
 import GUI.View.View;
+import US.KdStrom.Vrchol;
 import triedy.GPS;
 import triedy.Nehnutelnost;
 
@@ -51,13 +52,20 @@ public class Controller {
                 gpsPositions.add(pozicia1);
                 gpsPositions.add(pozicia2);
 
-                List<Nehnutelnost> results = model.vyhladajNehnutelnost(gpsPositions);
+                ArrayList<Vrchol<Nehnutelnost>> results = model.vyhladajNehnutelnost(gpsPositions);
+
+                ArrayList<Vrchol<Nehnutelnost>> duplicity = new ArrayList<>();
+                for (Vrchol<Nehnutelnost> nehnutelnostVrchol : results) {
+                    duplicity.addAll(nehnutelnostVrchol.getDuplicity());
+                }
+
+                results.addAll(duplicity);
 
                 if (results.isEmpty()) {
                     view.addResult("Chyba", "N/A", "N/A", "N/A", "Nehnutelnost nebola nájdená!");
                 } else {
-                    for (Nehnutelnost result : results) {
-                        view.addResult("Nehnuteľnosť", result.getGPSsuradnice().toString(), result.getGPSsuradnice().toString(), String.valueOf(result.getSupisneCislo()), result.getPopis());
+                    for (Vrchol<Nehnutelnost> result : results) {
+                        view.addResult("Nehnuteľnosť", result.getData().getGPSsuradnice().toString(), result.getData().getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(result.getData().getSupisneCislo()), result.getData().getPopis());
                     }
                 }
             } catch (NumberFormatException ex) {
@@ -73,7 +81,7 @@ public class Controller {
 
                 int supisneCislo = Integer.parseInt(view.getSupisneCisloNehnutelnosti());
                 String popis = view.getPopisNehnutelnosti();
-                List<GPS> gpsPositions = getGps();
+                ArrayList<GPS> gpsPositions = getGps();
 
                 model.pridajNehnutelnost(supisneCislo, popis, gpsPositions);
 
@@ -88,8 +96,8 @@ public class Controller {
             }
         }
 
-        private List<GPS> getGps() {
-            List<GPS> gpsPositions = new ArrayList<>();
+        private ArrayList<GPS> getGps() {
+            ArrayList<GPS> gpsPositions = new ArrayList<>();
 
             char sirka1 = view.getSirkaNehnutelnostiComboBox1();
             char dlzka1 = view.getDlzkaNehnutelnostiComboBox1();
