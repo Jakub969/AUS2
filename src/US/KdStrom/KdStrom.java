@@ -98,10 +98,6 @@ public class KdStrom<T extends IKluc<T>> {
     }
 
     public ArrayList<Vrchol<T>> bodoveVyhladavanie(ArrayList<Vrchol<T>> kluce) {
-        if (kluce.size() != this.pocetKlucov) {
-            throw new IllegalArgumentException("Nespravny pocet klucov");
-        }
-
         ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
         for (Vrchol<T> vrchol : kluce) {
             vrcholy.add(vyhladaj(vrchol));

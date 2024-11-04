@@ -20,15 +20,17 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         this.maxRozsah = parMaxRozsah;
         this.zoznamVlozenychVrcholov = new ArrayList<>();
         this.random = new Random(System.nanoTime());
+        for (int i = 0; i < 20000; i++) {
+            metodaVkladania();
+        }
+        skontrolujPocetVrcholov();
         generujOperacie();
     }
 
     private void generujOperacie() {
         for (int i = 0; i < pocetOperacii; i++) {
             double rand = random.nextDouble();
-            if (rand < 0.60) {
-                metodaVkladania();
-            } else if (rand < 0.85) {
+            if (rand < 0.6) {
                 metodaMazania();
             } else {
                 metodaVyhladavania();
@@ -37,23 +39,20 @@ public class GeneratorOperacii<T extends IKluc<T>> {
     }
 
     public void metodaVkladania() {
-        double atributA = Math.random() * this.maxRozsah;
-        String atributB = RandomStringGenerator.generateRandomString(10);
-        int atributC = random.nextInt(this.maxRozsah);
-        double atributD = Math.random() * this.maxRozsah;
-        T data = (T) new GenerovaneData(atributA, atributB, atributC, atributD);
+        int atributA = random.nextInt(this.maxRozsah);
+        int atributB = random.nextInt(this.maxRozsah);
+        String atributC = RandomStringGenerator.generateRandomString(10);
+        T data = (T) new GenerovaneData(atributA, atributB, atributC);
         Vrchol<T> vrchol = new Vrchol<>(data);
-        System.out.println("Vkladam vrchol: " + vrchol.getData().toString());
         this.strom.vloz(vrchol);
         this.zoznamVlozenychVrcholov.add(vrchol);
         double rand = random.nextDouble();
-        if (rand < 0.5) {
-            T data2 = (T) new GenerovaneData(atributA, atributB, atributC, atributD);
+        /*if (rand < 0.5) {
+            T data2 = (T) new GenerovaneData(atributA, atributB, atributC);
             Vrchol<T> vrchol2 = new Vrchol<>(data2);
-            System.out.println("Vkladam duplicitu: " + vrchol2.getData().toString());
             this.strom.vloz(vrchol2);
             this.zoznamVlozenychVrcholov.add(vrchol2);
-        }
+        }*/
     }
 
     public void metodaMazania() {
@@ -65,6 +64,7 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         System.out.println("Vymazavam vrchol: " + vrchol.getData().toString());
         this.strom.vyrad(vrchol);
         this.zoznamVlozenychVrcholov.remove(index);
+        skontrolujPocetVrcholov();
     }
 
     public void metodaVyhladavania() {
@@ -84,6 +84,17 @@ public class GeneratorOperacii<T extends IKluc<T>> {
                 System.out.println("Vyhladaný vrchol: " + tVrchol.getData().toString());
             }
         }
+    }
+
+    private void skontrolujPocetVrcholov() {
+        ArrayList<Vrchol<T>> vsetkyVrcholy = this.strom.inOrderPrehliadka();
+        ArrayList<Vrchol<T>> duplikaty = new ArrayList<>();
+        for (Vrchol<T> vrchol : vsetkyVrcholy) {
+            duplikaty.addAll(vrchol.getDuplicity());
+        }
+        vsetkyVrcholy.addAll(duplikaty);
+        System.out.println("Pocet vrcholov inOrder: " + vsetkyVrcholy.size());
+        System.out.println("Pocet vrcholov v pomocnej strukture: " + this.zoznamVlozenychVrcholov.size());
     }
 
     public class RandomStringGenerator {

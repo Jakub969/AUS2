@@ -2,11 +2,10 @@ package GUI.View;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ResultTableModel extends AbstractTableModel {
     private final String[] columnNames = {"Geograficky objekt", "GPS súradnica 1", "GPS súradnica 2", "Súpisné číslo", "Popis"};
-    private final List<Object[]> data = new ArrayList<>();
+    private final ArrayList<Object[]> data = new ArrayList<>();
 
     public void addRow(String geoObjekt, String gps1, String gps2, String supisneCislo, String popis) {
         data.add(new Object[]{geoObjekt, gps1, gps2, supisneCislo, popis});
