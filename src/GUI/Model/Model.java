@@ -17,9 +17,9 @@ public class Model {
     private KdStrom<Nehnutelnost> kdStromNehnutelnosti;
     private KdStrom<Parcela> kdStromParciel;
     private KdStrom<GeografickyObjekt> kdStromGeografickychObjektov;
-    VkladanieGeografickychObjektov<Nehnutelnost> vkladanieNehnutelnosti;
-    VkladanieGeografickychObjektov<Parcela> vkladanieParciel;
-    VkladanieGeografickychObjektov<GeografickyObjekt> vkladanieGeografickychObjektov;
+    private VkladanieGeografickychObjektov<Nehnutelnost> vkladanieNehnutelnosti;
+    private VkladanieGeografickychObjektov<Parcela> vkladanieParciel;
+    private VkladanieGeografickychObjektov<GeografickyObjekt> vkladanieGeografickychObjektov;
 
     public Model() {
         this.kdStromNehnutelnosti = new KdStrom<>(2);
