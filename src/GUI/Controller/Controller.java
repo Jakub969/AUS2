@@ -1,6 +1,7 @@
 package GUI.Controller;
 
 import GUI.Model.Model;
+import GUI.View.EditWindow;
 import GUI.View.View;
 import US.KdStrom.Vrchol;
 import triedy.GPS;
@@ -125,7 +126,63 @@ public class Controller {
     private class EditButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Implement edit functionality here
+            int selectedRow = view.getSelectedRow();
+            if (selectedRow != -1) {
+                String geografickyObjekt = view.getGeografickyObjekt(selectedRow);
+                String gps1 = view.getGps1(selectedRow);
+                String gps2 = view.getGps2(selectedRow);
+                String supisneCislo = view.getSupisneCislo(selectedRow);
+                String popis = view.getPopis(selectedRow);
+
+                String predEditaciouString = geografickyObjekt + "," + gps1 + "," + gps2 + "," + supisneCislo + "," + popis;
+
+                EditWindow editWindow = new EditWindow(geografickyObjekt, gps1, gps2, supisneCislo, popis);
+                editWindow.addConfirmButtonListener(confirmEvent -> {
+                    updateModel(predEditaciouString, selectedRow, editWindow.getGps1(), editWindow.getGps2(), editWindow.getSupisneCislo(), editWindow.getPopis());
+                    editWindow.dispose();
+                });
+                editWindow.addCancelButtonListener(cancelEvent -> editWindow.dispose());
+                editWindow.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(view, "Prosím, vyberte riadok na úpravu.");
+            }
+        }
+
+        private void updateModel(String objektPred, int selectedRow, String gps1, String gps2, String supisneCislo, String popis) {
+            try {
+                String gps1Part = gps1.split(" ")[1];
+                if (gps1Part.endsWith(";")) {
+                    gps1Part = gps1Part.substring(0, gps1Part.length() - 1);
+                }
+                double poziciaSirky1 = Double.parseDouble(gps1Part);
+                double poziciaDlzky1 = Double.parseDouble(gps1.split(" ")[3]);
+
+                char sirka1 = gps1.split(" ")[0].charAt(0);
+                char dlzka1 = gps1.split(" ")[2].charAt(0);
+
+                String gps2Part = gps2.split(" ")[1];
+                if (gps2Part.endsWith(";")) {
+                    gps2Part = gps2Part.substring(0, gps2Part.length() - 1);
+                }
+                double poziciaSirky2 = Double.parseDouble(gps2Part);
+                double poziciaDlzky2 = Double.parseDouble(gps2.split(" ")[3]);
+                char sirka2 = gps2.split(" ")[0].charAt(0);
+                char dlzka2 = gps2.split(" ")[2].charAt(0);
+
+                GPS pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
+                GPS pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
+
+                if (view.getGeografickyObjekt(selectedRow).equals("Nehnuteľnosť")) {
+                    model.upravNehnutelnost(objektPred, Integer.parseInt(supisneCislo), popis, pozicia1, pozicia2);
+                } else {
+                    model.upravParcelu(objektPred, Integer.parseInt(supisneCislo), popis, pozicia1, pozicia2);
+                }
+                String geoObjekt = view.getGeografickyObjekt(selectedRow);
+                view.clearResults();
+                view.addResult(geoObjekt, gps1, gps2, supisneCislo, popis);
+            } catch (NumberFormatException ex) {
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!");
+            }
         }
     }
 

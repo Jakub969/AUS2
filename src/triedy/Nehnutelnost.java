@@ -5,8 +5,8 @@ import rozhrania.IKluc;
 import java.util.ArrayList;
 
 public class Nehnutelnost implements IKluc<Nehnutelnost> {
-    private final int supisneCislo;
-    private final String popis;
+    private int supisneCislo;
+    private String popis;
     private ArrayList<Parcela> zoznamParciel;
     private Nehnutelnost referenciaNaRovnakuNehnutelnostSInymiGPS;
     private final GPS GPSsuradnice;
@@ -39,6 +39,14 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
 
     public Nehnutelnost getReferenciaNaRovnakuNehnutelnostSInymiGPS() {
         return referenciaNaRovnakuNehnutelnostSInymiGPS;
+    }
+
+    public void setSupisneCislo(int supisneCislo) {
+        this.supisneCislo = supisneCislo;
+    }
+
+    public void setPopis(String popis) {
+        this.popis = popis;
     }
 
     public void setReferenciaNaRovnakuNehnutelnostSInymiGPS(Nehnutelnost referenciaNaRovnakuNehnutelnostSInymiGPS) {

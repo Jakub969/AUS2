@@ -26,6 +26,8 @@ public class View extends JFrame {
         tlacidloUkladania = new JButton("Uloz");
         tlacidloNacitania = new JButton("Nacitaj");
         tlacidloVypisaniaVsetkeho = new JButton("Vypis Vsetko");
+        tlacidloUpravovania = new JButton("Edituj");
+        tlacidloMazania = new JButton("Vymaz");
 
         dlzkaField1 = new JTextField(10);
         sirkaField1 = new JTextField(10);
@@ -99,7 +101,7 @@ public class View extends JFrame {
         dlzkaPanel2.add(dlzkaField2);
         gpsSearchPanel2.add(dlzkaPanel2);
 
-        JPanel actionPanel = new JPanel(new GridLayout(2, 3, 5, 5));
+        JPanel actionPanel = new JPanel(new GridLayout(3, 3, 5, 5));
         actionPanel.setBorder(BorderFactory.createTitledBorder("Funkcie"));
         actionPanel.add(tlacidloVyhladavaniaNehnutelnosti);
         actionPanel.add(tlacidloVyhladavaniaParciel);
@@ -107,6 +109,8 @@ public class View extends JFrame {
         actionPanel.add(tlacidloUkladania);
         actionPanel.add(tlacidloNacitania);
         actionPanel.add(tlacidloVypisaniaVsetkeho);
+        actionPanel.add(tlacidloUpravovania);
+        actionPanel.add(tlacidloMazania);
 
         JPanel propertyPanel1 = new JPanel(new GridLayout(4, 2, 5, 5));
         propertyPanel1.setBorder(BorderFactory.createTitledBorder("Pridanie Nehnuteľnosti"));
@@ -387,5 +391,29 @@ public class View extends JFrame {
 
     public String getDlzkaParcely2() {
         return dlzkaParcelyField2.getText();
+    }
+
+    public int getSelectedRow() {
+        return resultTable.getSelectedRow();
+    }
+
+    public String getGps1(int selectedRow) {
+        return (String) tableModel.getValueAt(selectedRow, 1);
+    }
+
+    public String getGps2(int selectedRow) {
+        return (String) tableModel.getValueAt(selectedRow, 2);
+    }
+
+    public String getSupisneCislo(int selectedRow) {
+        return (String) tableModel.getValueAt(selectedRow, 3);
+    }
+
+    public String getPopis(int selectedRow) {
+        return (String) tableModel.getValueAt(selectedRow, 4);
+    }
+
+    public String getGeografickyObjekt(int selectedRow) {
+        return (String) tableModel.getValueAt(selectedRow, 0);
     }
 }
