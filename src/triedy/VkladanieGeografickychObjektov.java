@@ -5,12 +5,11 @@ import US.KdStrom.Vrchol;
 import rozhrania.IKluc;
 
 import java.util.ArrayList;
-import java.util.Random;
 
-public class OperacieGeografickychObjektov<T extends IKluc<T>> {
+public class VkladanieGeografickychObjektov<T extends IKluc<T>> {
     private final KdStrom<T> strom;
 
-    public OperacieGeografickychObjektov(KdStrom<T> kdStrom) {
+    public VkladanieGeografickychObjektov(KdStrom<T> kdStrom) {
         this.strom = kdStrom;
     }
 

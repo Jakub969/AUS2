@@ -4,11 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class EditWindow extends JFrame {
+public class EditovacieOkno extends JFrame {
     private JTextField gpsField1, gpsField2, supisneCisloField, popisField;
     private JButton confirmButton, cancelButton;
 
-    public EditWindow(String geografickyObjekt, String gps1, String gps2, String supisneCislo, String popis) {
+    public EditovacieOkno(String geografickyObjekt, String gps1, String gps2, String supisneCislo, String popis) {
         setTitle("Editacia zaznamu");
         setSize(400, 300);
         setLayout(new GridLayout(6, 2, 10, 10));

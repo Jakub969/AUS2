@@ -11,7 +11,7 @@ public class View extends JFrame {
     private JTextArea zobrazenieVysledkov;
     private JFrame frame;
     private JTable resultTable;
-    private ResultTableModel tableModel;
+    private TabulkaVysledkov tableModel;
     private JComboBox<String> sirkaComboBox1, dlzkaComboBox1, sirkaComboBox2, dlzkaComboBox2, pridanieSirkaNehnutelnostiComboBox1, pridanieDlzkaNehnutelnostiComboBox1, pridanieSirkaNehnutelnostiComboBox2, pridanieDlzkaNehnutelnostiComboBox2, pridanieSirkaParcelyComboBox1,
             pridanieSirkaParcelyComboBox2, pridanieDlzkaParcelyComboBox1, pridanieDlzkaParcelyComboBox2;
 
@@ -64,7 +64,7 @@ public class View extends JFrame {
         pridanieSirkaParcelyComboBox2 = new JComboBox<>(new String[]{"N", "S"});
         pridanieDlzkaParcelyComboBox2 = new JComboBox<>(new String[]{"E", "W"});
 
-        tableModel = new ResultTableModel();
+        tableModel = new TabulkaVysledkov();
         resultTable = new JTable(tableModel);
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -415,5 +415,9 @@ public class View extends JFrame {
 
     public String getGeografickyObjekt(int selectedRow) {
         return (String) tableModel.getValueAt(selectedRow, 0);
+    }
+
+    public void removeRow(int selectedRow) {
+        tableModel.removeRow(selectedRow);
     }
 }

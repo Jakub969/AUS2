@@ -1,7 +1,7 @@
 package GUI.Controller;
 
 import GUI.Model.Model;
-import GUI.View.EditWindow;
+import GUI.View.EditovacieOkno;
 import GUI.View.View;
 import US.KdStrom.Vrchol;
 import triedy.GPS;
@@ -13,7 +13,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Controller {
     private Model model;
@@ -62,18 +61,22 @@ public class Controller {
 
                 ArrayList<Vrchol<Nehnutelnost>> results = model.vyhladajNehnutelnost(gpsPositions);
 
-                ArrayList<Vrchol<Nehnutelnost>> duplicity = new ArrayList<>();
-                for (Vrchol<Nehnutelnost> nehnutelnostVrchol : results) {
-                    duplicity.addAll(nehnutelnostVrchol.getDuplicity());
+                if (!results.isEmpty()) {
+                    ArrayList<Vrchol<Nehnutelnost>> duplicity = new ArrayList<>();
+                    for (Vrchol<Nehnutelnost> nehnutelnostVrchol : results) {
+                        if (nehnutelnostVrchol != null) {
+                            duplicity.addAll(nehnutelnostVrchol.getDuplicity());
+                        }
+                    }
+                    results.addAll(duplicity);
                 }
-
-                results.addAll(duplicity);
 
                 if (results.isEmpty()) {
                     view.addResult("Chyba", "N/A", "N/A", "N/A", "Nehnutelnost nebola nájdená!");
                 } else {
-                    for (Vrchol<Nehnutelnost> result : results) {
-                        view.addResult("Nehnuteľnosť", result.getData().getGPSsuradnice().toString(), result.getData().getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(result.getData().getSupisneCislo()), result.getData().getPopis());
+                    for (Vrchol<Nehnutelnost> nehnutelnostVrchol : results) {
+                        Nehnutelnost nehnutelnost = nehnutelnostVrchol.getData();
+                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis());
                     }
                 }
             } catch (NumberFormatException ex) {
@@ -136,13 +139,13 @@ public class Controller {
 
                 String predEditaciouString = geografickyObjekt + "," + gps1 + "," + gps2 + "," + supisneCislo + "," + popis;
 
-                EditWindow editWindow = new EditWindow(geografickyObjekt, gps1, gps2, supisneCislo, popis);
-                editWindow.addConfirmButtonListener(confirmEvent -> {
-                    updateModel(predEditaciouString, selectedRow, editWindow.getGps1(), editWindow.getGps2(), editWindow.getSupisneCislo(), editWindow.getPopis());
-                    editWindow.dispose();
+                EditovacieOkno editovacieOkno = new EditovacieOkno(geografickyObjekt, gps1, gps2, supisneCislo, popis);
+                editovacieOkno.addConfirmButtonListener(confirmEvent -> {
+                    updateModel(predEditaciouString, selectedRow, editovacieOkno.getGps1(), editovacieOkno.getGps2(), editovacieOkno.getSupisneCislo(), editovacieOkno.getPopis());
+                    editovacieOkno.dispose();
                 });
-                editWindow.addCancelButtonListener(cancelEvent -> editWindow.dispose());
-                editWindow.setVisible(true);
+                editovacieOkno.addCancelButtonListener(cancelEvent -> editovacieOkno.dispose());
+                editovacieOkno.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(view, "Prosím, vyberte riadok na úpravu.");
             }
@@ -189,7 +192,32 @@ public class Controller {
     private class DeleteButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Implement delete functionality here
+            int selectedRow = view.getSelectedRow();
+            if (selectedRow != -1) {
+                int confirm = JOptionPane.showConfirmDialog(view, "Naozaj chcete vymazať tento záznam?", "Potvrdenie", JOptionPane.YES_NO_OPTION);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    vymazZaznam(selectedRow);
+                }
+            } else {
+                JOptionPane.showMessageDialog(view, "Prosím, vyberte riadok na vymazanie.");
+            }
+        }
+
+        private void vymazZaznam(int selectedRow) {
+            String geografickyObjekt = view.getGeografickyObjekt(selectedRow);
+            String gps1 = view.getGps1(selectedRow);
+            String gps2 = view.getGps2(selectedRow);
+            String supisneCislo = view.getSupisneCislo(selectedRow);
+            String popis = view.getPopis(selectedRow);
+
+            String objektPred = geografickyObjekt + "," + gps1 + "," + gps2 + "," + supisneCislo + "," + popis;
+
+            if (geografickyObjekt.equals("Nehnuteľnosť")) {
+                model.odstranNehnutelnost(objektPred);
+            } else {
+                model.odstranParcelu(objektPred);
+            }
+            view.removeRow(selectedRow);
         }
     }
 
@@ -280,18 +308,22 @@ public class Controller {
 
                 ArrayList<Vrchol<Parcela>> results = model.vyhladajParcelu(gpsPositions);
 
-                ArrayList<Vrchol<Parcela>> duplicity = new ArrayList<>();
-                for (Vrchol<Parcela> parcelaVrchol : results) {
-                    duplicity.addAll(parcelaVrchol.getDuplicity());
+                if (!results.isEmpty()) {
+                    ArrayList<Vrchol<Parcela>> duplicity = new ArrayList<>();
+                    for (Vrchol<Parcela> parcelaVrchol : results) {
+                        if (parcelaVrchol != null) {
+                            duplicity.addAll(parcelaVrchol.getDuplicity());
+                        }
+                    }
+                    results.addAll(duplicity);
                 }
-
-                results.addAll(duplicity);
 
                 if (results.isEmpty()) {
                     view.addResult("Chyba", "N/A", "N/A", "N/A", "Parcela nebola nájdená!");
                 } else {
-                    for (Vrchol<Parcela> result : results) {
-                        view.addResult("Parcela", result.getData().getGPSsuradnice().toString(), result.getData().getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(result.getData().getCisloParcely()), result.getData().getPopis());
+                    for (Vrchol<Parcela> parcelaVrchol : results) {
+                        Parcela parcela = parcelaVrchol.getData();
+                        view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis());
                     }
                 }
             } catch (NumberFormatException ex) {

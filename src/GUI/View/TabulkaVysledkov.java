@@ -3,13 +3,18 @@ package GUI.View;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
-public class ResultTableModel extends AbstractTableModel {
+public class TabulkaVysledkov extends AbstractTableModel {
     private final String[] columnNames = {"Geograficky objekt", "GPS súradnica 1", "GPS súradnica 2", "Súpisné číslo", "Popis"};
     private final ArrayList<Object[]> data = new ArrayList<>();
 
     public void addRow(String geoObjekt, String gps1, String gps2, String supisneCislo, String popis) {
         data.add(new Object[]{geoObjekt, gps1, gps2, supisneCislo, popis});
         fireTableRowsInserted(data.size() - 1, data.size() - 1);
+    }
+
+    public void removeRow(int row) {
+        data.remove(row);
+        fireTableRowsDeleted(row, row);
     }
 
     public void clear() {
