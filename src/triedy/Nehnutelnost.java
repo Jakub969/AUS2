@@ -16,6 +16,9 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
         this.supisneCislo = supisneCislo;
         this.popis = popis;
         this.zoznamParciel = zoznamParcel;
+        if (zoznamParcel == null) {
+            this.zoznamParciel = new ArrayList<>();
+        }
         this.referenciaNaRovnakuNehnutelnostSInymiGPS = referenciaNaRovnakuNehnutelnostSInymiGPS;
         this.GPSsuradnice = GPSsuradnice;
         this.uuid = java.util.UUID.randomUUID().toString();

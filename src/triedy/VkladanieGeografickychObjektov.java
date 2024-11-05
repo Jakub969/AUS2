@@ -45,9 +45,10 @@ public class VkladanieGeografickychObjektov<T extends IKluc<T>> {
                 Nehnutelnost nehnutelnost = dataGeografickyObjekt1.getNehnutelnost();
                 Parcela parcela = dataGeografickyObjekt1.getParcela();
                 Vrchol<T> duplicita = this.strom.vyhladaj(vrchol1);
-                if (duplicita.getData() instanceof Nehnutelnost nehnutelnostDuplicita && parcela != null) {
+                GeografickyObjekt geografickyObjekt = (GeografickyObjekt) duplicita.getData();
+                if (geografickyObjekt.getNehnutelnost() instanceof Nehnutelnost nehnutelnostDuplicita && parcela != null) {
                     parcela.addNehnutelnost(nehnutelnostDuplicita);
-                } else if (duplicita.getData() instanceof Parcela parcelaDuplicita && nehnutelnost != null) {
+                } else if (geografickyObjekt.getParcela() instanceof Parcela parcelaDuplicita && nehnutelnost != null) {
                     nehnutelnost.addParcela(parcelaDuplicita);
                 }
             }

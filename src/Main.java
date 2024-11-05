@@ -7,7 +7,7 @@ import testy.GenerovaneData;
 
 public class Main {
     public static void main(String[] args) {
-        //GeneratorOperacii<GenerovaneData> generatorOperacii = new GeneratorOperacii<>(new KdStrom<GenerovaneData>(2), 10, 50);
+        //GeneratorOperacii<GenerovaneData> generatorOperacii = new GeneratorOperacii<>(new KdStrom<GenerovaneData>(2), 20, 50);
 
         Model model = new Model();
         View view = new View();

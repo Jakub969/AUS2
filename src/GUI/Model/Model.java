@@ -128,8 +128,15 @@ public class Model {
     public void saveData(String path) {
         try (FileWriter writer = new FileWriter(path)) {
             ArrayList<Vrchol<Nehnutelnost>> nehnutelnosti = kdStromNehnutelnosti.preOrderPrehliadka();
+            ArrayList<String> uuid = new ArrayList<>();
             if (nehnutelnosti != null) {
                 for (Vrchol<Nehnutelnost> nehnutelnostVrchol : nehnutelnosti) {
+                    if (uuid.contains(nehnutelnostVrchol.getData().getUuid())) {
+                        continue;
+                    } else {
+                        uuid.add(nehnutelnostVrchol.getData().getUuid());
+                        uuid.add(nehnutelnostVrchol.getData().getReferenciaNaRovnakuNehnutelnostSInymiGPS().getUuid());
+                    }
                     Nehnutelnost nehnutelnost = nehnutelnostVrchol.getData();
                     ArrayList<Vrchol<Nehnutelnost>> duplicity = nehnutelnostVrchol.getDuplicity();
                     int pocetDuplicity = duplicity != null ? duplicity.size() : 0;
@@ -147,8 +154,15 @@ public class Model {
                 }
             }
             ArrayList<Vrchol<Parcela>> parciel = kdStromParciel.preOrderPrehliadka();
+            ArrayList<String> uuidParcela = new ArrayList<>();
             if (parciel != null) {
                 for (Vrchol<Parcela> parcelaVrchol : parciel) {
+                    if (uuidParcela.contains(parcelaVrchol.getData().getUuid())) {
+                        continue;
+                    } else {
+                        uuidParcela.add(parcelaVrchol.getData().getUuid());
+                        uuidParcela.add(parcelaVrchol.getData().getReferenciaNaRovnakuParceluSInymiGPS().getUuid());
+                    }
                     Parcela parcela = parcelaVrchol.getData();
                     ArrayList<Vrchol<Parcela>> duplicity = parcelaVrchol.getDuplicity();
                     int pocetDuplicity = duplicity != null ? duplicity.size() : 0;

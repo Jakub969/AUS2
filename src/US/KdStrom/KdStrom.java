@@ -91,6 +91,8 @@ public class KdStrom<T extends IKluc<T>> {
             }
             else if (porovnanie > 0 && aktualny.getPravySyn() != null) {
                 aktualny = aktualny.getPravySyn();
+            } else {
+                return null;
             }
             hlbka++;
         }

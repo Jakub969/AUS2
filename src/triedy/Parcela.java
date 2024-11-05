@@ -16,6 +16,9 @@ public class Parcela implements IKluc<Parcela> {
         this.cisloParcely = cisloParcely;
         this.popis = popis;
         this.zoznamNehnutelnosti = zoznamNehnutelnosti;
+        if (zoznamNehnutelnosti == null) {
+            this.zoznamNehnutelnosti = new ArrayList<>();
+        }
         this.referenciaNaRovnakuParceluSInymiGPS = referenciaNaRovnakuParceluSInymiGPS;
         this.GPSsuradnice = GPSsuradnice;
         this.uuid = java.util.UUID.randomUUID().toString();
