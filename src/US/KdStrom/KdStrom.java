@@ -83,7 +83,14 @@ public class KdStrom<T extends IKluc<T>> {
         while (aktualny != null) {
             int poradieKluca = hlbka % this.pocetKlucov;
             int porovnanie = kluc.getData().porovnaj(aktualny.getData(), poradieKluca);
-            if (porovnanie == 0 && aktualny.getData().porovnaj(kluc.getData(), (poradieKluca + 1) % this.pocetKlucov) == 0) {
+            boolean zhoda = true;
+            for (int i = 0; i < this.pocetKlucov; i++) {
+                if (kluc.getData().porovnaj(aktualny.getData(), i) != 0) {
+                    zhoda = false;
+                    break;
+                }
+            }
+            if (zhoda) {
                 return aktualny;
             }
             if (porovnanie <= 0 && aktualny.getLavySyn() != null) {
