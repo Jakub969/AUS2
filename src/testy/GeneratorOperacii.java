@@ -30,7 +30,7 @@ public class GeneratorOperacii<T extends IKluc<T>> {
     private void generujOperacie() {
         for (int i = 0; i < pocetOperacii; i++) {
             double rand = random.nextDouble();
-            if (rand < 0.6) {
+            if (rand < 0.85) {
                 metodaMazania();
             } else {
                 metodaVyhladavania();

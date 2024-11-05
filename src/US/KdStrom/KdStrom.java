@@ -113,8 +113,12 @@ public class KdStrom<T extends IKluc<T>> {
             if (vyhladanyVrchol.getLavySyn() == null && vyhladanyVrchol.getPravySyn() == null) {
                 odstranVrchol(vyhladanyVrchol, vrchol, true, false);
             } else {
-                nahradVrchol(vyhladanyVrchol);
-                odstranVrchol(vyhladanyVrchol, vrchol, false, false);
+                if (!vyhladanyVrchol.getDuplicity().isEmpty() || vyhladanyVrchol.getDuplicity() == null) {
+                    odstranVrchol(vyhladanyVrchol, vrchol, false, false);
+                } else {
+                    nahradVrchol(vyhladanyVrchol);
+                    odstranVrchol(vyhladanyVrchol, vrchol, false, false);
+                }
             }
         }
     }
@@ -239,22 +243,52 @@ public class KdStrom<T extends IKluc<T>> {
 
     private Vrchol<T> najdiNajmensiVrchol(Vrchol<T> vrchol, int poradieKluca) {
         Vrchol<T> najmensi = vrchol;
-        while (vrchol.getLavySyn() != null) {
-            if (vrchol.getLavySyn().getData().porovnaj(najmensi.getData(), poradieKluca) <= 0) {
-                najmensi = vrchol.getLavySyn();
+        Stack<Vrchol<T>> zasobnik = new Stack<>();
+        zasobnik.push(vrchol);
+        while (!zasobnik.isEmpty()) {
+            Vrchol<T> aktualny = zasobnik.pop();
+            int aktualnePoradieKluca = getHlbkaVrchola(aktualny) % this.pocetKlucov;
+            if (aktualny.getData().porovnaj(najmensi.getData(), poradieKluca) <= 0) {
+                najmensi = aktualny;
             }
-            vrchol = vrchol.getLavySyn();
+            if (aktualnePoradieKluca == poradieKluca) {
+                if (aktualny.getLavySyn() != null) {
+                    zasobnik.push(aktualny.getLavySyn());
+                }
+            } else {
+                if (aktualny.getLavySyn() != null) {
+                    zasobnik.push(aktualny.getLavySyn());
+                }
+                if (aktualny.getPravySyn() != null) {
+                    zasobnik.push(aktualny.getPravySyn());
+                }
+            }
         }
         return najmensi;
     }
 
     private Vrchol<T> najdiNajvacsiVrchol(Vrchol<T> vrchol, int poradieKluca) {
         Vrchol<T> najvacsi = vrchol;
-        while (vrchol.getPravySyn() != null) {
-            if (vrchol.getPravySyn().getData().porovnaj(najvacsi.getData(), poradieKluca) >= 0) {
-                najvacsi = vrchol.getPravySyn();
+        Stack<Vrchol<T>> zasobnik = new Stack<>();
+        zasobnik.push(vrchol);
+        while (!zasobnik.isEmpty()) {
+            Vrchol<T> aktualny = zasobnik.pop();
+            int aktualnePoradieKluca = getHlbkaVrchola(aktualny) % this.pocetKlucov;
+            if (aktualny.getData().porovnaj(najvacsi.getData(), poradieKluca) >= 0) {
+                najvacsi = aktualny;
             }
-            vrchol = vrchol.getPravySyn();
+            if (aktualnePoradieKluca == poradieKluca) {
+                if (aktualny.getPravySyn() != null) {
+                    zasobnik.push(aktualny.getPravySyn());
+                }
+            } else {
+                if (aktualny.getLavySyn() != null) {
+                    zasobnik.push(aktualny.getLavySyn());
+                }
+                if (aktualny.getPravySyn() != null) {
+                    zasobnik.push(aktualny.getPravySyn());
+                }
+            }
         }
         return najvacsi;
     }
@@ -282,6 +316,7 @@ public class KdStrom<T extends IKluc<T>> {
                 }
             }
             duplicity.remove(mazanyVrchol);
+            return;
         }
         if (!duplicity.isEmpty() && !znovuVkladanieVrchola) {
             if (rodic == null) {
@@ -304,9 +339,7 @@ public class KdStrom<T extends IKluc<T>> {
                 nahrada.setLavySyn(vrchol.getLavySyn());
                 nahrada.setJeDuplicita(false);
             }
-            if (mazanyVrchol != null) {
-                mazanyVrchol.setRodic(null);
-            }
+            mazanyVrchol.setRodic(null);
         } else {
             if (jeList) {
                 if (rodic == null) {
