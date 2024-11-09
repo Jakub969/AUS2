@@ -329,8 +329,19 @@ public class KdStrom<T extends IKluc<T>> {
         }
         if (!duplicity.isEmpty() && !znovuVkladanieVrchola) {
             if (rodic == null) {
+                System.out.println("Mazaný vrchol je koreň, ktorý ma duplicity");
                 this.koren = duplicity.removeFirst();
                 this.koren.setDuplicity(duplicity);
+                this.koren.setRodic(null);
+                this.koren.setJeDuplicita(false);
+                this.koren.setLavySyn(vrchol.getLavySyn());
+                this.koren.setPravySyn(vrchol.getPravySyn());
+                if (this.koren.getLavySyn() != null) {
+                    this.koren.getLavySyn().setRodic(this.koren);
+                }
+                if (this.koren.getPravySyn() != null) {
+                    this.koren.getPravySyn().setRodic(this.koren);
+                }
             } else if (rodic.getLavySyn() == vrchol) {
                 Vrchol<T> nahrada = duplicity.removeFirst();
                 rodic.setLavySyn(nahrada);
@@ -338,6 +349,12 @@ public class KdStrom<T extends IKluc<T>> {
                 nahrada.setDuplicity(duplicity);
                 nahrada.setPravySyn(vrchol.getPravySyn());
                 nahrada.setLavySyn(vrchol.getLavySyn());
+                if (nahrada.getLavySyn() != null) {
+                    nahrada.getLavySyn().setRodic(nahrada);
+                }
+                if (nahrada.getPravySyn() != null) {
+                    nahrada.getPravySyn().setRodic(nahrada);
+                }
                 nahrada.setJeDuplicita(false);
             } else {
                 Vrchol<T> nahrada = duplicity.removeFirst();
@@ -346,6 +363,12 @@ public class KdStrom<T extends IKluc<T>> {
                 nahrada.setDuplicity(duplicity);
                 nahrada.setPravySyn(vrchol.getPravySyn());
                 nahrada.setLavySyn(vrchol.getLavySyn());
+                if (nahrada.getLavySyn() != null) {
+                    nahrada.getLavySyn().setRodic(nahrada);
+                }
+                if (nahrada.getPravySyn() != null) {
+                    nahrada.getPravySyn().setRodic(nahrada);
+                }
                 nahrada.setJeDuplicita(false);
             }
             mazanyVrchol.setRodic(null);

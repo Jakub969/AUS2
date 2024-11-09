@@ -31,7 +31,11 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         for (int i = 0; i < pocetOperacii; i++) {
             double rand = random.nextDouble();
             if (rand < 0.85) {
-                metodaMazania();
+                boolean spravne = metodaMazania();
+                if (!spravne) {
+                    System.out.println("Chyba pri mazani");
+                    return;
+                }
             } else {
                 metodaVyhladavania();
             }
@@ -55,16 +59,16 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         }*/
     }
 
-    public void metodaMazania() {
+    public boolean metodaMazania() {
         if (this.zoznamVlozenychVrcholov.isEmpty()) {
-            return;
+            return false;
         }
         int index = (random.nextInt(this.zoznamVlozenychVrcholov.size()));
         Vrchol<T> vrchol = this.zoznamVlozenychVrcholov.get(index);
-        System.out.println("Vymazavam vrchol: " + vrchol.getData().toString());
         this.strom.vyrad(vrchol);
         this.zoznamVlozenychVrcholov.remove(index);
-        skontrolujPocetVrcholov();
+        int pocetVrcholovPreOrder = skontrolujPocetVrcholov();
+        return pocetVrcholovPreOrder == this.zoznamVlozenychVrcholov.size();
     }
 
     public void metodaVyhladavania() {
@@ -86,7 +90,7 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         }
     }
 
-    private void skontrolujPocetVrcholov() {
+    private int skontrolujPocetVrcholov() {
         ArrayList<Vrchol<T>> vsetkyVrcholy = this.strom.inOrderPrehliadka();
         ArrayList<Vrchol<T>> duplikaty = new ArrayList<>();
         for (Vrchol<T> vrchol : vsetkyVrcholy) {
@@ -95,6 +99,7 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         vsetkyVrcholy.addAll(duplikaty);
         System.out.println("Pocet vrcholov inOrder: " + vsetkyVrcholy.size());
         System.out.println("Pocet vrcholov v pomocnej strukture: " + this.zoznamVlozenychVrcholov.size());
+        return vsetkyVrcholy.size();
     }
 
     public class RandomStringGenerator {
