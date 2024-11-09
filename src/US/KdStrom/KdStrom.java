@@ -181,7 +181,7 @@ public class KdStrom<T extends IKluc<T>> {
         if (nahrada.getRodic() != null) {
             if (nahrada.getRodic().getLavySyn() == nahrada) {
                 nahrada.getRodic().setLavySyn(null);
-            } else {
+            } else if (nahrada.getRodic().getPravySyn() == nahrada) {
                 nahrada.getRodic().setPravySyn(null);
             }
         }
@@ -190,7 +190,7 @@ public class KdStrom<T extends IKluc<T>> {
         if (rodicVrchola != null) {
             if (rodicVrchola.getLavySyn() == vrchol) {
                 rodicVrchola.setLavySyn(nahrada);
-            } else {
+            } else if (rodicVrchola.getPravySyn() == vrchol) {
                 rodicVrchola.setPravySyn(nahrada);
             }
             nahrada.setRodic(rodicVrchola);

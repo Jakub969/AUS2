@@ -21,7 +21,7 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         this.maxRozsah = parMaxRozsah;
         this.zoznamVlozenychVrcholov = new ArrayList<>();
         for (int j = 0; j < 1000000; j++) {
-            this.seed = 233866529706100L;
+            this.seed = System.nanoTime();
             this.random = new Random(seed);
             for (int i = 0; i < 10; i++) {
                 metodaVkladania();
