@@ -119,10 +119,6 @@ public class KdStrom<T extends IKluc<T>> {
     public void vyrad(Vrchol<T> vrchol) {
         Vrchol<T> vyhladanyVrchol = this.vyhladaj(vrchol);
         if (vyhladanyVrchol != null) {
-            System.out.println("Vymazavam vrchol: " + vyhladanyVrchol.getData().toString() + (vyhladanyVrchol.isJeDuplicita() ? " (, ktorý je duplicitou)" : "") + (vyhladanyVrchol.getDuplicity().isEmpty() ? "" : " (, ktorý ma duplicity)"));
-            System.out.println("Jeho pravy syn: " + (vyhladanyVrchol.getPravySyn() != null ? vyhladanyVrchol.getPravySyn().getData().toString() : "null"));
-            System.out.println("Jeho lavy syn: " + (vyhladanyVrchol.getLavySyn() != null ? vyhladanyVrchol.getLavySyn().getData().toString() : "null"));
-            System.out.println("Jeho rodic: " + (vyhladanyVrchol.getRodic() != null ? vyhladanyVrchol.getRodic().getData().toString() : "null"));
             if (vyhladanyVrchol.getLavySyn() == null && vyhladanyVrchol.getPravySyn() == null) {
                 odstranVrchol(vyhladanyVrchol, vrchol, true, false);
             } else {
@@ -133,8 +129,6 @@ public class KdStrom<T extends IKluc<T>> {
                     odstranVrchol(vyhladanyVrchol, vrchol, false, false);
                 }
             }
-        } else {
-            System.out.println("Vrchol nebol najdeny");
         }
     }
 
@@ -228,24 +222,7 @@ public class KdStrom<T extends IKluc<T>> {
             if (vrchol.getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
                 vrcholyNaZnovuVlozenie.add(vrchol);
             }
-            if (aktualnePoradieKluca == poradieKluca) {
-                if (vrchol.getLavySyn() != null) {
-                    zasobnik.push(vrchol.getLavySyn());
-                }
-            } else {
-                if (vrchol.getLavySyn() != null) {
-                    zasobnik.push(vrchol.getLavySyn());
-                }
-                if (vrchol.getPravySyn() != null) {
-                    zasobnik.push(vrchol.getPravySyn());
-                }
-            }/*
-            if (vrchol.getLavySyn() != null && vrchol.getLavySyn().getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
-                zasobnik.push(vrchol.getLavySyn());
-            }
-            if (vrchol.getPravySyn() != null && vrchol.getPravySyn().getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
-                zasobnik.push(vrchol.getPravySyn());
-            }*/
+            prehladajPodstrom(poradieKluca, zasobnik, vrchol, aktualnePoradieKluca);
         }
 
         for (Vrchol<T> vrchol : vrcholyNaZnovuVlozenie) {
@@ -253,6 +230,27 @@ public class KdStrom<T extends IKluc<T>> {
             odstranVrchol(vrchol, vrchol, vrchol.getLavySyn() == null && vrchol.getPravySyn() == null, true);
             vloz(vrchol);
         }
+    }
+
+    private void prehladajPodstrom(int poradieKluca, Stack<Vrchol<T>> zasobnik, Vrchol<T> vrchol, int aktualnePoradieKluca) {
+        if (aktualnePoradieKluca == poradieKluca) {
+            if (vrchol.getLavySyn() != null) {
+                zasobnik.push(vrchol.getLavySyn());
+            }
+        } else {
+            if (vrchol.getLavySyn() != null) {
+                zasobnik.push(vrchol.getLavySyn());
+            }
+            if (vrchol.getPravySyn() != null) {
+                zasobnik.push(vrchol.getPravySyn());
+            }
+        }/*
+        if (vrchol.getLavySyn() != null && vrchol.getLavySyn().getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
+            zasobnik.push(vrchol.getLavySyn());
+        }
+        if (vrchol.getPravySyn() != null && vrchol.getPravySyn().getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
+            zasobnik.push(vrchol.getPravySyn());
+        }*/
     }
 
     private Vrchol<T> vyhladajNahradu(Vrchol<T> vrchol, int poradieKluca) {
@@ -279,18 +277,7 @@ public class KdStrom<T extends IKluc<T>> {
             if (aktualny.getData().porovnaj(najmensi.getData(), poradieKluca) <= 0) {
                 najmensi = aktualny;
             }
-            if (aktualnePoradieKluca == poradieKluca) {
-                if (aktualny.getLavySyn() != null) {
-                    zasobnik.push(aktualny.getLavySyn());
-                }
-            } else {
-                if (aktualny.getLavySyn() != null) {
-                    zasobnik.push(aktualny.getLavySyn());
-                }
-                if (aktualny.getPravySyn() != null) {
-                    zasobnik.push(aktualny.getPravySyn());
-                }
-            }
+            prehladajPodstrom(poradieKluca, zasobnik, aktualny, aktualnePoradieKluca);
         }
         return najmensi;
     }

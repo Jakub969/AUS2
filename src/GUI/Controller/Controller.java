@@ -15,8 +15,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class Controller {
-    private Model model;
-    private View view;
+    private final Model model;
+    private final View view;
 
     public Controller(Model model, View view) {
         this.model = model;
@@ -40,24 +40,7 @@ public class Controller {
             try {
                 view.clearResults();
 
-                double poziciaDlzky1 = Double.parseDouble(view.getDlzka1());
-                double poziciaSirky1 = Double.parseDouble(view.getSirka1());
-
-                char sirka1 = view.getSirkaOrientation1();
-                char dlzka1 = view.getDlzkaOrientation1();
-
-                double poziciaDlzky2 = Double.parseDouble(view.getDlzka2());
-                double poziciaSirky2 = Double.parseDouble(view.getSirka2());
-
-                char sirka2 = view.getSirkaOrientation2();
-                char dlzka2 = view.getDlzkaOrientation2();
-
-                GPS pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
-                GPS pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
-
-                ArrayList<GPS> gpsPositions = new ArrayList<>();
-                gpsPositions.add(pozicia1);
-                gpsPositions.add(pozicia2);
+                ArrayList<GPS> gpsPositions = getGps();
 
                 ArrayList<Vrchol<Nehnutelnost>> results = model.vyhladajNehnutelnost(gpsPositions);
 
@@ -85,6 +68,28 @@ public class Controller {
         }
     }
 
+    private ArrayList<GPS> getGps() {
+        double poziciaDlzky1 = Double.parseDouble(view.getDlzka1());
+        double poziciaSirky1 = Double.parseDouble(view.getSirka1());
+
+        char sirka1 = view.getSirkaOrientation1();
+        char dlzka1 = view.getDlzkaOrientation1();
+
+        double poziciaDlzky2 = Double.parseDouble(view.getDlzka2());
+        double poziciaSirky2 = Double.parseDouble(view.getSirka2());
+
+        char sirka2 = view.getSirkaOrientation2();
+        char dlzka2 = view.getDlzkaOrientation2();
+
+        GPS pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
+        GPS pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
+
+        ArrayList<GPS> gpsPositions = new ArrayList<>();
+        gpsPositions.add(pozicia1);
+        gpsPositions.add(pozicia2);
+        return gpsPositions;
+    }
+
     class AddNehnutelnostButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             try {
@@ -106,24 +111,6 @@ public class Controller {
                 view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!");
             }
         }
-
-        private ArrayList<GPS> getGps() {
-            ArrayList<GPS> gpsPositions = new ArrayList<>();
-
-            char sirka1 = view.getSirkaNehnutelnostiComboBox1();
-            char dlzka1 = view.getDlzkaNehnutelnostiComboBox1();
-            double poziciaDlzky1 = Double.parseDouble(view.getDlzkaNehnutelnosti1());
-            double poziciaSirky1 = Double.parseDouble(view.getSirkaNehnutelnosti1());
-            GPS pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
-            gpsPositions.add(pozicia1);
-            char sirka2 = view.getSirkaNehnutelnostiComboBox2();
-            char dlzka2 = view.getDlzkaNehnutelnostiComboBox2();
-            double poziciaDlzky2 = Double.parseDouble(view.getDlzkaNehnutelnosti2());
-            double poziciaSirky2 = Double.parseDouble(view.getSirkaNehnutelnosti2());
-            GPS pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
-            gpsPositions.add(pozicia2);
-            return gpsPositions;
-        }
     }
 
     private class EditButtonListener implements ActionListener {
@@ -137,11 +124,11 @@ public class Controller {
                 String supisneCislo = view.getSupisneCislo(selectedRow);
                 String popis = view.getPopis(selectedRow);
 
-                String predEditaciouString = geografickyObjekt + "," + gps1 + "," + gps2 + "," + supisneCislo + "," + popis;
+                String objektPred = geografickyObjekt + "," + gps1 + "," + gps2 + "," + supisneCislo + "," + popis;
 
                 EditovacieOkno editovacieOkno = new EditovacieOkno(geografickyObjekt, gps1, gps2, supisneCislo, popis);
                 editovacieOkno.addConfirmButtonListener(confirmEvent -> {
-                    updateModel(predEditaciouString, selectedRow, editovacieOkno.getGps1(), editovacieOkno.getGps2(), editovacieOkno.getSupisneCislo(), editovacieOkno.getPopis());
+                    updateModel(objektPred, selectedRow, editovacieOkno.getGps1(), editovacieOkno.getGps2(), editovacieOkno.getSupisneCislo(), editovacieOkno.getPopis());
                     editovacieOkno.dispose();
                 });
                 editovacieOkno.addCancelButtonListener(cancelEvent -> editovacieOkno.dispose());
@@ -259,24 +246,6 @@ public class Controller {
                 view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!");
             }
         }
-
-        private ArrayList<GPS> getGps() {
-            ArrayList<GPS> gpsPositions = new ArrayList<>();
-
-            char sirka1 = view.getSirkaParcelyComboBox1();
-            char dlzka1 = view.getDlzkaParcelyComboBox1();
-            double poziciaDlzky1 = Double.parseDouble(view.getDlzkaParcely1());
-            double poziciaSirky1 = Double.parseDouble(view.getSirkaParcely1());
-            GPS pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
-            gpsPositions.add(pozicia1);
-            char sirka2 = view.getSirkaParcelyComboBox2();
-            char dlzka2 = view.getDlzkaParcelyComboBox2();
-            double poziciaDlzky2 = Double.parseDouble(view.getDlzkaParcely2());
-            double poziciaSirky2 = Double.parseDouble(view.getSirkaParcely2());
-            GPS pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
-            gpsPositions.add(pozicia2);
-            return gpsPositions;
-        }
     }
 
     private class SearchParcelaButtonListener implements ActionListener {
@@ -285,24 +254,7 @@ public class Controller {
             try {
                 view.clearResults();
 
-                double poziciaDlzky1 = Double.parseDouble(view.getDlzka1());
-                double poziciaSirky1 = Double.parseDouble(view.getSirka1());
-
-                char sirka1 = view.getSirkaOrientation1();
-                char dlzka1 = view.getDlzkaOrientation1();
-
-                double poziciaDlzky2 = Double.parseDouble(view.getDlzka2());
-                double poziciaSirky2 = Double.parseDouble(view.getSirka2());
-
-                char sirka2 = view.getSirkaOrientation2();
-                char dlzka2 = view.getDlzkaOrientation2();
-
-                GPS pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
-                GPS pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
-
-                ArrayList<GPS> gpsPositions = new ArrayList<>();
-                gpsPositions.add(pozicia1);
-                gpsPositions.add(pozicia2);
+                ArrayList<GPS> gpsPositions = getGps();
 
                 ArrayList<Vrchol<Parcela>> results = model.vyhladajParcelu(gpsPositions);
 
@@ -372,24 +324,7 @@ public class Controller {
             try {
                 view.clearResults();
 
-                double poziciaDlzky1 = Double.parseDouble(view.getDlzka1());
-                double poziciaSirky1 = Double.parseDouble(view.getSirka1());
-
-                char sirka1 = view.getSirkaOrientation1();
-                char dlzka1 = view.getDlzkaOrientation1();
-
-                double poziciaDlzky2 = Double.parseDouble(view.getDlzka2());
-                double poziciaSirky2 = Double.parseDouble(view.getSirka2());
-
-                char sirka2 = view.getSirkaOrientation2();
-                char dlzka2 = view.getDlzkaOrientation2();
-
-                GPS pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
-                GPS pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
-
-                ArrayList<GPS> gpsPositions = new ArrayList<>();
-                gpsPositions.add(pozicia1);
-                gpsPositions.add(pozicia2);
+                ArrayList<GPS> gpsPositions = getGps();
 
                 ArrayList<Vrchol<GeografickyObjekt>> results = model.vyhladajVsetky(gpsPositions);
                 ArrayList<Nehnutelnost> nehnutelnosti = new ArrayList<>();
