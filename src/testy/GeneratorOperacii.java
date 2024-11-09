@@ -20,35 +20,24 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         this.pocetOperacii = parPocetOperacii;
         this.maxRozsah = parMaxRozsah;
         this.zoznamVlozenychVrcholov = new ArrayList<>();
-        for (int j = 0; j < 1000000; j++) {
-            this.seed = System.nanoTime();
-            this.random = new Random(seed);
-            for (int i = 0; i < 10; i++) {
-                metodaVkladania();
-            }
-            //skontrolujPocetVrcholov();
-            boolean uspech = generujOperacie();
-            if (!uspech) {
-                return;
-            }
+        this.seed = System.nanoTime();
+        this.random = new Random(seed);
+        for (int i = 0; i < 20000; i++) {
+            metodaVkladania();
         }
+        skontrolujPocetVrcholov();
+        generujOperacie();
     }
 
-    private boolean generujOperacie() {
+    private void generujOperacie() {
         for (int i = 0; i < pocetOperacii; i++) {
             double rand = random.nextDouble();
-            if (true) { //rand < 0.85
-                boolean spravne = metodaMazania();
-                if (!spravne) {
-                    System.out.println("Chyba pri mazani");
-                    System.out.println("Seed: " + this.seed);
-                    return false;
-                }
+            if (rand < 0.85) {
+                metodaMazania();
             } else {
                 metodaVyhladavania();
             }
         }
-        return true;
     }
 
     public void metodaVkladania() {
@@ -68,16 +57,15 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         }*/
     }
 
-    public boolean metodaMazania() {
+    public void metodaMazania() {
         if (this.zoznamVlozenychVrcholov.isEmpty()) {
-            return false;
+            return;
         }
         int index = (random.nextInt(this.zoznamVlozenychVrcholov.size()));
         Vrchol<T> vrchol = this.zoznamVlozenychVrcholov.get(index);
         this.strom.vyrad(vrchol);
         this.zoznamVlozenychVrcholov.remove(index);
-        int pocetVrcholovPreOrder = skontrolujPocetVrcholov();
-        return pocetVrcholovPreOrder == this.zoznamVlozenychVrcholov.size();
+        skontrolujPocetVrcholov();
     }
 
     public void metodaVyhladavania() {
@@ -99,7 +87,7 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         }
     }
 
-    private int skontrolujPocetVrcholov() {
+    private void skontrolujPocetVrcholov() {
         ArrayList<Vrchol<T>> vsetkyVrcholy = this.strom.inOrderPrehliadka();
         ArrayList<Vrchol<T>> duplikaty = new ArrayList<>();
         for (Vrchol<T> vrchol : vsetkyVrcholy) {
@@ -108,7 +96,6 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         vsetkyVrcholy.addAll(duplikaty);
         System.out.println("Pocet vrcholov inOrder: " + vsetkyVrcholy.size());
         System.out.println("Pocet vrcholov v pomocnej strukture: " + this.zoznamVlozenychVrcholov.size());
-        return vsetkyVrcholy.size();
     }
 
     public class RandomStringGenerator {
