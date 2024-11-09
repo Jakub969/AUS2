@@ -46,20 +46,25 @@ public class VkladanieGeografickychObjektov<T extends IKluc<T>> {
                 Parcela parcela = dataGeografickyObjekt1.getParcela();
                 Vrchol<T> duplicita = this.strom.vyhladaj(vrchol1);
                 GeografickyObjekt geografickyObjekt = (GeografickyObjekt) duplicita.getData();
-                if (geografickyObjekt.getNehnutelnost() instanceof Nehnutelnost nehnutelnostDuplicita && parcela != null) {
-                    parcela.addNehnutelnost(nehnutelnostDuplicita);
-                } else if (geografickyObjekt.getParcela() instanceof Parcela parcelaDuplicita && nehnutelnost != null) {
-                    nehnutelnost.addParcela(parcelaDuplicita);
+                if (parcela != null) {
+                    parcela.addNehnutelnost(geografickyObjekt.getNehnutelnost());
+                    geografickyObjekt.getNehnutelnost().addParcela(parcela);
+                } else if (nehnutelnost != null) {
+                    nehnutelnost.addParcela(geografickyObjekt.getParcela());
+                    geografickyObjekt.getParcela().addNehnutelnost(nehnutelnost);
                 }
             }
             if (vrchol2.isJeDuplicita()) {
                 Nehnutelnost nehnutelnost = dataGeografickyObjekt2.getNehnutelnost();
                 Parcela parcela = dataGeografickyObjekt2.getParcela();
                 Vrchol<T> duplicita = this.strom.vyhladaj(vrchol2);
-                if (duplicita.getData() instanceof Nehnutelnost nehnutelnostDuplicita && parcela != null) {
-                    parcela.addNehnutelnost(nehnutelnostDuplicita);
-                } else if (duplicita.getData() instanceof Parcela parcelaDuplicita && nehnutelnost != null) {
-                    nehnutelnost.addParcela(parcelaDuplicita);
+                GeografickyObjekt geografickyObjekt = (GeografickyObjekt) duplicita.getData();
+                if (parcela != null) {
+                    parcela.addNehnutelnost(geografickyObjekt.getNehnutelnost());
+                    geografickyObjekt.getNehnutelnost().addParcela(parcela);
+                } else if (nehnutelnost != null) {
+                    nehnutelnost.addParcela(geografickyObjekt.getParcela());
+                    geografickyObjekt.getParcela().addNehnutelnost(nehnutelnost);
                 }
             }
             return null;

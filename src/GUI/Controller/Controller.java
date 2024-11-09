@@ -40,7 +40,7 @@ public class Controller {
             try {
                 view.clearResults();
 
-                ArrayList<GPS> gpsPositions = getGps();
+                ArrayList<GPS> gpsPositions = getGpsSearch();
 
                 ArrayList<Vrchol<Nehnutelnost>> results = model.vyhladajNehnutelnost(gpsPositions);
 
@@ -55,20 +55,20 @@ public class Controller {
                 }
 
                 if (results.isEmpty()) {
-                    view.addResult("Chyba", "N/A", "N/A", "N/A", "Nehnutelnost nebola nájdená!");
+                    view.addResult("Chyba", "N/A", "N/A", "N/A", "Nehnutelnost nebola nájdená!", "N/A");
                 } else {
                     for (Vrchol<Nehnutelnost> nehnutelnostVrchol : results) {
                         Nehnutelnost nehnutelnost = nehnutelnostVrchol.getData();
-                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis());
+                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis(), nehnutelnost.getZoznamParciel().toString());
                     }
                 }
             } catch (NumberFormatException ex) {
-                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!");
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!", "N/A");
             }
         }
     }
 
-    private ArrayList<GPS> getGps() {
+    private ArrayList<GPS> getGpsSearch() {
         double poziciaDlzky1 = Double.parseDouble(view.getDlzka1());
         double poziciaSirky1 = Double.parseDouble(view.getSirka1());
 
@@ -106,10 +106,26 @@ public class Controller {
                 String gps1 = gpsPositions.getFirst().toString();
                 String gps2 = gpsPositions.getLast().toString();
 
-                view.addResult("Nehnuteľnosť", gps1, gps2, String.valueOf(supisneCislo), popis);
+                view.addResult("Nehnuteľnosť", gps1, gps2, String.valueOf(supisneCislo), popis, "");
             } catch (NumberFormatException ex) {
-                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!");
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!", "N/A");
             }
+        }
+        private ArrayList<GPS> getGps() {
+            ArrayList<GPS> gpsPositions = new ArrayList<>();
+            char sirka1 = view.getSirkaNehnutelnostiComboBox1();
+            char dlzka1 = view.getDlzkaNehnutelnostiComboBox1();
+            double poziciaDlzky1 = Double.parseDouble(view.getDlzkaNehnutelnosti1());
+            double poziciaSirky1 = Double.parseDouble(view.getSirkaNehnutelnosti1());
+            GPS pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
+            gpsPositions.add(pozicia1);
+            char sirka2 = view.getSirkaNehnutelnostiComboBox2();
+            char dlzka2 = view.getDlzkaNehnutelnostiComboBox2();
+            double poziciaDlzky2 = Double.parseDouble(view.getDlzkaNehnutelnosti2());
+            double poziciaSirky2 = Double.parseDouble(view.getSirkaNehnutelnosti2());
+            GPS pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
+            gpsPositions.add(pozicia2);
+            return gpsPositions;
         }
     }
 
@@ -169,9 +185,9 @@ public class Controller {
                 }
                 String geoObjekt = view.getGeografickyObjekt(selectedRow);
                 view.clearResults();
-                view.addResult(geoObjekt, gps1, gps2, supisneCislo, popis);
+                view.addResult(geoObjekt, gps1, gps2, supisneCislo, popis, "");
             } catch (NumberFormatException ex) {
-                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!");
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!", "N/A");
             }
         }
     }
@@ -219,9 +235,9 @@ public class Controller {
 
                 model.generujData(pocetNehnutelnosti, pocetParciel, pravdepodobnostPrekrytia);
 
-                view.addResult("Generovanie", "N/A", "N/A", "N/A", "Dáta boli vygenerované!");
+                view.addResult("Generovanie", "N/A", "N/A", "N/A", "Dáta boli vygenerované!", "N/A");
             } catch (NumberFormatException ex) {
-                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!");
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!", "N/A");
             }
         }
     }
@@ -241,10 +257,26 @@ public class Controller {
                 String gps1 = gpsPositions.getFirst().toString();
                 String gps2 = gpsPositions.getLast().toString();
 
-                view.addResult("Parcela", gps1, gps2, String.valueOf(supisneCislo), popis);
+                view.addResult("Parcela", gps1, gps2, String.valueOf(supisneCislo), popis, "");
             } catch (NumberFormatException ex) {
-                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!");
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!", "N/A");
             }
+        }
+        private ArrayList<GPS> getGps() {
+            ArrayList<GPS> gpsPositions = new ArrayList<>();
+            char sirka1 = view.getSirkaParcelyComboBox1();
+            char dlzka1 = view.getDlzkaParcelyComboBox1();
+            double poziciaDlzky1 = Double.parseDouble(view.getDlzkaParcely1());
+            double poziciaSirky1 = Double.parseDouble(view.getSirkaParcely1());
+            GPS pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
+            gpsPositions.add(pozicia1);
+            char sirka2 = view.getSirkaParcelyComboBox2();
+            char dlzka2 = view.getDlzkaParcelyComboBox2();
+            double poziciaDlzky2 = Double.parseDouble(view.getDlzkaParcely2());
+            double poziciaSirky2 = Double.parseDouble(view.getSirkaParcely2());
+            GPS pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
+            gpsPositions.add(pozicia2);
+            return gpsPositions;
         }
     }
 
@@ -254,7 +286,7 @@ public class Controller {
             try {
                 view.clearResults();
 
-                ArrayList<GPS> gpsPositions = getGps();
+                ArrayList<GPS> gpsPositions = getGpsSearch();
 
                 ArrayList<Vrchol<Parcela>> results = model.vyhladajParcelu(gpsPositions);
 
@@ -269,17 +301,18 @@ public class Controller {
                 }
 
                 if (results.isEmpty()) {
-                    view.addResult("Chyba", "N/A", "N/A", "N/A", "Parcela nebola nájdená!");
+                    view.addResult("Chyba", "N/A", "N/A", "N/A", "Parcela nebola nájdená!", "N/A");
                 } else {
                     for (Vrchol<Parcela> parcelaVrchol : results) {
                         Parcela parcela = parcelaVrchol.getData();
-                        view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis());
+                        view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis(), parcela.getZoznamNehnutelnosti().toString());
                     }
                 }
             } catch (NumberFormatException ex) {
-                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!");
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Nesprávny vstup!", "N/A");
             }
         }
+
     }
 
     private class SaveButtonListener implements ActionListener {
@@ -292,10 +325,10 @@ public class Controller {
                 if (userSelection == JFileChooser.APPROVE_OPTION) {
                     view.clearResults();
                     model.saveData(fileChooser.getSelectedFile().getAbsolutePath());
-                    view.addResult("Uloženie", "N/A", "N/A", "N/A", "Dáta boli uložené!");
+                    view.addResult("Uloženie", "N/A", "N/A", "N/A", "Dáta boli uložené!", "N/A");
                 }
             } catch (Exception ex) {
-                view.addResult("Chyba", "N/A", "N/A", "N/A", "Chyba pri ukladaní dát!");
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Chyba pri ukladaní dát!", "N/A");
             }
         }
     }
@@ -310,10 +343,10 @@ public class Controller {
                 if (userSelection == JFileChooser.APPROVE_OPTION) {
                     view.clearResults();
                     model.loadData(fileChooser.getSelectedFile().getAbsolutePath());
-                    view.addResult("Načítanie", "N/A", "N/A", "N/A", "Dáta boli načítané!");
+                    view.addResult("Načítanie", "N/A", "N/A", "N/A", "Dáta boli načítané!", "N/A");
                 }
             } catch (Exception ex) {
-                view.addResult("Chyba", "N/A", "N/A", "N/A", "Chyba pri načítaní dát!");
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Chyba pri načítaní dát!", "N/A");
             }
         }
     }
@@ -324,7 +357,7 @@ public class Controller {
             try {
                 view.clearResults();
 
-                ArrayList<GPS> gpsPositions = getGps();
+                ArrayList<GPS> gpsPositions = getGpsSearch();
 
                 ArrayList<Vrchol<GeografickyObjekt>> results = model.vyhladajVsetky(gpsPositions);
                 ArrayList<Nehnutelnost> nehnutelnosti = new ArrayList<>();
@@ -342,18 +375,18 @@ public class Controller {
                     }
                 }
                 if (nehnutelnosti.isEmpty() && parcely.isEmpty()) {
-                    view.addResult("Chyba", "N/A", "N/A", "N/A", "Žiadne dáta neboli nájdené!");
+                    view.addResult("Chyba", "N/A", "N/A", "N/A", "Žiadne dáta neboli nájdené!", "N/A");
                 } else {
                     for (Nehnutelnost nehnutelnost : nehnutelnosti) {
-                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis());
+                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis(), nehnutelnost.getZoznamParciel().toString());
                     }
                     for (Parcela parcela : parcely) {
-                        view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis());
+                        view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis(), parcela.getZoznamNehnutelnosti().toString());
                     }
                 }
 
             } catch (Exception ex) {
-                view.addResult("Chyba", "N/A", "N/A", "N/A", "Chyba pri vyhľadávaní dát!");
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Chyba pri vyhľadávaní dát!", "N/A");
             }
         }
     }
@@ -379,18 +412,18 @@ public class Controller {
                     }
                 }
                 if (nehnutelnosti.isEmpty() && parcely.isEmpty()) {
-                    view.addResult("Chyba", "N/A", "N/A", "N/A", "Žiadne dáta neboli nájdené!");
+                    view.addResult("Chyba", "N/A", "N/A", "N/A", "Žiadne dáta neboli nájdené!", "N/A");
                 } else {
                     for (Nehnutelnost nehnutelnost : nehnutelnosti) {
-                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis());
+                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis(), nehnutelnost.getZoznamParciel().toString());
                     }
                     for (Parcela parcela : parcely) {
-                        view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis());
+                        view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis(), parcela.getZoznamNehnutelnosti().toString());
                     }
                 }
 
             } catch (Exception ex) {
-                view.addResult("Chyba", "N/A", "N/A", "N/A", "Chyba pri vyhľadávaní dát!");
+                view.addResult("Chyba", "N/A", "N/A", "N/A", "Chyba pri vyhľadávaní dát!", "N/A");
             }
         }
     }

@@ -212,14 +212,10 @@ public class Model {
                     nehnutelnostReferencia = new Nehnutelnost(supisneCisloReferencie, popisReferencie, null, null, gpsReferencie);
                     Nehnutelnost nehnutelnost = new Nehnutelnost(supisneCislo, popis, null, nehnutelnostReferencia, gps);
                     nehnutelnostReferencia.setReferenciaNaRovnakuNehnutelnostSInymiGPS(nehnutelnost);
-                    Vrchol<Nehnutelnost> vrchol = new Vrchol<>(nehnutelnost);
-                    Vrchol<Nehnutelnost> vrchol1 = new Vrchol<>(nehnutelnostReferencia);
-                    kdStromNehnutelnosti.vloz(vrchol);
-                    kdStromNehnutelnosti.vloz(vrchol1);
-                    Vrchol<GeografickyObjekt> vrcholGeografickyObjekt = new Vrchol<>(new GeografickyObjekt(gps, nehnutelnost, null));
-                    Vrchol<GeografickyObjekt> vrcholGeografickyObjektReferencia = new Vrchol<>(new GeografickyObjekt(gpsReferencie, nehnutelnostReferencia, null));
-                    kdStromGeografickychObjektov.vloz(vrcholGeografickyObjekt);
-                    kdStromGeografickychObjektov.vloz(vrcholGeografickyObjektReferencia);
+                    vkladanieNehnutelnosti.metodaVkladania(nehnutelnost, nehnutelnostReferencia);
+                    GeografickyObjekt geografickyObjekt = new GeografickyObjekt(gps, nehnutelnost, null);
+                    GeografickyObjekt geografickyObjektReferencia = new GeografickyObjekt(gpsReferencie, nehnutelnostReferencia, null);
+                    vkladanieGeografickychObjektov.metodaVkladania(geografickyObjekt, geografickyObjektReferencia);
                 } else if (parts[0].equals("Parcela")) {
                     int cisloParcely = Integer.parseInt(parts[1]);
                     String popis = parts[2];
@@ -241,14 +237,10 @@ public class Model {
                     parcelaReferencia = new Parcela(cisloParcelyReferencie, popisReferencie, null, null, gpsReferencie);
                     Parcela parcela = new Parcela(cisloParcely, popis, null, parcelaReferencia, gps);
                     parcelaReferencia.setReferenciaNaRovnakuParceluSInymiGPS(parcela);
-                    Vrchol<Parcela> vrchol = new Vrchol<>(parcela);
-                    Vrchol<Parcela> vrchol1 = new Vrchol<>(parcelaReferencia);
-                    kdStromParciel.vloz(vrchol);
-                    kdStromParciel.vloz(vrchol1);
-                    Vrchol<GeografickyObjekt> vrcholGeografickyObjekt = new Vrchol<>(new GeografickyObjekt(gps, null, parcela));
-                    Vrchol<GeografickyObjekt> vrcholGeografickyObjektReferencia = new Vrchol<>(new GeografickyObjekt(gpsReferencie, null, parcelaReferencia));
-                    kdStromGeografickychObjektov.vloz(vrcholGeografickyObjekt);
-                    kdStromGeografickychObjektov.vloz(vrcholGeografickyObjektReferencia);
+                    vkladanieParciel.metodaVkladania(parcela, parcelaReferencia);
+                    GeografickyObjekt geografickyObjekt = new GeografickyObjekt(gps, null, parcela);
+                    GeografickyObjekt geografickyObjektReferencia = new GeografickyObjekt(gpsReferencie, null, parcelaReferencia);
+                    vkladanieGeografickychObjektov.metodaVkladania(geografickyObjekt, geografickyObjektReferencia);
                 }
             }
         } catch (IOException e) {
@@ -286,7 +278,7 @@ public class Model {
         } else {
             Nehnutelnost nehnutelnostNaVymazanie1 = new Nehnutelnost(supisneCislo, "", null, null, staraGPSsuradnice1);
             Nehnutelnost nehnutelnostNaVymazanie2 = new Nehnutelnost(supisneCislo, "", null, null, staraGPSsuradnice2);
-            odstranNehnutelnost(staraGPSsuradnice1, staraGPSsuradnice2, nehnutelnostNaVymazanie1, nehnutelnostNaVymazanie2);
+            vyradNehnutelnost(staraGPSsuradnice1, staraGPSsuradnice2, nehnutelnostNaVymazanie1, nehnutelnostNaVymazanie2);
             Nehnutelnost nehnutelnost = new Nehnutelnost(supisneCislo, popis, null, null, pozicia1);
             Nehnutelnost nehnutelnostReferencia = new Nehnutelnost(supisneCislo, popis, null, nehnutelnost, pozicia2);
             vkladanieNehnutelnosti.metodaVkladania(nehnutelnost, nehnutelnostReferencia);
@@ -335,7 +327,7 @@ public class Model {
         } else {
             Parcela parcelaNaVymazanie1 = new Parcela(supisneCislo, "", null, null, staraGPSsuradnice1);
             Parcela parcelaNaVymazanie2 = new Parcela(supisneCislo, "", null, null, staraGPSsuradnice2);
-            odstranParcelu(staraGPSsuradnice1, staraGPSsuradnice2, parcelaNaVymazanie1, parcelaNaVymazanie2);
+            vyradParcelu(staraGPSsuradnice1, staraGPSsuradnice2, parcelaNaVymazanie1, parcelaNaVymazanie2);
             Parcela parcela = new Parcela(supisneCislo, popis, null, null, pozicia1);
             Parcela parcelaReferencia = new Parcela(supisneCislo, popis, null, parcela, pozicia2);
             vkladanieParciel.metodaVkladania(parcela, parcelaReferencia);
@@ -349,14 +341,31 @@ public class Model {
         GPS GPSsuradnice2 = suradnice[1];
         Nehnutelnost nehnutelnostNaVymazanie1 = new Nehnutelnost(0, "", null, null, GPSsuradnice1);
         Nehnutelnost nehnutelnostNaVymazanie2 = new Nehnutelnost(0, "", null, null, GPSsuradnice2);
-        odstranNehnutelnost(GPSsuradnice1, GPSsuradnice2, nehnutelnostNaVymazanie1, nehnutelnostNaVymazanie2);
+        vyradNehnutelnost(GPSsuradnice1, GPSsuradnice2, nehnutelnostNaVymazanie1, nehnutelnostNaVymazanie2);
     }
 
-    private void odstranNehnutelnost(GPS GPSsuradnice1, GPS GPSsuradnice2, Nehnutelnost nehnutelnostNaVymazanie1, Nehnutelnost nehnutelnostNaVymazanie2) {
-        kdStromNehnutelnosti.vyrad(new Vrchol<>(nehnutelnostNaVymazanie1));
-        kdStromNehnutelnosti.vyrad(new Vrchol<>(nehnutelnostNaVymazanie2));
+    private void vyradNehnutelnost(GPS GPSsuradnice1, GPS GPSsuradnice2, Nehnutelnost nehnutelnostNaVymazanie1, Nehnutelnost nehnutelnostNaVymazanie2) {
+        ArrayList<Vrchol<GeografickyObjekt>> geografickeObjekty = kdStromGeografickychObjektov.preOrderPrehliadka();
+        ArrayList<Vrchol<GeografickyObjekt>> duplicity = new ArrayList<>();
+        for (Vrchol<GeografickyObjekt> geografickyObjektVrchol : geografickeObjekty) {
+            duplicity.addAll(geografickyObjektVrchol.getDuplicity());
+        }
+        geografickeObjekty.addAll(duplicity);
+        System.out.println("Počet geografických objektov pred vymazaním: " + geografickeObjekty.size());
         kdStromGeografickychObjektov.vyrad(new Vrchol<>(new GeografickyObjekt(GPSsuradnice1, nehnutelnostNaVymazanie1, null)));
         kdStromGeografickychObjektov.vyrad(new Vrchol<>(new GeografickyObjekt(GPSsuradnice2, nehnutelnostNaVymazanie2, null)));
+        geografickeObjekty = kdStromGeografickychObjektov.preOrderPrehliadka();
+        duplicity.clear();
+        for (Vrchol<GeografickyObjekt> geografickyObjektVrchol : geografickeObjekty) {
+            duplicity.addAll(geografickyObjektVrchol.getDuplicity());
+        }
+        geografickeObjekty.addAll(duplicity);
+        System.out.println("Počet geografických objektov po vymazaní: " + geografickeObjekty.size());
+        System.out.println("Počet nehnuteľností pred vymazaním: " + kdStromNehnutelnosti.preOrderPrehliadka().size());
+        kdStromNehnutelnosti.vyrad(new Vrchol<>(nehnutelnostNaVymazanie1));
+        kdStromNehnutelnosti.vyrad(new Vrchol<>(nehnutelnostNaVymazanie2));
+        System.out.println("Počet nehnuteľností po vymazaní: " + kdStromNehnutelnosti.preOrderPrehliadka().size());
+
     }
 
     public void odstranParcelu(String objektMazania) {
@@ -365,10 +374,10 @@ public class Model {
         GPS GPSsuradnice2 = suradnice[1];
         Parcela parcelaNaVymazanie1 = new Parcela(0, "", null, null, GPSsuradnice1);
         Parcela parcelaNaVymazanie2 = new Parcela(0, "", null, null, GPSsuradnice2);
-        odstranParcelu(GPSsuradnice1, GPSsuradnice2, parcelaNaVymazanie1, parcelaNaVymazanie2);
+        vyradParcelu(GPSsuradnice1, GPSsuradnice2, parcelaNaVymazanie1, parcelaNaVymazanie2);
     }
 
-    private void odstranParcelu(GPS GPSsuradnice1, GPS GPSsuradnice2, Parcela parcelaNaVymazanie1, Parcela parcelaNaVymazanie2) {
+    private void vyradParcelu(GPS GPSsuradnice1, GPS GPSsuradnice2, Parcela parcelaNaVymazanie1, Parcela parcelaNaVymazanie2) {
         kdStromParciel.vyrad(new Vrchol<>(parcelaNaVymazanie1));
         kdStromParciel.vyrad(new Vrchol<>(parcelaNaVymazanie2));
         kdStromGeografickychObjektov.vyrad(new Vrchol<>(new GeografickyObjekt(GPSsuradnice1, null, parcelaNaVymazanie1)));

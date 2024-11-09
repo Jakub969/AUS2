@@ -212,8 +212,8 @@ public class View extends JFrame {
         this.add(resultPanel, BorderLayout.SOUTH);
     }
 
-    public void addResult(String geoObjekt, String gps1, String gps2, String supisneCislo, String popis) {
-        tableModel.addRow(geoObjekt, gps1, gps2, supisneCislo, popis);
+    public void addResult(String geoObjekt, String gps1, String gps2, String supisneCislo, String popis, String zoznam) {
+        tableModel.addRow(geoObjekt, gps1, gps2, supisneCislo, popis, zoznam);
     }
 
     public String getDlzka1() {
