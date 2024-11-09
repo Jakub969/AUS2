@@ -12,34 +12,43 @@ public class GeneratorOperacii<T extends IKluc<T>> {
     private final int pocetOperacii;
     private final int maxRozsah;
     private ArrayList<Vrchol<T>> zoznamVlozenychVrcholov;
-    private final Random random;
+    private Random random;
+    private long seed;
 
     public GeneratorOperacii(KdStrom<T> kdStrom, int parPocetOperacii, int parMaxRozsah) {
         this.strom = kdStrom;
         this.pocetOperacii = parPocetOperacii;
         this.maxRozsah = parMaxRozsah;
         this.zoznamVlozenychVrcholov = new ArrayList<>();
-        this.random = new Random(System.nanoTime());
-        for (int i = 0; i < 20000; i++) {
-            metodaVkladania();
+        for (int j = 0; j < 1000000; j++) {
+            this.seed = 233866529706100L;
+            this.random = new Random(seed);
+            for (int i = 0; i < 10; i++) {
+                metodaVkladania();
+            }
+            //skontrolujPocetVrcholov();
+            boolean uspech = generujOperacie();
+            if (!uspech) {
+                return;
+            }
         }
-        skontrolujPocetVrcholov();
-        generujOperacie();
     }
 
-    private void generujOperacie() {
+    private boolean generujOperacie() {
         for (int i = 0; i < pocetOperacii; i++) {
             double rand = random.nextDouble();
-            if (rand < 0.85) {
+            if (true) { //rand < 0.85
                 boolean spravne = metodaMazania();
                 if (!spravne) {
                     System.out.println("Chyba pri mazani");
-                    return;
+                    System.out.println("Seed: " + this.seed);
+                    return false;
                 }
             } else {
                 metodaVyhladavania();
             }
         }
+        return true;
     }
 
     public void metodaVkladania() {

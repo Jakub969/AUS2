@@ -119,16 +119,22 @@ public class KdStrom<T extends IKluc<T>> {
     public void vyrad(Vrchol<T> vrchol) {
         Vrchol<T> vyhladanyVrchol = this.vyhladaj(vrchol);
         if (vyhladanyVrchol != null) {
+            System.out.println("Vymazavam vrchol: " + vyhladanyVrchol.getData().toString() + (vyhladanyVrchol.isJeDuplicita() ? " (, ktorý je duplicitou)" : "") + (vyhladanyVrchol.getDuplicity().isEmpty() ? "" : " (, ktorý ma duplicity)"));
+            System.out.println("Jeho pravy syn: " + (vyhladanyVrchol.getPravySyn() != null ? vyhladanyVrchol.getPravySyn().getData().toString() : "null"));
+            System.out.println("Jeho lavy syn: " + (vyhladanyVrchol.getLavySyn() != null ? vyhladanyVrchol.getLavySyn().getData().toString() : "null"));
+            System.out.println("Jeho rodic: " + (vyhladanyVrchol.getRodic() != null ? vyhladanyVrchol.getRodic().getData().toString() : "null"));
             if (vyhladanyVrchol.getLavySyn() == null && vyhladanyVrchol.getPravySyn() == null) {
                 odstranVrchol(vyhladanyVrchol, vrchol, true, false);
             } else {
-                if (!vyhladanyVrchol.getDuplicity().isEmpty() || vyhladanyVrchol.getDuplicity() == null) {
+                if (!vyhladanyVrchol.getDuplicity().isEmpty()) {
                     odstranVrchol(vyhladanyVrchol, vrchol, false, false);
                 } else {
                     nahradVrchol(vyhladanyVrchol);
                     odstranVrchol(vyhladanyVrchol, vrchol, false, false);
                 }
             }
+        } else {
+            System.out.println("Vrchol nebol najdeny");
         }
     }
 
@@ -203,9 +209,9 @@ public class KdStrom<T extends IKluc<T>> {
             nahrada.setPravySyn(pravySyn);
             if (pravySyn != null) {
                 pravySyn.setRodic(nahrada);
-                if (nahrada.getData().porovnaj(pravySyn.getData(), getHlbkaVrchola(nahrada) % this.pocetKlucov) == 0) {
+                //if (nahrada.getData().porovnaj(pravySyn.getData(), getHlbkaVrchola(nahrada) % this.pocetKlucov) == 0) {
                     znovuVlozVrcholy(pravySyn, nahrada);
-                }
+                //}
             }
         }
     }
@@ -218,15 +224,28 @@ public class KdStrom<T extends IKluc<T>> {
 
         while (!zasobnik.isEmpty()) {
             Vrchol<T> vrchol = zasobnik.pop();
+            int aktualnePoradieKluca = getHlbkaVrchola(vrchol) % this.pocetKlucov;
             if (vrchol.getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
                 vrcholyNaZnovuVlozenie.add(vrchol);
             }
+            if (aktualnePoradieKluca == poradieKluca) {
+                if (vrchol.getLavySyn() != null) {
+                    zasobnik.push(vrchol.getLavySyn());
+                }
+            } else {
+                if (vrchol.getLavySyn() != null) {
+                    zasobnik.push(vrchol.getLavySyn());
+                }
+                if (vrchol.getPravySyn() != null) {
+                    zasobnik.push(vrchol.getPravySyn());
+                }
+            }/*
             if (vrchol.getLavySyn() != null && vrchol.getLavySyn().getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
                 zasobnik.push(vrchol.getLavySyn());
             }
             if (vrchol.getPravySyn() != null && vrchol.getPravySyn().getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
                 zasobnik.push(vrchol.getPravySyn());
-            }
+            }*/
         }
 
         for (Vrchol<T> vrchol : vrcholyNaZnovuVlozenie) {
@@ -329,7 +348,6 @@ public class KdStrom<T extends IKluc<T>> {
         }
         if (!duplicity.isEmpty() && !znovuVkladanieVrchola) {
             if (rodic == null) {
-                System.out.println("Mazaný vrchol je koreň, ktorý ma duplicity");
                 this.koren = duplicity.removeFirst();
                 this.koren.setDuplicity(duplicity);
                 this.koren.setRodic(null);
@@ -345,31 +363,11 @@ public class KdStrom<T extends IKluc<T>> {
             } else if (rodic.getLavySyn() == vrchol) {
                 Vrchol<T> nahrada = duplicity.removeFirst();
                 rodic.setLavySyn(nahrada);
-                nahrada.setRodic(rodic);
-                nahrada.setDuplicity(duplicity);
-                nahrada.setPravySyn(vrchol.getPravySyn());
-                nahrada.setLavySyn(vrchol.getLavySyn());
-                if (nahrada.getLavySyn() != null) {
-                    nahrada.getLavySyn().setRodic(nahrada);
-                }
-                if (nahrada.getPravySyn() != null) {
-                    nahrada.getPravySyn().setRodic(nahrada);
-                }
-                nahrada.setJeDuplicita(false);
-            } else {
+                opravDuplicity(vrchol, rodic, duplicity, nahrada);
+            } else if (rodic.getPravySyn() == vrchol) {
                 Vrchol<T> nahrada = duplicity.removeFirst();
                 rodic.setPravySyn(nahrada);
-                nahrada.setRodic(rodic);
-                nahrada.setDuplicity(duplicity);
-                nahrada.setPravySyn(vrchol.getPravySyn());
-                nahrada.setLavySyn(vrchol.getLavySyn());
-                if (nahrada.getLavySyn() != null) {
-                    nahrada.getLavySyn().setRodic(nahrada);
-                }
-                if (nahrada.getPravySyn() != null) {
-                    nahrada.getPravySyn().setRodic(nahrada);
-                }
-                nahrada.setJeDuplicita(false);
+                opravDuplicity(vrchol, rodic, duplicity, nahrada);
             }
             mazanyVrchol.setRodic(null);
         } else {
@@ -378,7 +376,7 @@ public class KdStrom<T extends IKluc<T>> {
                     this.koren = null;
                 } else if (rodic.getLavySyn() == vrchol) {
                     rodic.setLavySyn(null);
-                } else {
+                } else if (rodic.getPravySyn() == vrchol) {
                     rodic.setPravySyn(null);
                 }
             } else {
@@ -388,6 +386,20 @@ public class KdStrom<T extends IKluc<T>> {
             }
             pocetVrcholov--;
         }
+    }
+
+    private void opravDuplicity(Vrchol<T> vrchol, Vrchol<T> rodic, ArrayList<Vrchol<T>> duplicity, Vrchol<T> nahrada) {
+        nahrada.setRodic(rodic);
+        nahrada.setDuplicity(duplicity);
+        nahrada.setPravySyn(vrchol.getPravySyn());
+        nahrada.setLavySyn(vrchol.getLavySyn());
+        if (nahrada.getLavySyn() != null) {
+            nahrada.getLavySyn().setRodic(nahrada);
+        }
+        if (nahrada.getPravySyn() != null) {
+            nahrada.getPravySyn().setRodic(nahrada);
+        }
+        nahrada.setJeDuplicita(false);
     }
 
     public ArrayList<Vrchol<T>> inOrderPrehliadka() {
