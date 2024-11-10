@@ -12,6 +12,14 @@ public class Parcela implements IKluc<Parcela> {
     private GPS GPSsuradnice;
     private final String uuid;
 
+    /**
+     * Konstruktor triedy Parcela
+     * @param cisloParcely cislo parcely
+     * @param popis popis parcely
+     * @param zoznamNehnutelnosti zoznam nehnutelnosti na parcele
+     * @param referenciaNaRovnakuParceluSInymiGPS referencia na rovnaku parcelu s inymi GPS
+     * @param GPSsuradnice GPS suradnice parcely
+     */
     public Parcela(int cisloParcely, String popis, ArrayList<Nehnutelnost> zoznamNehnutelnosti, Parcela referenciaNaRovnakuParceluSInymiGPS, GPS GPSsuradnice) {
         this.cisloParcely = cisloParcely;
         this.popis = popis;
@@ -64,11 +72,22 @@ public class Parcela implements IKluc<Parcela> {
         this.zoznamNehnutelnosti.add(nehnutelnost);
     }
 
+    /**
+     * Metoda na zistenie, ci sa dve parcely zhoduju podla UUID
+     * @param objekt parcela, s ktorou sa ma porovnat
+     * @return boolean - true, ak sa zhoduju, inak false
+     * */
     @Override
     public boolean zhodneUuid(Parcela objekt) {
         return this.uuid.equals(objekt.getUuid());
     }
 
+    /**
+     * Metoda na porovnanie dvoch parcel podla GPS suradnic
+     * @param objekt parcela, s ktorou sa ma porovnat
+     * @param poradieKluca poradie kluca, podla ktoreho sa ma porovnat
+     * @return int - 0, ak sa zhoduju, inak -1 alebo 1
+     * */
     @Override
     public int porovnaj(Parcela objekt, int poradieKluca) {
         double tolerancia = 0.000001;

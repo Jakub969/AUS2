@@ -7,6 +7,13 @@ public class GPS {
     private char sirka;
     private double poziciaSirky;
 
+    /**
+     * Konstruktor triedy GPS
+     * @param sirka - smer zemepisnej sirky
+     * @param poziciaSirky - pozicia zemepisnej sirky
+     * @param dlzka - smer zemepisnej dlzky
+     * @param poziciaDlzky - pozicia zemepisnej dlzky
+     * */
     public GPS(char sirka, double poziciaSirky, char dlzka, double poziciaDlzky) {
         if (sirka != 'N' && sirka != 'S') {
             throw new IllegalArgumentException("Sirka musí byť 'N' alebo 'S'");

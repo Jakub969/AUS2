@@ -8,6 +8,14 @@ public class EditovacieOkno extends JFrame {
     private JTextField gpsField1, gpsField2, supisneCisloField, popisField;
     private JButton confirmButton, cancelButton;
 
+    /**
+     * Konstruktor triedy EditovacieOkno
+     * @param geografickyObjekt geograficky objekt
+     * @param gps1 GPS suradnica 1
+     * @param gps2 GPS suradnica 2
+     * @param supisneCislo supisne cislo
+     * @param popis popis
+     * */
     public EditovacieOkno(String geografickyObjekt, String gps1, String gps2, String supisneCislo, String popis) {
         setTitle("Editacia zaznamu");
         setSize(400, 300);

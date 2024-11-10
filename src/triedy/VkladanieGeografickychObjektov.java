@@ -9,10 +9,20 @@ import java.util.ArrayList;
 public class VkladanieGeografickychObjektov<T extends IKluc<T>> {
     private final KdStrom<T> strom;
 
+    /**
+     * Konstruktor triedy VkladanieGeografickychObjektov
+     * @param kdStrom - instanciu triedy KdStrom
+     * */
     public VkladanieGeografickychObjektov(KdStrom<T> kdStrom) {
         this.strom = kdStrom;
     }
 
+    /**
+     * Metoda vkladania geografickych objektov
+     * @param objekt1 - prvy objekt, ktory sa ma vlozit
+     * @param objekt2 - druhy objekt, ktory sa ma vlozit
+     * @return ArrayList<Vrchol<T>> - zoznam vrcholov, ktore boli vlozene
+     * */
     public ArrayList<Vrchol<T>> metodaVkladania(T objekt1, T objekt2) {
         if (objekt1 instanceof Nehnutelnost dataNehnutelnost1 && objekt2 instanceof Nehnutelnost dataNehnutelnost2) {
             dataNehnutelnost1.setReferenciaNaRovnakuNehnutelnostSInymiGPS(dataNehnutelnost2);

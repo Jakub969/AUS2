@@ -10,6 +10,10 @@ public class Vrchol<T> {
     private ArrayList<Vrchol<T>> duplicity;
     private boolean jeDuplicita;
 
+    /**
+     * Konstruktor triedy Vrchol
+     * @param data - data, ktore sa maju ulozit do vrcholu
+     * */
     public Vrchol(T data) {
         this.data = data;
         this.lavySyn = null;

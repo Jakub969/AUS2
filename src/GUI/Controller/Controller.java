@@ -18,6 +18,11 @@ public class Controller {
     private final Model model;
     private final View view;
 
+    /**
+     * Konstruktor triedy Controller
+     * @param model model
+     * @param view view
+     * */
     public Controller(Model model, View view) {
         this.model = model;
         this.view = view;
@@ -35,6 +40,9 @@ public class Controller {
         this.view.addPrintAllButtonListener(new PrintAllButtonListener());
     }
 
+    /**
+     * Handler pre vyhladanie nehnutelnosti
+     * */
     class SearchNehnutelnostButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             try {
@@ -90,6 +98,9 @@ public class Controller {
         return gpsPositions;
     }
 
+    /**
+     * Handler pre pridanie nehnutelnosti
+     * */
     class AddNehnutelnostButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             try {

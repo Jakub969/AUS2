@@ -12,6 +12,10 @@ public class KdStrom<T extends IKluc<T>> {
     private final int pocetKlucov;
     private int pocetVrcholov;
 
+    /**
+     * Konštruktor triedy KdStrom
+     * @param pocetKlucov počet klúčov, podľa ktorých sa bude strom deliť
+     * */
     public KdStrom(int pocetKlucov) {
         this.koren = null;
         this.pocetKlucov = pocetKlucov;
@@ -19,6 +23,10 @@ public class KdStrom<T extends IKluc<T>> {
         this.pocetVrcholov = 0;
     }
 
+    /**
+     * Metóda na vloženie vrchola do stromu
+     * @param vrchol vrchol, ktorý chceme vložiť do stromu
+     * */
     public void vloz(Vrchol<T> vrchol) {
         // ak je strom prazdny, vlozime vrchol ako koren
         if (this.koren == null) {
@@ -39,8 +47,15 @@ public class KdStrom<T extends IKluc<T>> {
             // porovnanie klucov, ak je vrchol mensi alebo rovnaky, ideme dolava, inak doprava
             if (porovnanie == -1 || porovnanie == 0) {
                 if (porovnanie == 0) {
-                    int porovnanieDuplicity = vrchol.getData().porovnaj(aktualny.getData(), (poradieKluca + 1) % this.pocetKlucov);
-                    if (porovnanieDuplicity == 0) {
+                    //ak sa kluce zhoduju, pridame vrchol do zoznamu duplicit
+                    boolean zhoda = true;
+                    for (int i = 0; i < this.pocetKlucov; i++) {
+                        if (vrchol.getData().porovnaj(aktualny.getData(), i) != 0) {
+                            zhoda = false;
+                            break;
+                        }
+                    }
+                    if (zhoda) {
                         aktualny.addDuplicitu(vrchol);
                         vrchol.setJeDuplicita(true);
                         return;
@@ -73,6 +88,11 @@ public class KdStrom<T extends IKluc<T>> {
         }
     }
 
+    /**
+     * Metóda na vyhľadanie vrchola v strome
+     * @param kluc kluc, podla ktoreho vyhladavame vrchol
+     * @return vrchol, ktory sme vyhladali
+     * */
     public Vrchol<T> vyhladaj(Vrchol<T> kluc) {
         if (this.koren == null) {
             return null;
@@ -106,6 +126,11 @@ public class KdStrom<T extends IKluc<T>> {
         return aktualny;
     }
 
+    /**
+     * Metóda na vyhľadanie všetkých vrcholov v strome podľa zoznamu klúčov
+     * @param kluce zoznam klucov, podla ktorych vyhladavame vrcholy
+     * @return zoznam vrcholov v strome
+     * */
     public ArrayList<Vrchol<T>> bodoveVyhladavanie(ArrayList<Vrchol<T>> kluce) {
         ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
         for (Vrchol<T> vrchol : kluce) {
@@ -116,6 +141,10 @@ public class KdStrom<T extends IKluc<T>> {
     }
 
 
+    /**
+     * Metóda na vyradenie vrchola zo stromu
+     * @param vrchol vrchol, ktorý chceme vyradiť zo stromu
+     * */
     public void vyrad(Vrchol<T> vrchol) {
         Vrchol<T> vyhladanyVrchol = this.vyhladaj(vrchol);
         if (vyhladanyVrchol != null) {
@@ -203,9 +232,7 @@ public class KdStrom<T extends IKluc<T>> {
             nahrada.setPravySyn(pravySyn);
             if (pravySyn != null) {
                 pravySyn.setRodic(nahrada);
-                //if (nahrada.getData().porovnaj(pravySyn.getData(), getHlbkaVrchola(nahrada) % this.pocetKlucov) == 0) {
-                    znovuVlozVrcholy(pravySyn, nahrada);
-                //}
+                znovuVlozVrcholy(pravySyn, nahrada);
             }
         }
     }
@@ -244,13 +271,7 @@ public class KdStrom<T extends IKluc<T>> {
             if (vrchol.getPravySyn() != null) {
                 zasobnik.push(vrchol.getPravySyn());
             }
-        }/*
-        if (vrchol.getLavySyn() != null && vrchol.getLavySyn().getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
-            zasobnik.push(vrchol.getLavySyn());
         }
-        if (vrchol.getPravySyn() != null && vrchol.getPravySyn().getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
-            zasobnik.push(vrchol.getPravySyn());
-        }*/
     }
 
     private Vrchol<T> vyhladajNahradu(Vrchol<T> vrchol, int poradieKluca) {
@@ -389,6 +410,10 @@ public class KdStrom<T extends IKluc<T>> {
         nahrada.setJeDuplicita(false);
     }
 
+    /**
+     * Metóda na in-order prehliadku stromu
+     * @return zoznam vrcholov v strome
+     * */
     public ArrayList<Vrchol<T>> inOrderPrehliadka() {
         Vrchol<T> aktualny = this.koren;
         ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
@@ -421,6 +446,10 @@ public class KdStrom<T extends IKluc<T>> {
         return vrcholy;
     }
 
+    /**
+     * Metóda na pre-order prehliadku stromu
+     * @return zoznam vrcholov v strome
+     * */
     public ArrayList<Vrchol<T>> preOrderPrehliadka() {
         Vrchol<T> aktualny = this.koren;
         ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
@@ -441,6 +470,10 @@ public class KdStrom<T extends IKluc<T>> {
         return vrcholy;
     }
 
+    /**
+     * Getter pre atribút koren
+     * @return kořen stromu
+     * */
     public Vrchol<T> getKoren() {
         return koren;
     }

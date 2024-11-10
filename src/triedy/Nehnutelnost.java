@@ -12,6 +12,14 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
     private final GPS GPSsuradnice;
     private final String uuid;
 
+    /**
+     * Konstruktor triedy Nehnutelnost
+     * @param supisneCislo supisne cislo nehnutelnosti
+     * @param popis popis nehnutelnosti
+     * @param zoznamParcel zoznam parciel na nehnutelnosti
+     * @param referenciaNaRovnakuNehnutelnostSInymiGPS referencia na rovnaku nehnutelnost s inymi GPS
+     * @param GPSsuradnice GPS suradnice nehnutelnosti
+     */
     public Nehnutelnost(int supisneCislo, String popis, ArrayList<Parcela> zoznamParcel, Nehnutelnost referenciaNaRovnakuNehnutelnostSInymiGPS, GPS GPSsuradnice) {
         this.supisneCislo = supisneCislo;
         this.popis = popis;
@@ -64,6 +72,12 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
         return uuid;
     }
 
+    /**
+     * Metoda porovnania nehnutelnosti
+     * @param objekt objekt, s ktorym sa ma porovnat
+     * @param poradieKluca poradie kluca, podla ktoreho sa ma porovnat
+     * @return int - vysledok porovnania 0 ak su rovnake, -1 ak je mensie, 1 ak je vacsie
+     */
     @Override
     public int porovnaj(Nehnutelnost objekt, int poradieKluca) {
         double tolerancia = 0.000001;
@@ -84,6 +98,11 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
         }
     }
 
+    /**
+     * Metoda na zistenie, ci sa dve nehnutelnosti zhoduju podla UUID
+     * @param objekt nehnutelnost, s ktorou sa ma porovnat
+     * @return boolean - true, ak sa zhoduju, inak false
+     */
     @Override
     public boolean zhodneUuid(Nehnutelnost objekt) {
         return this.uuid.equals(objekt.getUuid());
