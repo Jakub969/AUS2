@@ -414,6 +414,9 @@ public class Model {
 
     private void vyradNehnutelnost(GPS GPSsuradnice1, GPS GPSsuradnice2, Nehnutelnost nehnutelnostNaVymazanie1, Nehnutelnost nehnutelnostNaVymazanie2) {
         Vrchol<GeografickyObjekt> hladanyVrchol = kdStromGeografickychObjektov.vyhladaj(new Vrchol<>(new GeografickyObjekt(GPSsuradnice1, nehnutelnostNaVymazanie1, null)));
+        if (hladanyVrchol.getData().getNehnutelnost() == null) {
+            hladanyVrchol = kdStromGeografickychObjektov.vyhladaj(new Vrchol<>(new GeografickyObjekt(GPSsuradnice2, nehnutelnostNaVymazanie2, null)));
+        }
         Vrchol<GeografickyObjekt> hladanyVrcholReferencia = new Vrchol<>(new GeografickyObjekt(hladanyVrchol.getData().getNehnutelnost().getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice(), hladanyVrchol.getData().getNehnutelnost().getReferenciaNaRovnakuNehnutelnostSInymiGPS(), null));
         kdStromGeografickychObjektov.vyrad(hladanyVrchol);
         kdStromGeografickychObjektov.vyrad(hladanyVrcholReferencia);
@@ -436,6 +439,9 @@ public class Model {
 
     private void vyradParcelu(GPS GPSsuradnice1, GPS GPSsuradnice2, Parcela parcelaNaVymazanie1, Parcela parcelaNaVymazanie2) {
         Vrchol<GeografickyObjekt> hladanyVrchol = kdStromGeografickychObjektov.vyhladaj(new Vrchol<>(new GeografickyObjekt(GPSsuradnice1, null, parcelaNaVymazanie1)));
+        if (hladanyVrchol.getData().getParcela() == null) {
+            hladanyVrchol = kdStromGeografickychObjektov.vyhladaj(new Vrchol<>(new GeografickyObjekt(GPSsuradnice2, null, parcelaNaVymazanie2)));
+        }
         Vrchol<GeografickyObjekt> hladanyVrcholReferencia = new Vrchol<>(new GeografickyObjekt(hladanyVrchol.getData().getParcela().getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice(), null, hladanyVrchol.getData().getParcela().getReferenciaNaRovnakuParceluSInymiGPS()));
         kdStromGeografickychObjektov.vyrad(hladanyVrchol);
         kdStromGeografickychObjektov.vyrad(hladanyVrcholReferencia);
