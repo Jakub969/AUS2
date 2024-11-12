@@ -402,28 +402,18 @@ public class Model {
     }
 
     private void vyradNehnutelnost(GPS GPSsuradnice1, GPS GPSsuradnice2, Nehnutelnost nehnutelnostNaVymazanie1, Nehnutelnost nehnutelnostNaVymazanie2) {
-       for (Parcela parcela : nehnutelnostNaVymazanie1.getZoznamParciel()) {
-            parcela.removeNehnutelnost(nehnutelnostNaVymazanie1);
+        Vrchol<Nehnutelnost> nehnutelnostVrchol = kdStromNehnutelnosti.vyhladaj(new Vrchol<>(nehnutelnostNaVymazanie1));
+        Vrchol<GeografickyObjekt> hladanyVrchol = new Vrchol<>(new GeografickyObjekt(GPSsuradnice1, nehnutelnostVrchol.getData(), null));
+        Vrchol<Nehnutelnost> nehnutelnostVrcholReferencia = kdStromNehnutelnosti.vyhladaj(new Vrchol<>(nehnutelnostNaVymazanie2));
+        Vrchol<GeografickyObjekt> hladanyVrcholReferencia = new Vrchol<>(new GeografickyObjekt(GPSsuradnice2, nehnutelnostVrcholReferencia.getData(), null));
+        for (Parcela parcela : nehnutelnostVrchol.getData().getZoznamParciel()) {
+            parcela.removeNehnutelnost(nehnutelnostVrchol.getData());
         }
-        for (Parcela parcela : nehnutelnostNaVymazanie2.getZoznamParciel()) {
-            parcela.removeNehnutelnost(nehnutelnostNaVymazanie2);
+        for (Parcela parcela : nehnutelnostVrcholReferencia.getData().getZoznamParciel()) {
+            parcela.removeNehnutelnost(nehnutelnostVrcholReferencia.getData());
         }
-        ArrayList<Vrchol<GeografickyObjekt>> vsetkyGeografickeObjekty = kdStromGeografickychObjektov.preOrderPrehliadka();
-        ArrayList<Vrchol<GeografickyObjekt>> duplicity = new ArrayList<>();
-        for (Vrchol<GeografickyObjekt> geografickyObjektVrchol : vsetkyGeografickeObjekty) {
-            duplicity.addAll(geografickyObjektVrchol.getDuplicity());
-        }
-        vsetkyGeografickeObjekty.addAll(duplicity);
-        System.out.println("Vsetky geograficke objekty: " + vsetkyGeografickeObjekty.size());
-        kdStromGeografickychObjektov.vyrad(new Vrchol<>(new GeografickyObjekt(GPSsuradnice1, nehnutelnostNaVymazanie1, null)));
-        kdStromGeografickychObjektov.vyrad(new Vrchol<>(new GeografickyObjekt(GPSsuradnice2, nehnutelnostNaVymazanie2, null)));
-        duplicity.clear();
-        vsetkyGeografickeObjekty = kdStromGeografickychObjektov.preOrderPrehliadka();
-        for (Vrchol<GeografickyObjekt> geografickyObjektVrchol : vsetkyGeografickeObjekty) {
-            duplicity.addAll(geografickyObjektVrchol.getDuplicity());
-        }
-        vsetkyGeografickeObjekty.addAll(duplicity);
-        System.out.println("Po vymazani: " + vsetkyGeografickeObjekty.size());
+        kdStromGeografickychObjektov.vyrad(hladanyVrchol);
+        kdStromGeografickychObjektov.vyrad(hladanyVrcholReferencia);
         kdStromNehnutelnosti.vyrad(new Vrchol<>(nehnutelnostNaVymazanie1));
         kdStromNehnutelnosti.vyrad(new Vrchol<>(nehnutelnostNaVymazanie2));
     }
@@ -442,28 +432,18 @@ public class Model {
     }
 
     private void vyradParcelu(GPS GPSsuradnice1, GPS GPSsuradnice2, Parcela parcelaNaVymazanie1, Parcela parcelaNaVymazanie2) {
-        Vrchol<GeografickyObjekt> hladanyVrchol = kdStromGeografickychObjektov.vyhladaj(new Vrchol<>(new GeografickyObjekt(GPSsuradnice1, null, parcelaNaVymazanie1)));
-        Parcela parcela = hladanyVrchol.getData().getParcela();
-        for (Nehnutelnost nehnutelnost : parcela.getZoznamNehnutelnosti()) {
-            nehnutelnost.removeParcela(parcela);
+        Vrchol<Parcela> parcelaVrchol = kdStromParciel.vyhladaj(new Vrchol<>(parcelaNaVymazanie1));
+        Vrchol<GeografickyObjekt> hladanyVrchol = new Vrchol<>(new GeografickyObjekt(GPSsuradnice1, null, parcelaVrchol.getData()));
+        Vrchol<Parcela> parcelaVrcholReferencia = kdStromParciel.vyhladaj(new Vrchol<>(parcelaNaVymazanie2));
+        Vrchol<GeografickyObjekt> hladanyVrcholReferencia = new Vrchol<>(new GeografickyObjekt(GPSsuradnice2, null, parcelaVrcholReferencia.getData()));
+        for (Nehnutelnost nehnutelnost : parcelaVrchol.getData().getZoznamNehnutelnosti()) {
+            nehnutelnost.removeParcela(parcelaVrchol.getData());
         }
-        Vrchol<GeografickyObjekt> hladanyVrcholReferencia = kdStromGeografickychObjektov.vyhladaj(new Vrchol<>(new GeografickyObjekt(GPSsuradnice2, null, parcelaNaVymazanie2)));
-        ArrayList<Vrchol<GeografickyObjekt>> vsetkyGeografickeObjekty = kdStromGeografickychObjektov.preOrderPrehliadka();
-        ArrayList<Vrchol<GeografickyObjekt>> duplicity = new ArrayList<>();
-        for (Vrchol<GeografickyObjekt> geografickyObjektVrchol : vsetkyGeografickeObjekty) {
-            duplicity.addAll(geografickyObjektVrchol.getDuplicity());
+        for (Nehnutelnost nehnutelnost : parcelaVrcholReferencia.getData().getZoznamNehnutelnosti()) {
+            nehnutelnost.removeParcela(parcelaVrcholReferencia.getData());
         }
-        vsetkyGeografickeObjekty.addAll(duplicity);
-        System.out.println("Vsetky geograficke objekty: " + vsetkyGeografickeObjekty.size());
         kdStromGeografickychObjektov.vyrad(hladanyVrchol);
         kdStromGeografickychObjektov.vyrad(hladanyVrcholReferencia);
-        duplicity.clear();
-        vsetkyGeografickeObjekty = kdStromGeografickychObjektov.preOrderPrehliadka();
-        for (Vrchol<GeografickyObjekt> geografickyObjektVrchol : vsetkyGeografickeObjekty) {
-            duplicity.addAll(geografickyObjektVrchol.getDuplicity());
-        }
-        vsetkyGeografickeObjekty.addAll(duplicity);
-        System.out.println("Po vymazani: " + vsetkyGeografickeObjekty.size());
         kdStromParciel.vyrad(new Vrchol<>(parcelaNaVymazanie1));
         kdStromParciel.vyrad(new Vrchol<>(parcelaNaVymazanie2));
     }

@@ -51,35 +51,27 @@ public class VkladanieGeografickychObjektov<T extends IKluc<T>> {
             this.strom.vloz(vrchol1);
             Vrchol<T> vrchol2 = new Vrchol<>(objekt2);
             this.strom.vloz(vrchol2);
-            if (vrchol1.isJeDuplicita()) {
-                Nehnutelnost nehnutelnost = dataGeografickyObjekt1.getNehnutelnost();
-                Parcela parcela = dataGeografickyObjekt1.getParcela();
-                Vrchol<T> duplicita = this.strom.vyhladaj(vrchol1);
-                GeografickyObjekt geografickyObjekt = (GeografickyObjekt) duplicita.getData();
-                if (parcela != null) {
-                    parcela.addNehnutelnost(geografickyObjekt.getNehnutelnost());
-                    geografickyObjekt.getNehnutelnost().addParcela(parcela);
-                } else if (nehnutelnost != null) {
-                    nehnutelnost.addParcela(geografickyObjekt.getParcela());
-                    geografickyObjekt.getParcela().addNehnutelnost(nehnutelnost);
-                }
-            }
-            if (vrchol2.isJeDuplicita()) {
-                Nehnutelnost nehnutelnost = dataGeografickyObjekt2.getNehnutelnost();
-                Parcela parcela = dataGeografickyObjekt2.getParcela();
-                Vrchol<T> duplicita = this.strom.vyhladaj(vrchol2);
-                GeografickyObjekt geografickyObjekt = (GeografickyObjekt) duplicita.getData();
-                if (parcela != null) {
-                    parcela.addNehnutelnost(geografickyObjekt.getNehnutelnost());
-                    geografickyObjekt.getNehnutelnost().addParcela(parcela);
-                } else if (nehnutelnost != null) {
-                    nehnutelnost.addParcela(geografickyObjekt.getParcela());
-                    geografickyObjekt.getParcela().addNehnutelnost(nehnutelnost);
-                }
-            }
+            naplnZoznam(dataGeografickyObjekt1, vrchol1);
+            naplnZoznam(dataGeografickyObjekt2, vrchol2);
             return null;
         } else {
             return null;
+        }
+    }
+
+    private void naplnZoznam(GeografickyObjekt dataGeografickyObjekt, Vrchol<T> vrchol) {
+        if (vrchol.isJeDuplicita()) {
+            Nehnutelnost nehnutelnost = dataGeografickyObjekt.getNehnutelnost();
+            Parcela parcela = dataGeografickyObjekt.getParcela();
+            Vrchol<T> duplicita = this.strom.vyhladaj(vrchol);
+            GeografickyObjekt geografickyObjekt = (GeografickyObjekt) duplicita.getData();
+            if (parcela != null) {
+                parcela.addNehnutelnost(geografickyObjekt.getNehnutelnost());
+                geografickyObjekt.getNehnutelnost().addParcela(parcela);
+            } else if (nehnutelnost != null) {
+                nehnutelnost.addParcela(geografickyObjekt.getParcela());
+                geografickyObjekt.getParcela().addNehnutelnost(nehnutelnost);
+            }
         }
     }
 }
