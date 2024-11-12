@@ -16,9 +16,13 @@ public class GeografickyObjekt implements IKluc<GeografickyObjekt> {
      * */
     public GeografickyObjekt(GPS GPSsuradnice, Nehnutelnost nehnutelnost, Parcela parcela) {
         this.GPSsuradnice = GPSsuradnice;
-        this.uuid = java.util.UUID.randomUUID().toString();
         this.nehnutelnost = nehnutelnost;
         this.parcela = parcela;
+        if (nehnutelnost != null) {
+            this.uuid = nehnutelnost.getUuid();
+        } else {
+            this.uuid = parcela.getUuid();
+        }
     }
 
     public GPS getGPSsuradnice() {

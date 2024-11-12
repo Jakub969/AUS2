@@ -68,6 +68,10 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
         this.zoznamParciel.add(parcela);
     }
 
+    public void removeParcela(Parcela parcela) {
+        this.zoznamParciel.remove(parcela);
+    }
+
     public String getUuid() {
         return uuid;
     }

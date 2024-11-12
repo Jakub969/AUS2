@@ -72,6 +72,9 @@ public class Parcela implements IKluc<Parcela> {
         this.zoznamNehnutelnosti.add(nehnutelnost);
     }
 
+    public void removeNehnutelnost(Nehnutelnost nehnutelnost) {
+        this.zoznamNehnutelnosti.remove(nehnutelnost);
+    }
     /**
      * Metoda na zistenie, ci sa dve parcely zhoduju podla UUID
      * @param objekt parcela, s ktorou sa ma porovnat
