@@ -205,9 +205,9 @@ public class Model {
     }
 
     private void zapisNehnutelnost(FileWriter writer, Nehnutelnost nehnutelnost) throws IOException {
-        writer.write("Nehnutelnost," + nehnutelnost.getSupisneCislo() + "," + nehnutelnost.getPopis() + "," + nehnutelnost.getGPSsuradnice().getPoziciaSirky() + "," + nehnutelnost.getGPSsuradnice().getPoziciaDlzky() + "\n");
+        writer.write("Nehnutelnost," + nehnutelnost.getSupisneCislo() + "," + nehnutelnost.getPopis() + "," + nehnutelnost.getGPSsuradnice1().getPoziciaSirky() + "," + nehnutelnost.getGPSsuradnice1().getPoziciaDlzky() + "\n");
         Nehnutelnost referencia = nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS();
-        writer.write("Nehnutelnost," + referencia.getSupisneCislo() + "," + referencia.getPopis() + "," + referencia.getGPSsuradnice().getPoziciaSirky() + "," + referencia.getGPSsuradnice().getPoziciaDlzky() + "\n");
+        writer.write("Nehnutelnost," + referencia.getSupisneCislo() + "," + referencia.getPopis() + "," + referencia.getGPSsuradnice1().getPoziciaSirky() + "," + referencia.getGPSsuradnice1().getPoziciaDlzky() + "\n");
     }
 
     /**

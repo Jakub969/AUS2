@@ -163,7 +163,7 @@ class KdStromTest {
             kluceVyhladavania.add(kluce.get(index + 1));
             ArrayList<Vrchol<Nehnutelnost>> vysledok = this.kdStromNehnutelnosti.bodoveVyhladavanie(kluceVyhladavania);
 
-            System.out.println("Vyhľadávam v rozsahu: x(" + kluce.get(index).getData().getGPSsuradnice().getPoziciaDlzky() + " ; " + kluce.get(index + 1).getData().getGPSsuradnice().getPoziciaDlzky() + ") a y(" + kluce.get(index).getData().getGPSsuradnice().getPoziciaSirky() + " ; " + kluce.get(index + 1).getData().getGPSsuradnice().getPoziciaSirky() + ")");
+            System.out.println("Vyhľadávam v rozsahu: x(" + kluce.get(index).getData().getGPSsuradnice1().getPoziciaDlzky() + " ; " + kluce.get(index + 1).getData().getGPSsuradnice1().getPoziciaDlzky() + ") a y(" + kluce.get(index).getData().getGPSsuradnice1().getPoziciaSirky() + " ; " + kluce.get(index + 1).getData().getGPSsuradnice1().getPoziciaSirky() + ")");
 
             for (Vrchol<Nehnutelnost> vrchol : vysledok) {
                 System.out.println("Vrchol: " + vrchol.getData().getSupisneCislo() + " ; " + vrchol.getData().toString() + " bol nájdený");

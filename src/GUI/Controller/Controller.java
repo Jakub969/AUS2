@@ -67,7 +67,7 @@ public class Controller {
                 } else {
                     for (Vrchol<Nehnutelnost> nehnutelnostVrchol : results) {
                         Nehnutelnost nehnutelnost = nehnutelnostVrchol.getData();
-                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis(), nehnutelnost.getZoznamParciel().toString());
+                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice1().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice1().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis(), nehnutelnost.getZoznamParciel().toString());
                     }
                 }
             } catch (NumberFormatException ex) {
@@ -389,7 +389,7 @@ public class Controller {
                     view.addResult("Chyba", "N/A", "N/A", "N/A", "Žiadne dáta neboli nájdené!", "N/A");
                 } else {
                     for (Nehnutelnost nehnutelnost : nehnutelnosti) {
-                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis(), nehnutelnost.getZoznamParciel().toString());
+                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice1().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice1().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis(), nehnutelnost.getZoznamParciel().toString());
                     }
                     for (Parcela parcela : parcely) {
                         view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis(), parcela.getZoznamNehnutelnosti().toString());
@@ -426,7 +426,7 @@ public class Controller {
                     view.addResult("Chyba", "N/A", "N/A", "N/A", "Žiadne dáta neboli nájdené!", "N/A");
                 } else {
                     for (Nehnutelnost nehnutelnost : nehnutelnosti) {
-                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis(), nehnutelnost.getZoznamParciel().toString());
+                        view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice1().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice1().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis(), nehnutelnost.getZoznamParciel().toString());
                     }
                     for (Parcela parcela : parcely) {
                         view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis(), parcela.getZoznamNehnutelnosti().toString());

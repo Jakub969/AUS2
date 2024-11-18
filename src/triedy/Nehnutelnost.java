@@ -9,7 +9,8 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
     private String popis;
     private ArrayList<Parcela> zoznamParciel;
     private Nehnutelnost referenciaNaRovnakuNehnutelnostSInymiGPS;
-    private final GPS GPSsuradnice;
+    private final GPS GPSsuradnice1;
+    private final GPS GPSsuradnice2;
     private final String uuid;
 
     /**
@@ -18,9 +19,10 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
      * @param popis popis nehnutelnosti
      * @param zoznamParcel zoznam parciel na nehnutelnosti
      * @param referenciaNaRovnakuNehnutelnostSInymiGPS referencia na rovnaku nehnutelnost s inymi GPS
-     * @param GPSsuradnice GPS suradnice nehnutelnosti
+     * @param GPSsuradnice1 GPS suradnice nehnutelnosti
+     * @param GPSsuradnice2 GPS suradnice nehnutelnosti
      */
-    public Nehnutelnost(int supisneCislo, String popis, ArrayList<Parcela> zoznamParcel, Nehnutelnost referenciaNaRovnakuNehnutelnostSInymiGPS, GPS GPSsuradnice) {
+    public Nehnutelnost(int supisneCislo, String popis, ArrayList<Parcela> zoznamParcel, Nehnutelnost referenciaNaRovnakuNehnutelnostSInymiGPS, GPS GPSsuradnice1, GPS GPSsuradnice2) {
         this.supisneCislo = supisneCislo;
         this.popis = popis;
         this.zoznamParciel = zoznamParcel;
@@ -28,7 +30,8 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
             this.zoznamParciel = new ArrayList<>();
         }
         this.referenciaNaRovnakuNehnutelnostSInymiGPS = referenciaNaRovnakuNehnutelnostSInymiGPS;
-        this.GPSsuradnice = GPSsuradnice;
+        this.GPSsuradnice1 = GPSsuradnice1;
+        this.GPSsuradnice2 = GPSsuradnice2;
         this.uuid = java.util.UUID.randomUUID().toString();
     }
 
@@ -44,8 +47,12 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
         return zoznamParciel;
     }
 
-    public GPS getGPSsuradnice() {
-        return GPSsuradnice;
+    public GPS getGPSsuradnice1() {
+        return GPSsuradnice1;
+    }
+
+    public GPS getGPSsuradnice2() {
+        return GPSsuradnice2;
     }
 
     public Nehnutelnost getReferenciaNaRovnakuNehnutelnostSInymiGPS() {
@@ -86,16 +93,16 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
     public int porovnaj(Nehnutelnost objekt, int poradieKluca) {
         double tolerancia = 0.000001;
         if (objekt instanceof Nehnutelnost dataNehnutelnost) {
-            if (poradieKluca == 0) {
-                if (Math.abs(this.GPSsuradnice.getPoziciaDlzky() - dataNehnutelnost.getGPSsuradnice().getPoziciaDlzky()) <= tolerancia) {
+            if (poradieKluca == 0) { //TODO opravenie aby jedna trieda mala 2 GPS suradnice
+                if (Math.abs(this.GPSsuradnice.getPoziciaDlzky() - dataNehnutelnost.getGPSsuradnice1().getPoziciaDlzky()) <= tolerancia) {
                     return 0;
                 }
-                return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataNehnutelnost.getGPSsuradnice().getPoziciaDlzky());
+                return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataNehnutelnost.getGPSsuradnice1().getPoziciaDlzky());
             } else {
-                if (Math.abs(this.GPSsuradnice.getPoziciaSirky() - dataNehnutelnost.getGPSsuradnice().getPoziciaSirky()) <= tolerancia) {
+                if (Math.abs(this.GPSsuradnice.getPoziciaSirky() - dataNehnutelnost.getGPSsuradnice1().getPoziciaSirky()) <= tolerancia) {
                     return 0;
                 }
-                return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataNehnutelnost.getGPSsuradnice().getPoziciaSirky());
+                return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataNehnutelnost.getGPSsuradnice1().getPoziciaSirky());
             }
         } else {
             return -2;
