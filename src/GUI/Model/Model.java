@@ -57,12 +57,10 @@ public class Model {
      * @param gpsPositions GPS suradnice
      * */
     public void pridajNehnutelnost(int supisneCislo, String popis, ArrayList<GPS> gpsPositions) {
-        Nehnutelnost newNehnutelnost1 = new Nehnutelnost(supisneCislo, popis, null, null, gpsPositions.getFirst());
-        Nehnutelnost newNehnutelnost2 = new Nehnutelnost(supisneCislo, popis, null, null, gpsPositions.getLast());
-        ArrayList<Vrchol<Nehnutelnost>> vysledok = vkladanieNehnutelnosti.metodaVkladania(newNehnutelnost1, newNehnutelnost2);
-        GeografickyObjekt newGeografickyObjekt1 = new GeografickyObjekt(gpsPositions.getFirst(), vysledok.getFirst().getData(), null);
-        GeografickyObjekt newGeografickyObjekt2 = new GeografickyObjekt(gpsPositions.getLast(), vysledok.getLast().getData(), null);
-        vkladanieGeografickychObjektov.metodaVkladania(newGeografickyObjekt1, newGeografickyObjekt2);
+        Nehnutelnost newNehnutelnost1 = new Nehnutelnost(supisneCislo, popis, null, gpsPositions.getFirst(), gpsPositions.getLast());
+        vkladanieNehnutelnosti.metodaVkladania(newNehnutelnost1);
+        GeografickyObjekt newGeografickyObjekt1 = new GeografickyObjekt(gpsPositions.getFirst(), gpsPositions.getLast(), newNehnutelnost1, null);
+        vkladanieGeografickychObjektov.metodaVkladania(newGeografickyObjekt1);
     }
 
     /**
@@ -71,11 +69,10 @@ public class Model {
      * @return ArrayList<Vrchol<Parcela>> - zoznam vrcholov parciel
      * */
     public ArrayList<Vrchol<Parcela>> vyhladajParcelu(ArrayList<GPS> gpsPositions) {
-        Parcela vyhladavanaParcela1 = new Parcela(0, "", null, null, gpsPositions.getFirst());
-        Parcela vyhladavanaParcela2 = new Parcela(0, "", null, null, gpsPositions.getLast());
+        Parcela vyhladavanaParcela1 = new Parcela(0, "", null, gpsPositions.getFirst(), gpsPositions.getLast());
 
-        Vrchol<Parcela> vrcholVyhladavania1 = new Vrchol<>(vyhladavanaParcela1);
-        Vrchol<Parcela> vrcholVyhladavania2 = new Vrchol<>(vyhladavanaParcela2);
+        Vrchol<Parcela> vrcholVyhladavania1 = new Vrchol<Parcela>(gpsPositions.getFirst(), vyhladavanaParcela1);
+        Vrchol<Parcela> vrcholVyhladavania2 = new Vrchol<Parcela>(gpsPositions.getLast(), vyhladavanaParcela1);
         ArrayList<Vrchol<Parcela>> kluce = new ArrayList<>();
         kluce.add(vrcholVyhladavania1);
         kluce.add(vrcholVyhladavania2);
@@ -89,12 +86,10 @@ public class Model {
      * @param gpsPositions GPS suradnice
      * */
     public void pridajParcelu(int cisloParcely, String popis, ArrayList<GPS> gpsPositions) {
-        Parcela newParcela1 = new Parcela(cisloParcely, popis, null, null, gpsPositions.getFirst());
-        Parcela newParcela2 = new Parcela(cisloParcely, popis, null, null, gpsPositions.getLast());
-        ArrayList<Vrchol<Parcela>> vysledok = vkladanieParciel.metodaVkladania(newParcela1, newParcela2);
-        GeografickyObjekt newGeografickyObjekt1 = new GeografickyObjekt(gpsPositions.getFirst(), null, vysledok.getFirst().getData());
-        GeografickyObjekt newGeografickyObjekt2 = new GeografickyObjekt(gpsPositions.getLast(), null, vysledok.getLast().getData());
-        vkladanieGeografickychObjektov.metodaVkladania(newGeografickyObjekt1, newGeografickyObjekt2);
+        Parcela newParcela1 = new Parcela(cisloParcely, popis, null, gpsPositions.getFirst(), gpsPositions.getLast());
+        vkladanieParciel.metodaVkladania(newParcela1);
+        GeografickyObjekt newGeografickyObjekt1 = new GeografickyObjekt(gpsPositions.getFirst(), gpsPositions.getLast(), null, newParcela1);
+        vkladanieGeografickychObjektov.metodaVkladania(newGeografickyObjekt1);
     }
 
     /**
@@ -156,7 +151,6 @@ public class Model {
                         continue;
                     } else {
                         uuid.add(nehnutelnostVrchol.getData().getUuid());
-                        uuid.add(nehnutelnostVrchol.getData().getReferenciaNaRovnakuNehnutelnostSInymiGPS().getUuid());
                     }
                     Nehnutelnost nehnutelnost = nehnutelnostVrchol.getData();
                     ArrayList<Vrchol<Nehnutelnost>> duplicity = nehnutelnostVrchol.getDuplicity();
@@ -178,7 +172,6 @@ public class Model {
                         continue;
                     } else {
                         uuidParcela.add(parcelaVrchol.getData().getUuid());
-                        uuidParcela.add(parcelaVrchol.getData().getReferenciaNaRovnakuParceluSInymiGPS().getUuid());
                     }
                     Parcela parcela = parcelaVrchol.getData();
                     ArrayList<Vrchol<Parcela>> duplicity = parcelaVrchol.getDuplicity();
@@ -198,15 +191,11 @@ public class Model {
     }
 
     private void zapisParcelu(FileWriter writer, Parcela parcela) throws IOException {
-        writer.write("Parcela," + parcela.getCisloParcely() + "," + parcela.getPopis() + "," + parcela.getGPSsuradnice1().getPoziciaSirky() + "," + parcela.getGPSsuradnice1().getPoziciaDlzky() + "\n");
-        Parcela referencia = parcela.getReferenciaNaRovnakuParceluSInymiGPS();
-        writer.write("Parcela," + referencia.getCisloParcely() + "," + referencia.getPopis() + "," + referencia.getGPSsuradnice1().getPoziciaSirky() + "," + referencia.getGPSsuradnice1().getPoziciaDlzky() + "\n");
+        writer.write("Parcela," + parcela.getCisloParcely() + "," + parcela.getPopis() + "," + parcela.getGPSsuradnice1().getPoziciaSirky() + "," + parcela.getGPSsuradnice1().getPoziciaDlzky() + "," + parcela.getGPSsuradnice2().getPoziciaSirky() + "," + parcela.getGPSsuradnice2().getPoziciaDlzky() + "\n");
     }
 
     private void zapisNehnutelnost(FileWriter writer, Nehnutelnost nehnutelnost) throws IOException {
-        writer.write("Nehnutelnost," + nehnutelnost.getSupisneCislo() + "," + nehnutelnost.getPopis() + "," + nehnutelnost.getGPSsuradnice1().getPoziciaSirky() + "," + nehnutelnost.getGPSsuradnice1().getPoziciaDlzky() + "\n");
-        Nehnutelnost referencia = nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS();
-        writer.write("Nehnutelnost," + referencia.getSupisneCislo() + "," + referencia.getPopis() + "," + referencia.getGPSsuradnice1().getPoziciaSirky() + "," + referencia.getGPSsuradnice1().getPoziciaDlzky() + "\n");
+        writer.write("Nehnutelnost," + nehnutelnost.getSupisneCislo() + "," + nehnutelnost.getPopis() + "," + nehnutelnost.getGPSsuradnice1().getPoziciaSirky() + "," + nehnutelnost.getGPSsuradnice1().getPoziciaDlzky() + "," + nehnutelnost.getGPSsuradnice2().getPoziciaSirky() + "," + nehnutelnost.getGPSsuradnice2().getPoziciaDlzky() +"\n");
     }
 
     /**
@@ -221,53 +210,37 @@ public class Model {
                 if (parts[0].equals("Nehnutelnost")) {
                     int supisneCislo = Integer.parseInt(parts[1]);
                     String popis = parts[2];
-                    double poziciaSirky = Double.parseDouble(parts[3]);
-                    char sirka = poziciaSirky < 0 ? 'S' : 'N';
-                    double poziciaDlzky = Double.parseDouble(parts[4]);
-                    char dlzka = poziciaDlzky < 0 ? 'W' : 'E';
-                    GPS gps = new GPS(sirka, poziciaSirky, dlzka, poziciaDlzky);
-                    Nehnutelnost nehnutelnostReferencia = null;
-                    line = reader.readLine();
-                    parts = line.split(",");
-                    int supisneCisloReferencie = Integer.parseInt(parts[1]);
-                    String popisReferencie = parts[2];
-                    double poziciaSirkyReferencie = Double.parseDouble(parts[3]);
-                    char sirkaReferencie = poziciaSirkyReferencie < 0 ? 'S' : 'N';
-                    double poziciaDlzkyReferencie = Double.parseDouble(parts[4]);
-                    char dlzkaReferencie = poziciaDlzkyReferencie < 0 ? 'W' : 'E';
-                    GPS gpsReferencie = new GPS(sirkaReferencie, poziciaSirkyReferencie, dlzkaReferencie, poziciaDlzkyReferencie);
-                    nehnutelnostReferencia = new Nehnutelnost(supisneCisloReferencie, popisReferencie, null, null, gpsReferencie);
-                    Nehnutelnost nehnutelnost = new Nehnutelnost(supisneCislo, popis, null, nehnutelnostReferencia, gps);
-                    nehnutelnostReferencia.setReferenciaNaRovnakuNehnutelnostSInymiGPS(nehnutelnost);
-                    vkladanieNehnutelnosti.metodaVkladania(nehnutelnost, nehnutelnostReferencia);
-                    GeografickyObjekt geografickyObjekt = new GeografickyObjekt(gps, nehnutelnost, null);
-                    GeografickyObjekt geografickyObjektReferencia = new GeografickyObjekt(gpsReferencie, nehnutelnostReferencia, null);
-                    vkladanieGeografickychObjektov.metodaVkladania(geografickyObjekt, geografickyObjektReferencia);
+                    double poziciaSirky1 = Double.parseDouble(parts[3]);
+                    char sirka = poziciaSirky1 < 0 ? 'S' : 'N';
+                    double poziciaDlzky1 = Double.parseDouble(parts[4]);
+                    char dlzka = poziciaDlzky1 < 0 ? 'W' : 'E';
+                    GPS gps1 = new GPS(sirka, poziciaSirky1, dlzka, poziciaDlzky1);
+                    double poziciaSirky2 = Double.parseDouble(parts[5]);
+                    char sirka2 = poziciaSirky2 < 0 ? 'S' : 'N';
+                    double poziciaDlzky2 = Double.parseDouble(parts[6]);
+                    char dlzka2 = poziciaDlzky2 < 0 ? 'W' : 'E';
+                    GPS gps2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
+                    Nehnutelnost nehnutelnost = new Nehnutelnost(supisneCislo, popis, null, gps1, gps2);
+                    vkladanieNehnutelnosti.metodaVkladania(nehnutelnost);
+                    GeografickyObjekt geografickyObjekt = new GeografickyObjekt(gps1, gps2, nehnutelnost, null);
+                    vkladanieGeografickychObjektov.metodaVkladania(geografickyObjekt);
                 } else if (parts[0].equals("Parcela")) {
                     int cisloParcely = Integer.parseInt(parts[1]);
                     String popis = parts[2];
-                    double poziciaSirky = Double.parseDouble(parts[3]);
-                    char sirka = poziciaSirky < 0 ? 'S' : 'N';
-                    double poziciaDlzky = Double.parseDouble(parts[4]);
-                    char dlzka = poziciaDlzky < 0 ? 'W' : 'E';
-                    GPS gps = new GPS(sirka, poziciaSirky, dlzka, poziciaDlzky);
-                    Parcela parcelaReferencia = null;
-                    line = reader.readLine();
-                    parts = line.split(",");
-                    int cisloParcelyReferencie = Integer.parseInt(parts[1]);
-                    String popisReferencie = parts[2];
-                    double poziciaSirkyReferencie = Double.parseDouble(parts[3]);
-                    char sirkaReferencie = poziciaSirkyReferencie < 0 ? 'S' : 'N';
-                    double poziciaDlzkyReferencie = Double.parseDouble(parts[4]);
-                    char dlzkaReferencie = poziciaDlzkyReferencie < 0 ? 'W' : 'E';
-                    GPS gpsReferencie = new GPS(sirkaReferencie, poziciaSirkyReferencie, dlzkaReferencie, poziciaDlzkyReferencie);
-                    parcelaReferencia = new Parcela(cisloParcelyReferencie, popisReferencie, null, null, gpsReferencie);
-                    Parcela parcela = new Parcela(cisloParcely, popis, null, parcelaReferencia, gps);
-                    parcelaReferencia.setReferenciaNaRovnakuParceluSInymiGPS(parcela);
-                    vkladanieParciel.metodaVkladania(parcela, parcelaReferencia);
-                    GeografickyObjekt geografickyObjekt = new GeografickyObjekt(gps, null, parcela);
-                    GeografickyObjekt geografickyObjektReferencia = new GeografickyObjekt(gpsReferencie, null, parcelaReferencia);
-                    vkladanieGeografickychObjektov.metodaVkladania(geografickyObjekt, geografickyObjektReferencia);
+                    double poziciaSirky1 = Double.parseDouble(parts[3]);
+                    char sirka = poziciaSirky1 < 0 ? 'S' : 'N';
+                    double poziciaDlzky1 = Double.parseDouble(parts[4]);
+                    char dlzka = poziciaDlzky1 < 0 ? 'W' : 'E';
+                    GPS gps1 = new GPS(sirka, poziciaSirky1, dlzka, poziciaDlzky1);
+                    double poziciaSirky2 = Double.parseDouble(parts[5]);
+                    char sirka2 = poziciaSirky2 < 0 ? 'S' : 'N';
+                    double poziciaDlzky2 = Double.parseDouble(parts[6]);
+                    char dlzka2 = poziciaDlzky2 < 0 ? 'W' : 'E';
+                    GPS gps2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
+                    Parcela parcela = new Parcela(cisloParcely, popis, null, gps1, gps2);
+                    vkladanieParciel.metodaVkladania(parcela);
+                    GeografickyObjekt geografickyObjekt = new GeografickyObjekt(gps1, gps2, null, parcela);
+                    vkladanieGeografickychObjektov.metodaVkladania(geografickyObjekt);
                 }
             }
         } catch (IOException e) {
@@ -281,11 +254,10 @@ public class Model {
      * @return ArrayList<Vrchol<GeografickyObjekt>> - zoznam vrcholov geografickych objektov
      * */
     public ArrayList<Vrchol<GeografickyObjekt>> vyhladajVsetky(ArrayList<GPS> gpsPositions) {
-        GeografickyObjekt vyhladavanyGeografickyObjekt1 = new GeografickyObjekt(gpsPositions.getFirst(), null, null);
-        GeografickyObjekt vyhladavanyGeografickyObjekt2 = new GeografickyObjekt(gpsPositions.getLast(), null, null);
+        GeografickyObjekt vyhladavanyGeografickyObjekt1 = new GeografickyObjekt(gpsPositions.getFirst(), gpsPositions.getLast(), null, null);
 
-        Vrchol<GeografickyObjekt> vrcholVyhladavania1 = new Vrchol<>(vyhladavanyGeografickyObjekt1);
-        Vrchol<GeografickyObjekt> vrcholVyhladavania2 = new Vrchol<>(vyhladavanyGeografickyObjekt2);
+        Vrchol<GeografickyObjekt> vrcholVyhladavania1 = new Vrchol<GeografickyObjekt>(gpsPositions.getFirst(), vyhladavanyGeografickyObjekt1);
+        Vrchol<GeografickyObjekt> vrcholVyhladavania2 = new Vrchol<GeografickyObjekt>(gpsPositions.getLast(), vyhladavanyGeografickyObjekt1);
         ArrayList<Vrchol<GeografickyObjekt>> kluce = new ArrayList<>();
         kluce.add(vrcholVyhladavania1);
         kluce.add(vrcholVyhladavania2);
@@ -315,18 +287,16 @@ public class Model {
         double tolerancia = 0.000001;
         if ((Math.abs(staraGPSsuradnice1.getPoziciaSirky() - pozicia1.getPoziciaSirky()) <= tolerancia && Math.abs(staraGPSsuradnice1.getPoziciaDlzky() - pozicia1.getPoziciaDlzky()) <= tolerancia)
                 || (Math.abs(staraGPSsuradnice2.getPoziciaSirky() - pozicia2.getPoziciaSirky()) <= tolerancia && Math.abs(staraGPSsuradnice2.getPoziciaDlzky() - pozicia2.getPoziciaDlzky()) <= tolerancia)) {
-            Vrchol<Nehnutelnost> vrchol = kdStromNehnutelnosti.vyhladaj(new Vrchol<>(new Nehnutelnost(supisneCislo, "", null, null, staraGPSsuradnice1)));
+            Vrchol<Nehnutelnost> vrchol = kdStromNehnutelnosti.vyhladaj(new Vrchol<Nehnutelnost>(staraGPSsuradnice1, new Nehnutelnost(supisneCislo, "", null, staraGPSsuradnice1, staraGPSsuradnice2)));
             Nehnutelnost nehnutelnost = vrchol.getData();
-            nehnutelnost.setPopis(popis);
+            nehnutelnost.setPopis(popis);//TODO ako postupovať pri duplicitách
             nehnutelnost.setSupisneCislo(supisneCislo);
         } else {
-            Nehnutelnost nehnutelnostNaVymazanie1 = new Nehnutelnost(supisneCislo, "", null, null, staraGPSsuradnice1);
-            Nehnutelnost nehnutelnostNaVymazanie2 = new Nehnutelnost(supisneCislo, "", null, null, staraGPSsuradnice2);
-            vyradNehnutelnost(staraGPSsuradnice1, staraGPSsuradnice2, nehnutelnostNaVymazanie1, nehnutelnostNaVymazanie2);
-            Nehnutelnost nehnutelnost = new Nehnutelnost(supisneCislo, popis, null, null, pozicia1);
-            Nehnutelnost nehnutelnostReferencia = new Nehnutelnost(supisneCislo, popis, null, nehnutelnost, pozicia2);
-            vkladanieNehnutelnosti.metodaVkladania(nehnutelnost, nehnutelnostReferencia);
-            vkladanieGeografickychObjektov.metodaVkladania(new GeografickyObjekt(pozicia1, nehnutelnost, null), new GeografickyObjekt(pozicia2, nehnutelnostReferencia, null));
+            Nehnutelnost nehnutelnostNaVymazanie1 = new Nehnutelnost(supisneCislo, "", null, staraGPSsuradnice1, staraGPSsuradnice2);
+            vyradNehnutelnost(staraGPSsuradnice1, staraGPSsuradnice2, nehnutelnostNaVymazanie1);
+            Nehnutelnost nehnutelnost = new Nehnutelnost(supisneCislo, popis, null, pozicia1, pozicia2);
+            vkladanieNehnutelnosti.metodaVkladania(nehnutelnost);
+            vkladanieGeografickychObjektov.metodaVkladania(new GeografickyObjekt(pozicia1, pozicia2, nehnutelnost, null));
         }
     }
 
@@ -372,9 +342,9 @@ public class Model {
         double tolerancia = 0.000001;
         if ((Math.abs(staraGPSsuradnice1.getPoziciaSirky() - pozicia1.getPoziciaSirky()) <= tolerancia && Math.abs(staraGPSsuradnice1.getPoziciaDlzky() - pozicia1.getPoziciaDlzky()) <= tolerancia)
                 || (Math.abs(staraGPSsuradnice2.getPoziciaSirky() - pozicia2.getPoziciaSirky()) <= tolerancia && Math.abs(staraGPSsuradnice2.getPoziciaDlzky() - pozicia2.getPoziciaDlzky()) <= tolerancia)) {
-            Vrchol<Parcela> vrchol = kdStromParciel.vyhladaj(new Vrchol<>(new Parcela(supisneCislo, "", null, null, staraGPSsuradnice1)));
+            Vrchol<Parcela> vrchol = kdStromParciel.vyhladaj(new Vrchol<Parcela>(staraGPSsuradnice1,new Parcela(supisneCislo, "", null, staraGPSsuradnice1, staraGPSsuradnice2)));
             Parcela parcela = vrchol.getData();
-            parcela.setPopis(popis);
+            parcela.setPopis(popis); //TODO ako postupovať pri duplicitách
             parcela.setCisloParcely(supisneCislo);
         } else {
             Parcela parcelaNaVymazanie1 = new Parcela(supisneCislo, "", null, null, staraGPSsuradnice1);

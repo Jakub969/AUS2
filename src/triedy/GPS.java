@@ -2,7 +2,7 @@ package triedy;
 
 import rozhrania.IKluc;
 
-public class GPS implements IKluc<GPS> {
+public class GPS implements IKluc {
 
     private char dlzka;
     private double poziciaDlzky;
@@ -59,20 +59,24 @@ public class GPS implements IKluc<GPS> {
     }
 
     @Override
-    public int porovnaj(GPS objekt, int poradieKluca) {
-        double tolerancia = 0.000001;
-        if (poradieKluca == 0) {
-            if (Math.abs(this.getPoziciaDlzky() - objekt.getPoziciaDlzky()) <= tolerancia) {
-                return 0;
+    public int porovnaj(Comparable objekt, int poradieKluca) {
+        if (objekt instanceof GPS GPSobjekt) {
+            double tolerancia = 0.000001;
+            if (poradieKluca == 0) {
+                if (Math.abs(this.getPoziciaDlzky() - GPSobjekt.getPoziciaDlzky()) <= tolerancia) {
+                    return 0;
+                } else {
+                    return Double.compare(this.getPoziciaDlzky(), GPSobjekt.getPoziciaDlzky());
+                }
             } else {
-                return Double.compare(this.getPoziciaDlzky(), objekt.getPoziciaDlzky());
+                if (Math.abs(this.getPoziciaSirky() - GPSobjekt.getPoziciaSirky()) <= tolerancia) {
+                    return 0;
+                } else {
+                    return Double.compare(this.getPoziciaSirky(), GPSobjekt.getPoziciaSirky());
+                }
             }
         } else {
-            if (Math.abs(this.getPoziciaSirky() - objekt.getPoziciaSirky()) <= tolerancia) {
-                return 0;
-            } else {
-                return Double.compare(this.getPoziciaSirky(), objekt.getPoziciaSirky());
-            }
+            return -2;
         }
     }
 }
