@@ -316,7 +316,7 @@ public class Controller {
                 } else {
                     for (Vrchol<Parcela> parcelaVrchol : results) {
                         Parcela parcela = parcelaVrchol.getData();
-                        view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis(), parcela.getZoznamNehnutelnosti().toString());
+                        view.addResult("Parcela", parcela.getGPSsuradnice1().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice1().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis(), parcela.getZoznamNehnutelnosti().toString());
                     }
                 }
             } catch (NumberFormatException ex) {
@@ -392,7 +392,7 @@ public class Controller {
                         view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice1().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice1().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis(), nehnutelnost.getZoznamParciel().toString());
                     }
                     for (Parcela parcela : parcely) {
-                        view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis(), parcela.getZoznamNehnutelnosti().toString());
+                        view.addResult("Parcela", parcela.getGPSsuradnice1().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice1().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis(), parcela.getZoznamNehnutelnosti().toString());
                     }
                 }
 
@@ -429,7 +429,7 @@ public class Controller {
                         view.addResult("Nehnuteľnosť", nehnutelnost.getGPSsuradnice1().toString(), nehnutelnost.getReferenciaNaRovnakuNehnutelnostSInymiGPS().getGPSsuradnice1().toString(), String.valueOf(nehnutelnost.getSupisneCislo()), nehnutelnost.getPopis(), nehnutelnost.getZoznamParciel().toString());
                     }
                     for (Parcela parcela : parcely) {
-                        view.addResult("Parcela", parcela.getGPSsuradnice().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis(), parcela.getZoznamNehnutelnosti().toString());
+                        view.addResult("Parcela", parcela.getGPSsuradnice1().toString(), parcela.getReferenciaNaRovnakuParceluSInymiGPS().getGPSsuradnice1().toString(), String.valueOf(parcela.getCisloParcely()), parcela.getPopis(), parcela.getZoznamNehnutelnosti().toString());
                     }
                 }
 

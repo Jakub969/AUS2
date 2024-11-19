@@ -1,14 +1,13 @@
 package triedy;
 
-import rozhrania.IKluc;
+import rozhrania.IZhoda;
 
 import java.util.ArrayList;
 
-public class Nehnutelnost implements IKluc<Nehnutelnost> {
+public class Nehnutelnost implements IZhoda<Nehnutelnost> {
     private int supisneCislo;
     private String popis;
     private ArrayList<Parcela> zoznamParciel;
-    private Nehnutelnost referenciaNaRovnakuNehnutelnostSInymiGPS;
     private final GPS GPSsuradnice1;
     private final GPS GPSsuradnice2;
     private final String uuid;
@@ -18,18 +17,16 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
      * @param supisneCislo supisne cislo nehnutelnosti
      * @param popis popis nehnutelnosti
      * @param zoznamParcel zoznam parciel na nehnutelnosti
-     * @param referenciaNaRovnakuNehnutelnostSInymiGPS referencia na rovnaku nehnutelnost s inymi GPS
      * @param GPSsuradnice1 GPS suradnice nehnutelnosti
      * @param GPSsuradnice2 GPS suradnice nehnutelnosti
      */
-    public Nehnutelnost(int supisneCislo, String popis, ArrayList<Parcela> zoznamParcel, Nehnutelnost referenciaNaRovnakuNehnutelnostSInymiGPS, GPS GPSsuradnice1, GPS GPSsuradnice2) {
+    public Nehnutelnost(int supisneCislo, String popis, ArrayList<Parcela> zoznamParcel, GPS GPSsuradnice1, GPS GPSsuradnice2) {
         this.supisneCislo = supisneCislo;
         this.popis = popis;
         this.zoznamParciel = zoznamParcel;
         if (zoznamParcel == null) {
             this.zoznamParciel = new ArrayList<>();
         }
-        this.referenciaNaRovnakuNehnutelnostSInymiGPS = referenciaNaRovnakuNehnutelnostSInymiGPS;
         this.GPSsuradnice1 = GPSsuradnice1;
         this.GPSsuradnice2 = GPSsuradnice2;
         this.uuid = java.util.UUID.randomUUID().toString();
@@ -55,20 +52,12 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
         return GPSsuradnice2;
     }
 
-    public Nehnutelnost getReferenciaNaRovnakuNehnutelnostSInymiGPS() {
-        return referenciaNaRovnakuNehnutelnostSInymiGPS;
-    }
-
     public void setSupisneCislo(int supisneCislo) {
         this.supisneCislo = supisneCislo;
     }
 
     public void setPopis(String popis) {
         this.popis = popis;
-    }
-
-    public void setReferenciaNaRovnakuNehnutelnostSInymiGPS(Nehnutelnost referenciaNaRovnakuNehnutelnostSInymiGPS) {
-        this.referenciaNaRovnakuNehnutelnostSInymiGPS = referenciaNaRovnakuNehnutelnostSInymiGPS;
     }
 
     public void addParcela(Parcela parcela) {
@@ -81,32 +70,6 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
 
     public String getUuid() {
         return uuid;
-    }
-
-    /**
-     * Metoda porovnania nehnutelnosti
-     * @param objekt objekt, s ktorym sa ma porovnat
-     * @param poradieKluca poradie kluca, podla ktoreho sa ma porovnat
-     * @return int - vysledok porovnania 0 ak su rovnake, -1 ak je mensie, 1 ak je vacsie
-     */
-    @Override
-    public int porovnaj(Nehnutelnost objekt, int poradieKluca) {
-        double tolerancia = 0.000001;
-        if (objekt instanceof Nehnutelnost dataNehnutelnost) {
-            if (poradieKluca == 0) { //TODO opravenie aby jedna trieda mala 2 GPS suradnice
-                if (Math.abs(this.GPSsuradnice.getPoziciaDlzky() - dataNehnutelnost.getGPSsuradnice1().getPoziciaDlzky()) <= tolerancia) {
-                    return 0;
-                }
-                return Double.compare(this.GPSsuradnice.getPoziciaDlzky(), dataNehnutelnost.getGPSsuradnice1().getPoziciaDlzky());
-            } else {
-                if (Math.abs(this.GPSsuradnice.getPoziciaSirky() - dataNehnutelnost.getGPSsuradnice1().getPoziciaSirky()) <= tolerancia) {
-                    return 0;
-                }
-                return Double.compare(this.GPSsuradnice.getPoziciaSirky(), dataNehnutelnost.getGPSsuradnice1().getPoziciaSirky());
-            }
-        } else {
-            return -2;
-        }
     }
 
     /**
@@ -124,7 +87,8 @@ public class Nehnutelnost implements IKluc<Nehnutelnost> {
         return "Nehnutelnost{" +
                 "supisneCislo=" + supisneCislo +
                 ", popis='" + popis + '\'' +
-                ", GPSsuradnice=" + GPSsuradnice.getDlzka() + ": " + GPSsuradnice.getPoziciaDlzky() +  " | " + GPSsuradnice.getSirka() + ": " + GPSsuradnice.getPoziciaSirky() +
+                ", GPSsuradnice1=" + GPSsuradnice1.getDlzka() + ": " + GPSsuradnice1.getPoziciaDlzky() +  " | " + GPSsuradnice1.getSirka() + ": " + GPSsuradnice1.getPoziciaSirky() +
+                ", GPSsuradnice2=" + GPSsuradnice2.getDlzka() + ": " + GPSsuradnice2.getPoziciaDlzky() +  " | " + GPSsuradnice2.getSirka() + ": " + GPSsuradnice2.getPoziciaSirky() +
                 '}';
     }
 }

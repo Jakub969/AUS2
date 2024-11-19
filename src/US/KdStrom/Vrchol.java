@@ -1,5 +1,7 @@
 package US.KdStrom;
 
+import rozhrania.IKluc;
+
 import java.util.ArrayList;
 
 public class Vrchol<T> {
@@ -7,6 +9,7 @@ public class Vrchol<T> {
     private Vrchol<T> pravySyn;
     private Vrchol<T> rodic;
     private final T data;
+    private final IKluc<T> kluce;
     private ArrayList<Vrchol<T>> duplicity;
     private boolean jeDuplicita;
 
@@ -14,7 +17,8 @@ public class Vrchol<T> {
      * Konstruktor triedy Vrchol
      * @param data - data, ktore sa maju ulozit do vrcholu
      * */
-    public Vrchol(T data) {
+    public Vrchol(IKluc<T> kluce,T data) {
+        this.kluce = kluce;
         this.data = data;
         this.lavySyn = null;
         this.pravySyn = null;
@@ -69,5 +73,9 @@ public class Vrchol<T> {
 
     public void setJeDuplicita(boolean jeDuplicita) {
         this.jeDuplicita = jeDuplicita;
+    }
+
+    public IKluc<T> getKluce() {
+        return kluce;
     }
 }

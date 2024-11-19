@@ -40,11 +40,10 @@ public class Model {
      * */
     public ArrayList<Vrchol<Nehnutelnost>> vyhladajNehnutelnost(ArrayList<GPS> gpsPositions) {
 
-        Nehnutelnost vyhladavanaNehnutelnost1 = new Nehnutelnost(0, "", null, null, gpsPositions.getFirst());
-        Nehnutelnost vyhladavanaNehnutelnost2 = new Nehnutelnost(0, "", null, null, gpsPositions.getLast());
+        Nehnutelnost vyhladavanaNehnutelnost = new Nehnutelnost(0, "", null, gpsPositions.getFirst(), gpsPositions.getLast());
 
-        Vrchol<Nehnutelnost> vrcholVyhladavania = new Vrchol<>(vyhladavanaNehnutelnost1);
-        Vrchol<Nehnutelnost> vrcholVyhladavania2 = new Vrchol<>(vyhladavanaNehnutelnost2);
+        Vrchol<Nehnutelnost> vrcholVyhladavania = new Vrchol<Nehnutelnost>(gpsPositions.getFirst() ,vyhladavanaNehnutelnost);
+        Vrchol<Nehnutelnost> vrcholVyhladavania2 = new Vrchol<Nehnutelnost>(gpsPositions.getLast(), vyhladavanaNehnutelnost);
         ArrayList<Vrchol<Nehnutelnost>> kluce = new ArrayList<>();
         kluce.add(vrcholVyhladavania);
         kluce.add(vrcholVyhladavania2);
@@ -199,9 +198,9 @@ public class Model {
     }
 
     private void zapisParcelu(FileWriter writer, Parcela parcela) throws IOException {
-        writer.write("Parcela," + parcela.getCisloParcely() + "," + parcela.getPopis() + "," + parcela.getGPSsuradnice().getPoziciaSirky() + "," + parcela.getGPSsuradnice().getPoziciaDlzky() + "\n");
+        writer.write("Parcela," + parcela.getCisloParcely() + "," + parcela.getPopis() + "," + parcela.getGPSsuradnice1().getPoziciaSirky() + "," + parcela.getGPSsuradnice1().getPoziciaDlzky() + "\n");
         Parcela referencia = parcela.getReferenciaNaRovnakuParceluSInymiGPS();
-        writer.write("Parcela," + referencia.getCisloParcely() + "," + referencia.getPopis() + "," + referencia.getGPSsuradnice().getPoziciaSirky() + "," + referencia.getGPSsuradnice().getPoziciaDlzky() + "\n");
+        writer.write("Parcela," + referencia.getCisloParcely() + "," + referencia.getPopis() + "," + referencia.getGPSsuradnice1().getPoziciaSirky() + "," + referencia.getGPSsuradnice1().getPoziciaDlzky() + "\n");
     }
 
     private void zapisNehnutelnost(FileWriter writer, Nehnutelnost nehnutelnost) throws IOException {

@@ -2,11 +2,9 @@ package triedy;
 
 import US.KdStrom.KdStrom;
 import US.KdStrom.Vrchol;
-import rozhrania.IKluc;
+import rozhrania.IZhoda;
 
-import java.util.ArrayList;
-
-public class VkladanieGeografickychObjektov<T extends IKluc<T>> {
+public class VkladanieGeografickychObjektov<T extends IZhoda<T>> {
     private final KdStrom<T> strom;
 
     /**
@@ -19,43 +17,28 @@ public class VkladanieGeografickychObjektov<T extends IKluc<T>> {
 
     /**
      * Metoda vkladania geografickych objektov
-     * @param objekt1 - prvy objekt, ktory sa ma vlozit
-     * @param objekt2 - druhy objekt, ktory sa ma vlozit
-     * @return ArrayList<Vrchol<T>> - zoznam vrcholov, ktore boli vlozene
+     * @param objekt - objekt, ktory sa ma vlozit
      * */
-    public ArrayList<Vrchol<T>> metodaVkladania(T objekt1, T objekt2) {
-        if (objekt1 instanceof Nehnutelnost dataNehnutelnost1 && objekt2 instanceof Nehnutelnost dataNehnutelnost2) {
-            dataNehnutelnost1.setReferenciaNaRovnakuNehnutelnostSInymiGPS(dataNehnutelnost2);
-            dataNehnutelnost2.setReferenciaNaRovnakuNehnutelnostSInymiGPS(dataNehnutelnost1);
-            Vrchol<T> vrchol1 = new Vrchol<>(objekt1);
-            this.strom.vloz(vrchol1);
-            Vrchol<T> vrchol2 = new Vrchol<>(objekt2);
-            this.strom.vloz(vrchol2);
-            ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
-            vrcholy.add(vrchol1);
-            vrcholy.add(vrchol2);
-            return vrcholy;
-        } else if (objekt1 instanceof Parcela dataParcela1 && objekt2 instanceof Parcela dataParcela2) {
-            dataParcela1.setReferenciaNaRovnakuParceluSInymiGPS(dataParcela2);
-            dataParcela2.setReferenciaNaRovnakuParceluSInymiGPS(dataParcela1);
-            Vrchol<T> vrchol1 = new Vrchol<>(objekt1);
-            this.strom.vloz(vrchol1);
-            Vrchol<T> vrchol2 = new Vrchol<>(objekt2);
-            this.strom.vloz(vrchol2);
-            ArrayList<Vrchol<T>> vrcholy = new ArrayList<>();
-            vrcholy.add(vrchol1);
-            vrcholy.add(vrchol2);
-            return vrcholy;
-        } else if (objekt1 instanceof GeografickyObjekt dataGeografickyObjekt1 && objekt2 instanceof GeografickyObjekt dataGeografickyObjekt2) {
-            Vrchol<T> vrchol1 = new Vrchol<>(objekt1);
-            this.strom.vloz(vrchol1);
-            Vrchol<T> vrchol2 = new Vrchol<>(objekt2);
-            this.strom.vloz(vrchol2);
-            naplnZoznam(dataGeografickyObjekt1, vrchol1);
-            naplnZoznam(dataGeografickyObjekt2, vrchol2);
-            return null;
-        } else {
-            return null;
+    public void metodaVkladania(T objekt) {
+        if (objekt instanceof Nehnutelnost dataNehnutelnost) {
+            vlozObjekt(objekt, dataNehnutelnost.getGPSsuradnice1(), dataNehnutelnost.getGPSsuradnice2());
+        } else if (objekt instanceof Parcela dataParcela) {
+            vlozObjekt(objekt, dataParcela.getGPSsuradnice1(), dataParcela.getGPSsuradnice2());
+        } else if (objekt instanceof GeografickyObjekt dataGeografickyObjekt) {
+            vlozObjekt(objekt, dataGeografickyObjekt.getGPSsuradnice1(), dataGeografickyObjekt.getGPSsuradnice2());
+        }
+    }
+
+    private void vlozObjekt(T objekt, GPS gpSsuradnice1, GPS gpSsuradnice2) {
+        GPS gps1 = gpSsuradnice1;
+        GPS gps2 = gpSsuradnice2;
+        Vrchol<T> vrchol1 = new Vrchol<>(gps1, objekt);
+        this.strom.vloz(vrchol1);
+        Vrchol<T> vrchol2 = new Vrchol<>(gps2, objekt);
+        this.strom.vloz(vrchol2);
+        if (objekt instanceof GeografickyObjekt dataGeografickyObjekt) {
+            naplnZoznam(dataGeografickyObjekt, vrchol1);
+            naplnZoznam(dataGeografickyObjekt, vrchol2);
         }
     }
 

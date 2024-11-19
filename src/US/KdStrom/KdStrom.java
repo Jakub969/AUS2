@@ -2,11 +2,12 @@ package US.KdStrom;
 
 
 import rozhrania.IKluc;
+import rozhrania.IZhoda;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class KdStrom<T extends IKluc<T>> {
+public class KdStrom<T extends IZhoda<T>> {
     private Vrchol<T> koren;
     private int hlbka;
     private final int pocetKlucov;
@@ -42,7 +43,7 @@ public class KdStrom<T extends IKluc<T>> {
         while (aktualny != null) {
             rodic = aktualny;
             int poradieKluca = lokalnaHlbka % this.pocetKlucov;
-            int porovnanie = vrchol.getData().porovnaj(aktualny.getData(), poradieKluca);
+            int porovnanie = vrchol.getKluce().porovnaj(aktualny.getData(), poradieKluca);
 
             // porovnanie klucov, ak je vrchol mensi alebo rovnaky, ideme dolava, inak doprava
             if (porovnanie == -1 || porovnanie == 0) {
@@ -50,7 +51,7 @@ public class KdStrom<T extends IKluc<T>> {
                     //ak sa kluce zhoduju, pridame vrchol do zoznamu duplicit
                     boolean zhoda = true;
                     for (int i = 0; i < this.pocetKlucov; i++) {
-                        if (vrchol.getData().porovnaj(aktualny.getData(), i) != 0) {
+                        if (vrchol.getKluce().porovnaj(aktualny.getData(), i) != 0) {
                             zhoda = false;
                             break;
                         }
@@ -102,10 +103,10 @@ public class KdStrom<T extends IKluc<T>> {
 
         while (aktualny != null) {
             int poradieKluca = hlbka % this.pocetKlucov;
-            int porovnanie = kluc.getData().porovnaj(aktualny.getData(), poradieKluca);
+            int porovnanie = kluc.getKluce().porovnaj(aktualny.getData(), poradieKluca);
             boolean zhoda = true;
             for (int i = 0; i < this.pocetKlucov; i++) {
-                if (kluc.getData().porovnaj(aktualny.getData(), i) != 0) {
+                if (kluc.getKluce().porovnaj(aktualny.getData(), i) != 0) {
                     zhoda = false;
                     break;
                 }
@@ -246,7 +247,7 @@ public class KdStrom<T extends IKluc<T>> {
         while (!zasobnik.isEmpty()) {
             Vrchol<T> vrchol = zasobnik.pop();
             int aktualnePoradieKluca = getHlbkaVrchola(vrchol) % this.pocetKlucov;
-            if (vrchol.getData().porovnaj(nahrada.getData(), poradieKluca) == 0) {
+            if (vrchol.getKluce().porovnaj(nahrada.getData(), poradieKluca) == 0) {
                 vrcholyNaZnovuVlozenie.add(vrchol);
             }
             prehladajPodstrom(poradieKluca, zasobnik, vrchol, aktualnePoradieKluca);
@@ -295,7 +296,7 @@ public class KdStrom<T extends IKluc<T>> {
         while (!zasobnik.isEmpty()) {
             Vrchol<T> aktualny = zasobnik.pop();
             int aktualnePoradieKluca = getHlbkaVrchola(aktualny) % this.pocetKlucov;
-            if (aktualny.getData().porovnaj(najmensi.getData(), poradieKluca) <= 0) {
+            if (aktualny.getKluce().porovnaj(najmensi.getData(), poradieKluca) <= 0) {
                 najmensi = aktualny;
             }
             prehladajPodstrom(poradieKluca, zasobnik, aktualny, aktualnePoradieKluca);
@@ -310,7 +311,7 @@ public class KdStrom<T extends IKluc<T>> {
         while (!zasobnik.isEmpty()) {
             Vrchol<T> aktualny = zasobnik.pop();
             int aktualnePoradieKluca = getHlbkaVrchola(aktualny) % this.pocetKlucov;
-            if (aktualny.getData().porovnaj(najvacsi.getData(), poradieKluca) >= 0) {
+            if (aktualny.getKluce().porovnaj(najvacsi.getData(), poradieKluca) >= 0) {
                 najvacsi = aktualny;
             }
             if (aktualnePoradieKluca == poradieKluca) {

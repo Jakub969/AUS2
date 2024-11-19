@@ -1,6 +1,8 @@
 package triedy;
 
-public class GPS {
+import rozhrania.IKluc;
+
+public class GPS implements IKluc<GPS> {
 
     private char dlzka;
     private double poziciaDlzky;
@@ -54,5 +56,23 @@ public class GPS {
     @Override
     public String toString() {
         return this.sirka + " " + this.poziciaSirky + "; " + this.dlzka + " " + this.poziciaDlzky;
+    }
+
+    @Override
+    public int porovnaj(GPS objekt, int poradieKluca) {
+        double tolerancia = 0.000001;
+        if (poradieKluca == 0) {
+            if (Math.abs(this.getPoziciaDlzky() - objekt.getPoziciaDlzky()) <= tolerancia) {
+                return 0;
+            } else {
+                return Double.compare(this.getPoziciaDlzky(), objekt.getPoziciaDlzky());
+            }
+        } else {
+            if (Math.abs(this.getPoziciaSirky() - objekt.getPoziciaSirky()) <= tolerancia) {
+                return 0;
+            } else {
+                return Double.compare(this.getPoziciaSirky(), objekt.getPoziciaSirky());
+            }
+        }
     }
 }
