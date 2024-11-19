@@ -21,8 +21,10 @@ public class GeografickyObjekt implements Comparable<GeografickyObjekt> {
         this.parcela = parcela;
         if (nehnutelnost != null) {
             this.uuid = nehnutelnost.getUuid();
-        } else {
+        } else if (parcela != null) {
             this.uuid = parcela.getUuid();
+        } else {
+            this.uuid = null;
         }
     }
 

@@ -77,21 +77,33 @@ public class Controller {
     }
 
     private ArrayList<GPS> getGpsSearch() {
-        double poziciaDlzky1 = Double.parseDouble(view.getDlzka1());
-        double poziciaSirky1 = Double.parseDouble(view.getSirka1());
-
+        double poziciaDlzky1 = Double.NaN;
+        double poziciaSirky1 = Double.NaN;
+        if (!view.getDlzka1().isEmpty() || !view.getSirka1().isEmpty()) {
+            poziciaDlzky1 = Double.parseDouble(view.getDlzka1());
+            poziciaSirky1 = Double.parseDouble(view.getSirka1());
+        }
         char sirka1 = view.getSirkaOrientation1();
         char dlzka1 = view.getDlzkaOrientation1();
 
-        double poziciaDlzky2 = Double.parseDouble(view.getDlzka2());
-        double poziciaSirky2 = Double.parseDouble(view.getSirka2());
+        double poziciaDlzky2 = Double.NaN;
+        double poziciaSirky2 = Double.NaN;
+        if (!view.getDlzka2().isEmpty() || !view.getSirka2().isEmpty()) {
+            poziciaDlzky2 = Double.parseDouble(view.getDlzka2());
+            poziciaSirky2 = Double.parseDouble(view.getSirka2());
+        }
 
         char sirka2 = view.getSirkaOrientation2();
         char dlzka2 = view.getDlzkaOrientation2();
 
-        GPS pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
-        GPS pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
-
+        GPS pozicia1 = null;
+        GPS pozicia2 = null;
+        if (!Double.isNaN(poziciaDlzky1) || !Double.isNaN(poziciaSirky1)) {
+            pozicia1 = new GPS(sirka1, poziciaSirky1, dlzka1, poziciaDlzky1);
+        }
+        if (!Double.isNaN(poziciaDlzky2) || !Double.isNaN(poziciaSirky2)) {
+            pozicia2 = new GPS(sirka2, poziciaSirky2, dlzka2, poziciaDlzky2);
+        }
         ArrayList<GPS> gpsPositions = new ArrayList<>();
         gpsPositions.add(pozicia1);
         gpsPositions.add(pozicia2);

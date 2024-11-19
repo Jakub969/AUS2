@@ -41,12 +41,21 @@ public class Model {
     public ArrayList<Vrchol<Nehnutelnost>> vyhladajNehnutelnost(ArrayList<GPS> gpsPositions) {
 
         Nehnutelnost vyhladavanaNehnutelnost = new Nehnutelnost(0, "", null, gpsPositions.getFirst(), gpsPositions.getLast());
-
-        Vrchol<Nehnutelnost> vrcholVyhladavania = new Vrchol<Nehnutelnost>(gpsPositions.getFirst() ,vyhladavanaNehnutelnost);
-        Vrchol<Nehnutelnost> vrcholVyhladavania2 = new Vrchol<Nehnutelnost>(gpsPositions.getLast(), vyhladavanaNehnutelnost);
+        Vrchol<Nehnutelnost> vrcholVyhladavania = null;
+        if (gpsPositions.getFirst() != null) {
+            vrcholVyhladavania = new Vrchol<Nehnutelnost>(gpsPositions.getFirst() ,vyhladavanaNehnutelnost);
+        }
+        Vrchol<Nehnutelnost> vrcholVyhladavania2 = null;
+        if (gpsPositions.getLast() != null) {
+            vrcholVyhladavania2 = new Vrchol<Nehnutelnost>(gpsPositions.getLast(), vyhladavanaNehnutelnost);
+        }
         ArrayList<Vrchol<Nehnutelnost>> kluce = new ArrayList<>();
-        kluce.add(vrcholVyhladavania);
-        kluce.add(vrcholVyhladavania2);
+        if (vrcholVyhladavania != null) {
+            kluce.add(vrcholVyhladavania);
+        }
+        if (vrcholVyhladavania2 != null) {
+            kluce.add(vrcholVyhladavania2);
+        }
         return kdStromNehnutelnosti.bodoveVyhladavanie(kluce);
     }
 
@@ -71,11 +80,21 @@ public class Model {
     public ArrayList<Vrchol<Parcela>> vyhladajParcelu(ArrayList<GPS> gpsPositions) {
         Parcela vyhladavanaParcela1 = new Parcela(0, "", null, gpsPositions.getFirst(), gpsPositions.getLast());
 
-        Vrchol<Parcela> vrcholVyhladavania1 = new Vrchol<Parcela>(gpsPositions.getFirst(), vyhladavanaParcela1);
-        Vrchol<Parcela> vrcholVyhladavania2 = new Vrchol<Parcela>(gpsPositions.getLast(), vyhladavanaParcela1);
+        Vrchol<Parcela> vrcholVyhladavania1 = null;
+        if (gpsPositions.getFirst() != null) {
+            vrcholVyhladavania1 = new Vrchol<Parcela>(gpsPositions.getFirst(), vyhladavanaParcela1);
+        }
+        Vrchol<Parcela> vrcholVyhladavania2 = null;
+        if (gpsPositions.getLast() != null) {
+            vrcholVyhladavania2 = new Vrchol<Parcela>(gpsPositions.getLast(), vyhladavanaParcela1);
+        }
         ArrayList<Vrchol<Parcela>> kluce = new ArrayList<>();
-        kluce.add(vrcholVyhladavania1);
-        kluce.add(vrcholVyhladavania2);
+        if (vrcholVyhladavania1 != null) {
+            kluce.add(vrcholVyhladavania1);
+        }
+        if (vrcholVyhladavania2 != null) {
+            kluce.add(vrcholVyhladavania2);
+        }
         return kdStromParciel.bodoveVyhladavanie(kluce);
     }
 
