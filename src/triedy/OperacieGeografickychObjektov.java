@@ -2,16 +2,15 @@ package triedy;
 
 import US.KdStrom.KdStrom;
 import US.KdStrom.Vrchol;
-import rozhrania.IZhoda;
 
-public class VkladanieGeografickychObjektov<T extends IZhoda<T>> {
+public class OperacieGeografickychObjektov<T extends Comparable<T>> {
     private final KdStrom<T> strom;
 
     /**
      * Konstruktor triedy VkladanieGeografickychObjektov
      * @param kdStrom - instanciu triedy KdStrom
      * */
-    public VkladanieGeografickychObjektov(KdStrom<T> kdStrom) {
+    public OperacieGeografickychObjektov(KdStrom<T> kdStrom) {
         this.strom = kdStrom;
     }
 
@@ -27,6 +26,25 @@ public class VkladanieGeografickychObjektov<T extends IZhoda<T>> {
         } else if (objekt instanceof GeografickyObjekt dataGeografickyObjekt) {
             vlozObjekt(objekt, dataGeografickyObjekt.getGPSsuradnice1(), dataGeografickyObjekt.getGPSsuradnice2());
         }
+    }
+
+    public void metodaMazania(T objekt) {
+        if (objekt instanceof Nehnutelnost dataNehnutelnost) {
+            vymazObjekt(objekt, dataNehnutelnost.getGPSsuradnice1(), dataNehnutelnost.getGPSsuradnice2());
+        } else if (objekt instanceof Parcela dataParcela) {
+            vymazObjekt(objekt, dataParcela.getGPSsuradnice1(), dataParcela.getGPSsuradnice2());
+        } else if (objekt instanceof GeografickyObjekt dataGeografickyObjekt) {
+            vymazObjekt(objekt, dataGeografickyObjekt.getGPSsuradnice1(), dataGeografickyObjekt.getGPSsuradnice2());
+        }
+    }
+
+    private void vymazObjekt(T objekt, GPS gpSsuradnice1, GPS gpSsuradnice2) {
+        GPS gps1 = gpSsuradnice1;
+        GPS gps2 = gpSsuradnice2;
+        Vrchol<T> vrchol1 = new Vrchol<>(gps1, objekt);
+        this.strom.vyrad(vrchol1);
+        Vrchol<T> vrchol2 = new Vrchol<>(gps2, objekt);
+        this.strom.vyrad(vrchol2);
     }
 
     private void vlozObjekt(T objekt, GPS gpSsuradnice1, GPS gpSsuradnice2) {

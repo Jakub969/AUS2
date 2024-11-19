@@ -1,13 +1,10 @@
 package US.KdStrom;
 
 
-import rozhrania.IKluc;
-import rozhrania.IZhoda;
-
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class KdStrom<T extends IZhoda<T>> {
+public class KdStrom<T extends Comparable<T>> {
     private Vrchol<T> koren;
     private int hlbka;
     private final int pocetKlucov;
@@ -43,7 +40,7 @@ public class KdStrom<T extends IZhoda<T>> {
         while (aktualny != null) {
             rodic = aktualny;
             int poradieKluca = lokalnaHlbka % this.pocetKlucov;
-            int porovnanie = vrchol.getKluce().porovnaj(aktualny.getData(), poradieKluca);
+            int porovnanie = vrchol.getKluce().porovnaj(aktualny.getKluce(), poradieKluca);
 
             // porovnanie klucov, ak je vrchol mensi alebo rovnaky, ideme dolava, inak doprava
             if (porovnanie == -1 || porovnanie == 0) {
@@ -51,7 +48,7 @@ public class KdStrom<T extends IZhoda<T>> {
                     //ak sa kluce zhoduju, pridame vrchol do zoznamu duplicit
                     boolean zhoda = true;
                     for (int i = 0; i < this.pocetKlucov; i++) {
-                        if (vrchol.getKluce().porovnaj(aktualny.getData(), i) != 0) {
+                        if (vrchol.getKluce().porovnaj(aktualny.getKluce(), i) != 0) {
                             zhoda = false;
                             break;
                         }
@@ -103,10 +100,10 @@ public class KdStrom<T extends IZhoda<T>> {
 
         while (aktualny != null) {
             int poradieKluca = hlbka % this.pocetKlucov;
-            int porovnanie = kluc.getKluce().porovnaj(aktualny.getData(), poradieKluca);
+            int porovnanie = kluc.getKluce().porovnaj(aktualny.getKluce(), poradieKluca);
             boolean zhoda = true;
             for (int i = 0; i < this.pocetKlucov; i++) {
-                if (kluc.getKluce().porovnaj(aktualny.getData(), i) != 0) {
+                if (kluc.getKluce().porovnaj(aktualny.getKluce(), i) != 0) {
                     zhoda = false;
                     break;
                 }
@@ -247,7 +244,7 @@ public class KdStrom<T extends IZhoda<T>> {
         while (!zasobnik.isEmpty()) {
             Vrchol<T> vrchol = zasobnik.pop();
             int aktualnePoradieKluca = getHlbkaVrchola(vrchol) % this.pocetKlucov;
-            if (vrchol.getKluce().porovnaj(nahrada.getData(), poradieKluca) == 0) {
+            if (vrchol.getKluce().porovnaj(nahrada.getKluce(), poradieKluca) == 0) {
                 vrcholyNaZnovuVlozenie.add(vrchol);
             }
             prehladajPodstrom(poradieKluca, zasobnik, vrchol, aktualnePoradieKluca);
@@ -296,7 +293,7 @@ public class KdStrom<T extends IZhoda<T>> {
         while (!zasobnik.isEmpty()) {
             Vrchol<T> aktualny = zasobnik.pop();
             int aktualnePoradieKluca = getHlbkaVrchola(aktualny) % this.pocetKlucov;
-            if (aktualny.getKluce().porovnaj(najmensi.getData(), poradieKluca) <= 0) {
+            if (aktualny.getKluce().porovnaj(najmensi.getKluce(), poradieKluca) <= 0) {
                 najmensi = aktualny;
             }
             prehladajPodstrom(poradieKluca, zasobnik, aktualny, aktualnePoradieKluca);
@@ -311,7 +308,7 @@ public class KdStrom<T extends IZhoda<T>> {
         while (!zasobnik.isEmpty()) {
             Vrchol<T> aktualny = zasobnik.pop();
             int aktualnePoradieKluca = getHlbkaVrchola(aktualny) % this.pocetKlucov;
-            if (aktualny.getKluce().porovnaj(najvacsi.getData(), poradieKluca) >= 0) {
+            if (aktualny.getKluce().porovnaj(najvacsi.getKluce(), poradieKluca) >= 0) {
                 najvacsi = aktualny;
             }
             if (aktualnePoradieKluca == poradieKluca) {
@@ -343,11 +340,11 @@ public class KdStrom<T extends IZhoda<T>> {
         Vrchol<T> rodic = vrchol.getRodic();
         ArrayList<Vrchol<T>> duplicity = vrchol.getDuplicity();
         Vrchol<T> mazanyVrchol = null;
-        if (vrchol.getData().zhodneUuid(kluc.getData())) {
+        if (vrchol.getData().compareTo(kluc.getData()) == 0) {
             mazanyVrchol = vrchol;
         } else if (!duplicity.isEmpty()) {
             for (Vrchol<T> tVrchol : duplicity) {
-                if (tVrchol.getData().zhodneUuid(kluc.getData())) {
+                if (tVrchol.getData().compareTo(kluc.getData()) == 0) {
                     mazanyVrchol = tVrchol;
                     break;
                 }

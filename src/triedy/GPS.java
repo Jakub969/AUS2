@@ -59,7 +59,7 @@ public class GPS implements IKluc {
     }
 
     @Override
-    public int porovnaj(Comparable objekt, int poradieKluca) {
+    public int porovnaj(IKluc objekt, int poradieKluca) {
         if (objekt instanceof GPS GPSobjekt) {
             double tolerancia = 0.000001;
             if (poradieKluca == 0) {

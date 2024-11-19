@@ -1,11 +1,8 @@
 package triedy;
 
-import rozhrania.IKluc;
-import rozhrania.IZhoda;
-
 import java.util.ArrayList;
 
-public class Parcela implements IZhoda<Parcela> {
+public class Parcela implements Comparable<Parcela> {
     private int cisloParcely;
     private String popis;
     private ArrayList<Nehnutelnost> zoznamNehnutelnosti;
@@ -71,15 +68,6 @@ public class Parcela implements IZhoda<Parcela> {
     public void removeNehnutelnost(Nehnutelnost nehnutelnost) {
         this.zoznamNehnutelnosti.remove(nehnutelnost);
     }
-    /**
-     * Metoda na zistenie, ci sa dve parcely zhoduju podla UUID
-     * @param objekt parcela, s ktorou sa ma porovnat
-     * @return boolean - true, ak sa zhoduju, inak false
-     * */
-    @Override
-    public boolean zhodneUuid(Parcela objekt) {
-        return this.uuid.equals(objekt.getUuid());
-    }
 
     @Override
     public String toString() {
@@ -89,5 +77,18 @@ public class Parcela implements IZhoda<Parcela> {
                 ", GPSsuradnice1="  + GPSsuradnice1.getDlzka() + ": " + GPSsuradnice1.getPoziciaDlzky() + " | " + GPSsuradnice1.getSirka() + ": " + GPSsuradnice1.getPoziciaSirky() +
                 ", GPSsuradnice2=" + GPSsuradnice2.getDlzka() + ": " + GPSsuradnice2.getPoziciaDlzky() + " | " + GPSsuradnice2.getSirka() + ": " + GPSsuradnice2.getPoziciaSirky() +
                 '}';
+    }
+    /**
+     * Metoda na zistenie, ci sa dve parcely zhoduju podla UUID
+     * @param objekt parcela, s ktorou sa ma porovnat
+     * @return boolean - true, ak sa zhoduju, inak false
+     * */
+    @Override
+    public int compareTo(Parcela objekt) {
+        if(this.uuid.equals(objekt.getUuid())){
+            return 0;
+        } else {
+            return -1;
+        }
     }
 }

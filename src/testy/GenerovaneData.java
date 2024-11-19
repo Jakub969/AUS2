@@ -2,7 +2,7 @@ package testy;
 
 import rozhrania.IKluc;
 
-public class GenerovaneData implements IKluc<GenerovaneData> {
+public class GenerovaneData implements IKluc<GenerovaneData>, Comparable<GenerovaneData> {
     private final int atributA;
     private final int atributB;
     private String uuid;
@@ -34,16 +34,24 @@ public class GenerovaneData implements IKluc<GenerovaneData> {
     }
 
     @Override
-    public int porovnaj(GenerovaneData objekt, int poradieKluca) {
-        if (poradieKluca == 0) {
-            return Integer.compare(this.atributA, objekt.getAtributA());
+    public int porovnaj(IKluc objekt, int poradieKluca) {
+        if (objekt instanceof GenerovaneData generovaneDataObjekt) {
+            if (poradieKluca == 0) {
+                return Integer.compare(this.atributA, generovaneDataObjekt.getAtributA());
+            } else {
+                return Integer.compare(this.atributB, generovaneDataObjekt.getAtributB());
+            }
         } else {
-            return Integer.compare(this.atributB, objekt.getAtributB());
+            return -2;
         }
     }
 
     @Override
-    public boolean zhodneUuid(GenerovaneData objekt) {
-        return this.uuid.equals(objekt.getUuid());
+    public int compareTo(GenerovaneData o) {
+        if (this.uuid.equals(o.getUuid())) {
+            return 0;
+        } else {
+            return -1;
+        }
     }
 }

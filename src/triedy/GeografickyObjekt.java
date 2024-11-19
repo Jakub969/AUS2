@@ -1,8 +1,6 @@
 package triedy;
 
-import rozhrania.IZhoda;
-
-public class GeografickyObjekt implements IZhoda<GeografickyObjekt> {
+public class GeografickyObjekt implements Comparable<GeografickyObjekt> {
     private final GPS GPSsuradnice1;
     private final GPS GPSsuradnice2;
     private final String uuid;
@@ -54,7 +52,11 @@ public class GeografickyObjekt implements IZhoda<GeografickyObjekt> {
      * @return boolean - true, ak sa zhoduju, inak false
      * */
     @Override
-    public boolean zhodneUuid(GeografickyObjekt objekt) {
-        return this.uuid.equals(objekt.getUuid());
+    public int compareTo(GeografickyObjekt objekt) {
+        if (this.uuid.equals(objekt.getUuid())) {
+            return 0;
+        } else {
+            return -1;
+        }
     }
 }

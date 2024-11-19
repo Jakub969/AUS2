@@ -7,7 +7,7 @@ import rozhrania.IKluc;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class GeneratorOperacii<T extends IKluc<T>> {
+public class GeneratorOperacii<T extends IKluc<T> & Comparable<T>> {
     private final KdStrom<T> strom;
     private final int pocetOperacii;
     private final int maxRozsah;
@@ -45,7 +45,7 @@ public class GeneratorOperacii<T extends IKluc<T>> {
         int atributB = random.nextInt(this.maxRozsah);
         String atributC = RandomStringGenerator.generateRandomString(10);
         T data = (T) new GenerovaneData(atributA, atributB, atributC);
-        Vrchol<T> vrchol = new Vrchol<>(data);
+        Vrchol<T> vrchol = new Vrchol<>(data ,data);
         this.strom.vloz(vrchol);
         this.zoznamVlozenychVrcholov.add(vrchol);
         double rand = random.nextDouble();

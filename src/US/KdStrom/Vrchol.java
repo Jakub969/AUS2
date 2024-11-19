@@ -4,7 +4,7 @@ import rozhrania.IKluc;
 
 import java.util.ArrayList;
 
-public class Vrchol<T> {
+public class Vrchol<T extends Comparable<T>> {
     private Vrchol<T> lavySyn;
     private Vrchol<T> pravySyn;
     private Vrchol<T> rodic;
