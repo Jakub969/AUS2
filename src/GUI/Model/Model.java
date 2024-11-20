@@ -301,22 +301,40 @@ public class Model {
      * */
     public void upravNehnutelnost(String objektPredEditaciou, int supisneCislo, String popis, GPS pozicia1, GPS pozicia2) {
         GPS[] suradnice = vytvorGPSsuradnice(objektPredEditaciou);
+        int stareSupisneCislo = Integer.parseInt(objektPredEditaciou.split(",")[3]);
         GPS staraGPSsuradnice1 = suradnice[0];
         GPS staraGPSsuradnice2 = suradnice[1];
         double tolerancia = 0.000001;
         if ((Math.abs(staraGPSsuradnice1.getPoziciaSirky() - pozicia1.getPoziciaSirky()) <= tolerancia && Math.abs(staraGPSsuradnice1.getPoziciaDlzky() - pozicia1.getPoziciaDlzky()) <= tolerancia)
                 || (Math.abs(staraGPSsuradnice2.getPoziciaSirky() - pozicia2.getPoziciaSirky()) <= tolerancia && Math.abs(staraGPSsuradnice2.getPoziciaDlzky() - pozicia2.getPoziciaDlzky()) <= tolerancia)) {
-            Vrchol<Nehnutelnost> vrchol = kdStromNehnutelnosti.vyhladaj(new Vrchol<Nehnutelnost>(staraGPSsuradnice1, new Nehnutelnost(supisneCislo, "", null, staraGPSsuradnice1, staraGPSsuradnice2)));
-            Nehnutelnost nehnutelnost = vrchol.getData();
-            nehnutelnost.setPopis(popis);//TODO ako postupovať pri duplicitách
+            Vrchol<Nehnutelnost> vrchol = kdStromNehnutelnosti.vyhladaj(new Vrchol<Nehnutelnost>(staraGPSsuradnice1, new Nehnutelnost(stareSupisneCislo, "", null, staraGPSsuradnice1, staraGPSsuradnice2)));
+            Nehnutelnost nehnutelnost = getNehnutelnost(vrchol, stareSupisneCislo);
+            nehnutelnost.setPopis(popis);
             nehnutelnost.setSupisneCislo(supisneCislo);
         } else {
-            Nehnutelnost nehnutelnostNaVymazanie1 = new Nehnutelnost(supisneCislo, "", null, staraGPSsuradnice1, staraGPSsuradnice2);
+            Vrchol<Nehnutelnost> vrchol = kdStromNehnutelnosti.vyhladaj(new Vrchol<Nehnutelnost>(staraGPSsuradnice1, new Nehnutelnost(stareSupisneCislo, "", null, staraGPSsuradnice1, staraGPSsuradnice2)));
+            Nehnutelnost nehnutelnostNaVymazanie1 = getNehnutelnost(vrchol, stareSupisneCislo);
             vyradNehnutelnost(staraGPSsuradnice1, staraGPSsuradnice2, nehnutelnostNaVymazanie1);
             Nehnutelnost nehnutelnost = new Nehnutelnost(supisneCislo, popis, null, pozicia1, pozicia2);
             operacieNehnutelnosti.metodaVkladania(nehnutelnost);
             operacieGeografickychObjektov.metodaVkladania(new GeografickyObjekt(pozicia1, pozicia2, nehnutelnost, null));
         }
+    }
+
+    private static Nehnutelnost getNehnutelnost(Vrchol<Nehnutelnost> vrchol, int stareSupisneCislo) {
+        Nehnutelnost nehnutelnost = vrchol.getData();
+        if (nehnutelnost.getSupisneCislo() != stareSupisneCislo) {
+            ArrayList<Vrchol<Nehnutelnost>> duplicity = vrchol.getDuplicity();
+            if (duplicity != null) {
+                for (Vrchol<Nehnutelnost> duplicityVrchol : duplicity) {
+                    Nehnutelnost duplicityNehnutelnost = duplicityVrchol.getData();
+                    if (duplicityNehnutelnost.getSupisneCislo() == stareSupisneCislo) {
+                        nehnutelnost = duplicityNehnutelnost;
+                    }
+                }
+            }
+        }
+        return nehnutelnost;
     }
 
     private GPS[] vytvorGPSsuradnice(String objektPredEditaciou) {
@@ -356,22 +374,40 @@ public class Model {
      * */
     public void upravParcelu(String objektPredEditaciou, int supisneCislo, String popis, GPS pozicia1, GPS pozicia2) {
         GPS[] suradnice = vytvorGPSsuradnice(objektPredEditaciou);
+        int stareSupisneCislo = Integer.parseInt(objektPredEditaciou.split(",")[3]);
         GPS staraGPSsuradnice1 = suradnice[0];
         GPS staraGPSsuradnice2 = suradnice[1];
         double tolerancia = 0.000001;
         if ((Math.abs(staraGPSsuradnice1.getPoziciaSirky() - pozicia1.getPoziciaSirky()) <= tolerancia && Math.abs(staraGPSsuradnice1.getPoziciaDlzky() - pozicia1.getPoziciaDlzky()) <= tolerancia)
                 || (Math.abs(staraGPSsuradnice2.getPoziciaSirky() - pozicia2.getPoziciaSirky()) <= tolerancia && Math.abs(staraGPSsuradnice2.getPoziciaDlzky() - pozicia2.getPoziciaDlzky()) <= tolerancia)) {
-            Vrchol<Parcela> vrchol = kdStromParciel.vyhladaj(new Vrchol<Parcela>(staraGPSsuradnice1,new Parcela(supisneCislo, "", null, staraGPSsuradnice1, staraGPSsuradnice2)));
-            Parcela parcela = vrchol.getData();
-            parcela.setPopis(popis); //TODO ako postupovať pri duplicitách
+            Vrchol<Parcela> vrchol = kdStromParciel.vyhladaj(new Vrchol<Parcela>(staraGPSsuradnice1,new Parcela(stareSupisneCislo, "", null, staraGPSsuradnice1, staraGPSsuradnice2)));
+            Parcela parcela = getParcelu(vrchol, stareSupisneCislo);
+            parcela.setPopis(popis);
             parcela.setCisloParcely(supisneCislo);
         } else {
-            Parcela parcelaNaVymazanie1 = new Parcela(supisneCislo, "", null, staraGPSsuradnice1, staraGPSsuradnice2);
+            Vrchol<Parcela> vrchol = kdStromParciel.vyhladaj(new Vrchol<Parcela>(staraGPSsuradnice1, new Parcela(stareSupisneCislo, "", null, staraGPSsuradnice1, staraGPSsuradnice2)));
+            Parcela parcelaNaVymazanie1 = getParcelu(vrchol, stareSupisneCislo);
             vyradParcelu(staraGPSsuradnice1, staraGPSsuradnice2, parcelaNaVymazanie1);
             Parcela parcela = new Parcela(supisneCislo, popis, null, pozicia1, pozicia2);
             operacieParciel.metodaVkladania(parcela);
             operacieGeografickychObjektov.metodaVkladania(new GeografickyObjekt(pozicia1, pozicia2, null, parcela));
         }
+    }
+
+    private Parcela getParcelu(Vrchol<Parcela> vrchol, int supisneCislo) {
+        Parcela parcela = vrchol.getData();
+        if (parcela.getCisloParcely() != supisneCislo) {
+            ArrayList<Vrchol<Parcela>> duplicity = vrchol.getDuplicity();
+            if (duplicity != null) {
+                for (Vrchol<Parcela> duplicityVrchol : duplicity) {
+                    Parcela duplicityParcela = duplicityVrchol.getData();
+                    if (duplicityParcela.getCisloParcely() == supisneCislo) {
+                        parcela = duplicityParcela;
+                    }
+                }
+            }
+        }
+        return parcela;
     }
 
     /**
@@ -380,20 +416,22 @@ public class Model {
      * */
     public void odstranNehnutelnost(String objektMazania) {
         GPS[] suradnice = vytvorGPSsuradnice(objektMazania);
+        int supisneCislo = Integer.parseInt(objektMazania.split(",")[3]);
         GPS GPSsuradnice1 = suradnice[0];
         GPS GPSsuradnice2 = suradnice[1];
-        Nehnutelnost nehnutelnostNaVymazanie1 = new Nehnutelnost(0, "", null, GPSsuradnice1, GPSsuradnice2);
+        Nehnutelnost nehnutelnostNaVymazanie1 = new Nehnutelnost(supisneCislo, "", null, GPSsuradnice1, GPSsuradnice2);
         vyradNehnutelnost(GPSsuradnice1, GPSsuradnice2, nehnutelnostNaVymazanie1);
     }
 
     private void vyradNehnutelnost(GPS GPSsuradnice1, GPS GPSsuradnice2, Nehnutelnost nehnutelnostNaVymazanie1) {
         Vrchol<Nehnutelnost> nehnutelnostVrchol = kdStromNehnutelnosti.vyhladaj(new Vrchol<Nehnutelnost>(GPSsuradnice1, nehnutelnostNaVymazanie1));
-        Vrchol<GeografickyObjekt> hladanyVrchol = new Vrchol<GeografickyObjekt>(GPSsuradnice1, new GeografickyObjekt(GPSsuradnice1, GPSsuradnice2, nehnutelnostVrchol.getData(), null));
+        Nehnutelnost nehnutelnostMazania = getNehnutelnost(nehnutelnostVrchol, nehnutelnostNaVymazanie1.getSupisneCislo());
+        Vrchol<GeografickyObjekt> hladanyVrchol = new Vrchol<GeografickyObjekt>(GPSsuradnice1, new GeografickyObjekt(GPSsuradnice1, GPSsuradnice2, nehnutelnostMazania, null));
         for (Parcela parcela : nehnutelnostVrchol.getData().getZoznamParciel()) {
             parcela.removeNehnutelnost(nehnutelnostVrchol.getData());
         }
         operacieGeografickychObjektov.metodaMazania(hladanyVrchol.getData());
-        operacieNehnutelnosti.metodaMazania(nehnutelnostVrchol.getData());
+        operacieNehnutelnosti.metodaMazania(nehnutelnostMazania);
     }
 
     /**
@@ -402,19 +440,21 @@ public class Model {
      * */
     public void odstranParcelu(String objektMazania) {
         GPS[] suradnice = vytvorGPSsuradnice(objektMazania);
+        int cisloParcely = Integer.parseInt(objektMazania.split(",")[3]);
         GPS GPSsuradnice1 = suradnice[0];
         GPS GPSsuradnice2 = suradnice[1];
-        Parcela parcelaNaVymazanie1 = new Parcela(0, "", null, GPSsuradnice1, GPSsuradnice2);
+        Parcela parcelaNaVymazanie1 = new Parcela(cisloParcely, "", null, GPSsuradnice1, GPSsuradnice2);
         vyradParcelu(GPSsuradnice1, GPSsuradnice2, parcelaNaVymazanie1);
     }
 
     private void vyradParcelu(GPS GPSsuradnice1, GPS GPSsuradnice2, Parcela parcelaNaVymazanie1) {
         Vrchol<Parcela> parcelaVrchol = kdStromParciel.vyhladaj(new Vrchol<Parcela>(GPSsuradnice1, parcelaNaVymazanie1));
-        Vrchol<GeografickyObjekt> hladanyVrchol = new Vrchol<GeografickyObjekt>(GPSsuradnice1 ,new GeografickyObjekt(GPSsuradnice1, GPSsuradnice2, null, parcelaVrchol.getData()));
+        Parcela parcelaMazania = getParcelu(parcelaVrchol, parcelaNaVymazanie1.getCisloParcely());
+        Vrchol<GeografickyObjekt> hladanyVrchol = new Vrchol<GeografickyObjekt>(GPSsuradnice1 ,new GeografickyObjekt(GPSsuradnice1, GPSsuradnice2, null, parcelaMazania));
         for (Nehnutelnost nehnutelnost : parcelaVrchol.getData().getZoznamNehnutelnosti()) {
             nehnutelnost.removeParcela(parcelaVrchol.getData());
         }
         operacieGeografickychObjektov.metodaMazania(hladanyVrchol.getData());
-        operacieParciel.metodaMazania(parcelaVrchol.getData());
+        operacieParciel.metodaMazania(parcelaMazania);
     }
 }
