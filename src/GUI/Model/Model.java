@@ -321,7 +321,7 @@ public class Model {
         }
     }
 
-    private static Nehnutelnost getNehnutelnost(Vrchol<Nehnutelnost> vrchol, int stareSupisneCislo) {
+    private Nehnutelnost getNehnutelnost(Vrchol<Nehnutelnost> vrchol, int stareSupisneCislo) {
         Nehnutelnost nehnutelnost = vrchol.getData();
         if (nehnutelnost.getSupisneCislo() != stareSupisneCislo) {
             ArrayList<Vrchol<Nehnutelnost>> duplicity = vrchol.getDuplicity();
